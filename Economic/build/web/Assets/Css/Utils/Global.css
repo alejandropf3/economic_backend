@@ -1,0 +1,56 @@
+/*Este archivo contiene los elementos globales del proyecto*/
+
+*{
+    margin: 0; /*Eliminamos los margenes exteriores*/
+    padding: 0; /*Eliminamos los margenes interiores*/
+    box-sizing: border-box; /*Modificamos el modelo de caja estándar*/
+}
+
+/* Seccion para custom propertys */
+:root{ 
+
+    /* Variables de colores */
+        --color_principal: #002349;
+        --color_secundario: #ffffff;
+        --color_terceario: #957C3D;
+        --color_capos_formulario: #EDEDED;
+        --colo_capos_formulario-oscuro:#001328;
+        --color_borde_formulario: rgba(0, 0, 0, 0.25);
+        --color_ingresos: #258D19;
+        --color_egresos: #C20000;
+        --color_linea_divisora: #AEAEAE;
+    /* Variables de letras (textos)*/
+
+        --color_texto-oscuro: #191919;
+        --fuente_principal: 'Poppins', sans-serif;
+        --tamaño_fuente:18px;
+        --tamaño_fuente_boton: 20px;
+        --tamaño_fuente_boton-pequeño: 18px;
+        --tamaño_fuente_titulo: 22px;
+        --tamaño_fuente-links: 19px;
+        --grosor_titulo: 100;
+
+    /* Variables de tamaño*/
+        --alto_header: 10vh;
+        --alto_footer: 10vh;
+        --alto_main: calc(100vh - (var(--alto_footer) + var(--alto_header))); 
+        --ancho_formulario: 505px;
+        --tamaño_icono:50px;
+
+    /* Variables del logo*/
+        --color_logo:#ffffff;
+        --fuente_logo: 'Poppins', sans-serif;
+        --tamaño_logo-grande:50px;
+        --tamaño_logo-pequeño: 40px;
+        --grosor_logo:300;
+
+    /*Variables contenedor*/
+        --padding_formulario: 0 25px;
+        --radio_borde-contenedores: 3px;
+}
+
+body{
+    background: linear-gradient(#002349 30%, #003977);
+    /* background-color: var(--color_principal); */ /*Color de fondo de reserva en caso de que el gradiente no funcione*/
+    font-family: var(--fuente_principal);
+}

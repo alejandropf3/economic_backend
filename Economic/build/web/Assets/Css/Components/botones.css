@@ -1,0 +1,202 @@
+
+
+/*Componente boton general*/
+
+.boton{
+
+    /*Dimenciones y tipo de display*/
+    display: flex;
+    height: 50px;
+    width: 150px;
+    /*Color de fondo y letras*/
+    background-color: var(--color_terceario);
+    color: var(--color_secundario);
+    /*Tipo de fuente y grosor*/
+    font-family: var(--fuente_principal);
+    font-weight:500;
+    font-size: var(--tamaño_fuente_boton);
+    border-radius: 8px; /*Radio del borde*/
+    /*Alineamos los elementos*/
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    text-decoration: none; /*Eliminamos la decoracion al texto*/
+    cursor: pointer;
+    border:  1px solid transparent;
+}
+
+.boton:focus{
+    background-color: var(--color_secundario);
+    color: var(--color_texto-oscuro);
+    box-shadow: 1px 1px 7px rgba(0, 0, 0, 0.500);
+}
+
+
+/*Componentes de boton de salida*/
+
+.boton--salir{
+
+    /*Dimenciones y tipo de display*/
+    display: flex;
+    height: 50px;
+    width: 150px;
+    /*Color de fondo y letras*/
+    background-color: var(--color_principal);
+    color: var(--color_secundario);
+    /*Tipo de fuente y grosor*/
+    font-family: var(--fuente_principal);
+    font-weight:normal;
+    font-size: var(--tamaño_fuente_boton);
+    border-radius: 8px; /*Radio del borde*/
+    /*Alineamos los elementos*/
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    text-decoration: none; /*Eliminamos la decoracion al texto*/
+    cursor: pointer;
+    border: 1px solid transparent;
+}
+
+.boton--ver-mas{
+  /*Aplicamos el display*/
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /*Asignamos tamaños al boton */
+  height: 30px;
+  width: 100px;
+  /*Aplicamos color al fondo y una sombra*/
+  background-color: var(--color_secundario);
+  box-shadow: 1px 1px 7px rgba(0, 0, 0, 0.500);
+  /*Aplicamos color de letra , tamaño y grosor*/
+  color: var(--color_terceario);
+  font-size: var(--tamaño_fuente_boton-pequeño);
+  font-weight: 600;
+  /*Eliminamos la decoracion y el radio del norde*/
+  text-decoration: none;
+  border-radius: var(--radio_borde-contenedores);
+}
+
+.boton--realizar-registro{
+    /*Tipo de display y alineamiento de elementos*/
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /*Color de fondo y tamaño*/
+    background-color: var(--color_secundario);
+    height: 100%;
+    width: 100%;
+    /*Posicion en la grid*/
+    grid-row: 2/3;
+    /*Color y tamaño de fuente*/
+    color: var(--color_texto-oscuro);
+    font-size: 30px;
+    font-weight: 100;
+    text-decoration: none;
+    /*Radio del borde y interaccion con el cursor*/
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.boton--crear-categoria{
+    /*Aplicamos el display*/
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /*Asignamos tamaños al boton */
+    height: 30px;
+    width: 170px;
+    /*Aplicamos color al fondo y una sombra*/
+    background-color: var(--color_terceario);
+    box-shadow: 1px 1px 7px rgba(0, 0, 0, 0.500);
+    /*Aplicamos color de letra , tamaño y grosor*/
+    color: var(--color_secundario);
+    font-size: var(--tamaño_fuente_boton-pequeño);
+    font-weight: 600;
+    /*Eliminamos la decoracion y el radio del norde*/
+    text-decoration: none;
+    border-radius: var(--radio_borde-contenedores);
+}
+
+.boton--editar{
+    /*Aplicamos el display*/
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /*Asignamos tamaños al boton */
+    height: 30px;
+    width: 100px;
+    /*Aplicamos color al fondo y una sombra*/
+    background-color: var(--color_secundario);
+    box-shadow: 1px 1px 7px rgba(0, 0, 0, 0.500);
+    /*Aplicamos color de letra , tamaño y grosor*/
+    color: var(--color_terceario);
+    font-size: var(--tamaño_fuente_boton-pequeño);
+    font-weight: 600;
+    /*Eliminamos la decoracion y el radio del norde*/
+    text-decoration: none;
+    border-radius: var(--radio_borde-contenedores);
+}
+
+.boton--eliminar{
+    /*Aplicamos el display*/
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /*Asignamos tamaños al boton */
+    height: 30px;
+    width: 100px;
+    /*Aplicamos color al fondo y una sombra*/
+    background-color: var(--color_secundario);
+    box-shadow: 1px 1px 7px rgba(0, 0, 0, 0.500);
+    /*Aplicamos color de letra , tamaño y grosor*/
+    color: var(--color_principal);
+    font-size: var(--tamaño_fuente_boton-pequeño);
+    font-weight: 600;
+    /*Eliminamos la decoracion y el radio del norde*/
+    text-decoration: none;
+    border-radius: var(--radio_borde-contenedores);
+}
+
+.boton--cancelar{
+    /*Aplicamos el display*/
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /*Asignamos tamaños al boton */
+    height: 30px;
+    width: 130px;
+    /*Aplicamos color al fondo y una sombra*/
+    background-color: var(--color_principal);
+    box-shadow: 1px 1px 7px rgba(0, 0, 0, 0.500);
+    /*Aplicamos color de letra , tamaño y grosor*/
+    color: var(--color_secundario);
+    font-size: var(--tamaño_fuente_boton-pequeño);
+    font-weight: 600;
+    /*Eliminamos la decoracion y el radio del norde*/
+    text-decoration: none;
+    border-radius: var(--radio_borde-contenedores);
+}
+
+
+.boton--guardar{
+    /*Aplicamos el display*/
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /*Asignamos tamaños al boton */
+    height: 30px;
+    width: 130px;
+    /*Aplicamos color al fondo y una sombra*/
+    background-color: var(--color_terceario);
+    box-shadow: 1px 1px 7px rgba(0, 0, 0, 0.500);
+    /*Aplicamos color de letra , tamaño y grosor*/
+    color: var(--color_secundario);
+    font-size: var(--tamaño_fuente_boton-pequeño);
+    font-weight: 600;
+    /*Eliminamos la decoracion y el radio del norde*/
+    text-decoration: none;
+    border-radius: var(--radio_borde-contenedores);
+    border:  1px solid transparent;
+    cursor: pointer;
+}

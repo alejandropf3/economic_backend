@@ -1,0 +1,268 @@
+/*=================== Elementos de formulario libre uso ========================*/
+
+.logotipo {
+    /*Aplicamos estilos al logo de la aplicacion*/
+    color: var(--color_logo);
+    font-family: var(--fuente_logo);
+    font-weight: var(--grosor_logo);
+    font-size: var(--tamaño_logo-grande);
+}
+
+.linea {
+    /*Le aplicamos estilos a la linea de separacion*/
+    width: 95%;
+    background-color: var(--color_terceario);
+    height: 3px;
+}
+
+.linea--texto {
+    width: 70%;
+    background-color: var(--color_terceario);
+    height: 3px;
+}
+
+.formulario__titulo {
+    /*Estilos para el titulo del formualrio*/
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: var(--color_terceario);
+    font-size: var(--tamaño_fuente_titulo);
+    font-family: var(--fuente_principal);
+}
+
+.formulario__label {
+    font-size: var(--tamaño_fuente);
+    color: var(--color_texto-oscuro);
+    font-weight: 700;
+}
+
+.formulario__input {
+    /*Aplicamos estilos a los imputs*/
+    height: 50px;
+    width: 370px;
+    background-color: var(--color_capos_formulario);
+    padding: 10px;
+    border-radius: var(--radio_borde-contenedores);
+    border-style: solid;
+    border-color: var(--color_borde_formulario);
+    font-size: var(--tamaño_fuente);
+    outline: none;
+}
+
+.formulario__link {
+    /*Aplicamos estilos al link del formulario*/
+    color: var(--color_terceario);
+}
+
+.formulario__navegacion {
+    /*Aplicamos parametros al contenedor de navegacion*/
+    display: flex;
+    width: 100%;
+    height: 100px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+}
+
+/*==================== Formulario de inicio de sesion =============================*/
+
+.formulario-inicio {
+    /*Parametros para el contenedor del formulario*/
+    height: 420px;
+    width: var(--ancho_formulario);
+    background-color: var(--color_secundario);
+    border-radius: var(--radio_borde-contenedores);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 25px;
+    gap: 25px;
+}
+
+.formulario-inicio__form {
+    /*Parametros del formulario*/
+    width: 85%;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.formulario-inicio__link {
+    /*Aplicamos estilos al link del formulario*/
+    color: var(--color_terceario);
+    text-decoration: none;
+    align-self: flex-start;
+}
+
+
+/*==================== Formulario de registro de usuario =============================*/
+
+.formulario-registro {
+    /*Parametros para el contenedor del formulario*/
+    height: 650px;
+    width: var(--ancho_formulario);
+    background-color: var(--color_secundario);
+    border-radius: var(--radio_borde-contenedores);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+    gap: 20px;
+    padding: var(--padding_formulario);
+}
+
+.formulario-registro__form {
+    display: flex;
+    flex-direction: column;
+    gap: 35px;
+    width: 85%;
+}
+
+/*==================== Formulario de recuperacion de contraseña =============================*/
+
+.formulario-recuperacion {
+    /*Parametros para el contenedor del formulario*/
+    height: 340px;
+    width: var(--ancho_formulario);
+    background-color: var(--color_secundario);
+    border-radius: var(--radio_borde-contenedores);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+    padding: var(--padding_formulario);
+}
+
+.formulario-recuperacion__form {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    gap: 40px;
+}
+
+.formulario__navegacion--alineado {
+    /*Aplicamos parametros al contenedor de navegacion*/
+    display: flex;
+    width: 370px;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/*==================== Formulario de codigo de verificacion =============================*/
+
+.formulario-codigo {
+    /*Parametros para el contenedor del formulario*/
+    height: 420px;
+    width: var(--ancho_formulario);
+    background-color: var(--color_secundario);
+    border-radius: var(--radio_borde-contenedores);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+    padding: var(--padding_formulario);
+}
+
+.formulario-codigo__form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.formulario__mensaje {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 10px;
+    font-size: var(--tamaño_fuente);
+    color: var(--color_texto-oscuro);
+}
+
+.formulario__texto {
+    width: 230px;
+    margin-bottom: 15px;
+    color: var(--color_texto-oscuro);
+}
+
+
+
+/*==================== Formulario de codigo de cambio de contraseña =============================*/
+
+.formulario-cambio-contrasena {
+    /*Parametros para el contenedor del formulario*/
+    height: 370px;
+    width: var(--ancho_formulario);
+    background-color: var(--color_secundario);
+    border-radius: var(--radio_borde-contenedores);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+    padding: var(--padding_formulario);
+}
+
+.formulario-cambio-contrasena__form {
+    /*Parametros del formulario*/
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+}
+
+/*==================== Formulario de registro de transaccion =============================*/
+
+.formulario__input--registro {
+    width: 100%;
+    height: 70px;
+    padding: 10px;
+    background-color: var(--color_capos_formulario);
+    border-radius: var(--radio_borde-contenedores);
+    border-style: solid;
+    border-color: var(--color_borde_formulario);
+    font-size: var(--tamaño_fuente);
+    outline: none;
+}
+
+.seccion__caja-eleccion {
+    width: 45%;
+    height: 70px;
+    padding: 10px;
+    background-color: var(--color_capos_formulario);
+    border-radius: var(--radio_borde-contenedores);
+    border-style: solid;
+    border-color: var(--color_borde_formulario);
+    font-size: var(--tamaño_fuente);
+    outline: none;
+}
+
+.seccion__input--registro {
+    width: 45%;
+    height: 70px;
+    padding: 10px;
+    background-color: var(--color_capos_formulario);
+    border-radius: var(--radio_borde-contenedores);
+    border-style: solid;
+    border-color: var(--color_borde_formulario);
+    font-size: var(--tamaño_fuente);
+    outline: none;
+}
+
+.formulario__caja-texto {
+    width: 100%;
+    height: 30%;
+    padding: 10px;
+    background-color: var(--color_capos_formulario);
+    border-radius: var(--radio_borde-contenedores);
+    border-style: solid;
+    border-color: var(--color_borde_formulario);
+    font-size: var(--tamaño_fuente);
+    outline: none;
+}

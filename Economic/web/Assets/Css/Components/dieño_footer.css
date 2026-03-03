@@ -1,0 +1,71 @@
+/*Hojas de estilos para el diseño del footer*/
+
+.pie-pagina {
+    height: 100%;
+    /*Aplico tamaños*/
+    width: 100%;
+    background-color: aliceblue;
+    /*Aplicamos el display y el padding*/
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    padding: 5px;
+}
+
+.pie-pagina__logo {
+    /*Aplicamos tamaño y color para el logo*/
+    color: var(--color_principal);
+    font-size: 40px;
+    font-weight: var(--grosor_titulo);
+}
+
+.pie-pagina .pie-pagina__logo {
+    /*Le aplicamos display y alineamos el logo*/
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.pie-pagina__link-icono {
+    /* Aplicamos estilos al icono */
+    font-size: 40px;
+    color: var(--color_principal);
+}
+
+.pie-pagina__link-icono:hover {
+    color: var(--color_terceario);
+}
+
+.pie-pagina__navegacion {
+    border-right: 2px solid var(--color_linea_divisora);
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.pie-pagina__contacto {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 10px;
+    grid-column: 3;
+    border-left: 2px solid var(--color_linea_divisora);
+    padding: 0px 25px;
+}
+
+.pie-pagina__contacto-informacion {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: var(--tamaño_fuente);
+    color: var(--color_texto-oscuro);
+}
+
+.pie-pagina__contacto-informacion i {
+    color: var(--color_principal);
+    font-size: 30px;
+}
+
+.pie-pagina__contacto-icono {
+    font-size: 30px;
+    color: var(--color_principal);
+}

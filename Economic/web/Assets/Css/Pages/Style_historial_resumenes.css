@@ -1,0 +1,127 @@
+/* Hoja de estilos del historial de resumenes */
+
+.layout-menu__contenedor-historial {
+    /*Seccion de elementos del historial de resumenes*/
+    background-color: var(--color_secundario);
+    height: 100%;
+    width: 90%;
+    padding: 20px;
+    border-radius: var(--radio_borde-contenedores);
+    grid-row: 2;
+    grid-column: 1/3;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.contenedor-historial__encabezado {
+    height: 10%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 40px;
+}
+
+.contenedor-historial__encabezado-texto {
+    font-size: var(--tamaño_fuente);
+    color: var(--color_texto-oscuro);
+}
+
+.contenido__transacciones-table {
+    color: var(--color_texto-oscuro);
+}
+
+.contenedor-historial__alinear {
+    height: 90%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    /*Habilitamos scroll vertical*/
+    overflow-y: auto;
+}
+
+.contenedor-historial__selector {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.contenedor-historial__selector-seleccion {
+    appearance: none;
+    outline: none;
+    border: transparent solid 1px;
+    font-size: var(--tamaño_fuente);
+    color: var(--color_texto-oscuro);
+}
+
+.contenedor-historial__selector-seleccion:hover {
+    color: var(--color_terceario);
+}
+
+/*======================= SECCION DE ELEMENTOS DE VISTA PREVIA =============================*/
+
+.layout-menu__contenedor-vista-previa {
+    /*Contenedor principal*/
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    gap: 10px;
+    background-color: var(--color_secundario);
+    height: 100%;
+    width: 100%;
+    padding: 20px;
+    border-radius: var(--radio_borde-contenedores);
+    grid-row: 2;
+    grid-column: 3;
+}
+
+.contenedor-vista-previa__encabezado {
+    height: 50px;
+    width: 100%;
+    border-top: 1px var(--color_linea_divisora) solid;
+    border-bottom: 1px var(--color_linea_divisora) solid;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.contenedor-vista-previa__titulo {
+    color: var(--color_texto-oscuro);
+    font-size: var(--tamaño_fuente_titulo);
+}
+
+.contenedor-vista-previa__encabezado-texto {
+    font-size: var(--tamaño_fuente);
+    color: var(--color_texto-oscuro);
+}
+
+.contenido__transacciones-table {
+    /*Contenedor de la tabla*/
+    width: 100%;
+    height: 70%;
+    border-bottom: 1px var(--color_linea_divisora) solid;
+    text-align: center;
+}
+
+.transacciones-table__egreso {
+    /*Estilos para los egresos en la vista previa*/
+    color: var(--color_egresos);
+    font-size: var(--tamaño_fuente);
+}
+
+.transacciones-table__ingreso {
+    /*Estilos para los ingresos en la vista previa*/
+    color: var(--color_ingresos);
+    font-size: var(--tamaño_fuente);
+}
+
+.contenido-total-semanal__titulo {
+    font-size: var(--tamaño_fuente_titulo);
+    color: var(--color_texto-oscuro);
+    font-weight: var(--grosor_titulo);
+}

@@ -1,0 +1,221 @@
+/* ============================================================================
+   SIDEBAR.CSS - Menú hamburguesa y sidebar para móvil
+   ============================================================================ */
+
+/* -------------------- Botón hamburguesa -------------------- */
+.hamburguesa {
+    display: none;
+    /* Oculto por defecto en desktop */
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    z-index: 1001;
+}
+
+.hamburguesa__linea {
+    width: 25px;
+    height: 3px;
+    background-color: var(--color_principal);
+    margin: 3px 0;
+    border-radius: 2px;
+    transition: all 0.3s ease;
+}
+
+/* Checkbox oculto para control del sidebar */
+.sidebar__toggle {
+    display: none;
+}
+
+/* -------------------- Sidebar -------------------- */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: -280px;
+    /* Oculto fuera de la pantalla */
+    width: 280px;
+    height: 100vh;
+    background-color: var(--color_principal);
+    z-index: 1000;
+    transition: left 0.3s ease;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.3);
+    overflow-y: auto;
+}
+
+.sidebar__contenido {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    height: 100%;
+}
+
+.sidebar__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--color_terceario);
+    margin-bottom: 20px;
+}
+
+.sidebar__logo {
+    color: var(--color_secundario);
+    font-size: 28px;
+    font-weight: var(--grosor_logo);
+}
+
+.sidebar__cerrar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 35px;
+    height: 35px;
+    background-color: transparent;
+    border: none;
+    color: var(--color_secundario);
+    font-size: 24px;
+    cursor: pointer;
+    border-radius: 50%;
+    transition: background-color 0.3s ease;
+}
+
+.sidebar__cerrar:hover {
+    background-color: var(--color_terceario);
+}
+
+/* -------------------- Navegación del sidebar -------------------- */
+.sidebar__navegacion {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    flex: 1;
+}
+
+.sidebar__link {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 15px;
+    color: var(--color_secundario);
+    text-decoration: none;
+    font-size: 18px;
+    font-weight: 300;
+    border-radius: var(--radio_borde-contenedores);
+    transition: background-color 0.3s ease;
+}
+
+.sidebar__link:hover {
+    background-color: var(--color_terceario);
+}
+
+.sidebar__link--activo {
+    background-color: var(--color_terceario);
+}
+
+.sidebar__link i {
+    font-size: 22px;
+    width: 30px;
+    text-align: center;
+}
+
+/* -------------------- Usuario en sidebar -------------------- */
+.sidebar__usuario {
+    display: flex;
+    flex-direction: column;
+    padding-top: 20px;
+    border-top: 1px solid var(--color_terceario);
+    margin-top: auto;
+}
+
+.sidebar__usuario-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 15px 0;
+}
+
+.sidebar__usuario-icono {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50px;
+    height: 50px;
+    background-color: var(--color_secundario);
+    color: var(--color_principal);
+    border-radius: 50%;
+    font-size: 28px;
+}
+
+.sidebar__usuario-datos {
+    color: var(--color_secundario);
+}
+
+.sidebar__usuario-nombre {
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.sidebar__usuario-email {
+    font-size: 14px;
+    opacity: 0.8;
+}
+
+.sidebar__salir {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 15px;
+    color: var(--color_secundario);
+    text-decoration: none;
+    font-size: 18px;
+    font-weight: 500;
+    border-radius: var(--radio_borde-contenedores);
+    transition: background-color 0.3s ease;
+}
+
+.sidebar__salir:hover {
+    background-color: rgba(194, 0, 0, 0.3);
+}
+
+.sidebar__salir i {
+    font-size: 22px;
+}
+
+/* -------------------- Overlay -------------------- */
+.sidebar__overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+/* -------------------- Toggle activo -------------------- */
+.sidebar__toggle:checked~.sidebar {
+    left: 0;
+}
+
+.sidebar__toggle:checked~.sidebar__overlay {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Animación de las líneas del hamburguesa cuando está activo */
+.sidebar__toggle:checked~.encabezado .hamburguesa .hamburguesa__linea:nth-child(1) {
+    transform: rotate(45deg) translate(5px, 5px);
+}
+
+.sidebar__toggle:checked~.encabezado .hamburguesa .hamburguesa__linea:nth-child(2) {
+    opacity: 0;
+}
+
+.sidebar__toggle:checked~.encabezado .hamburguesa .hamburguesa__linea:nth-child(3) {
+    transform: rotate(-45deg) translate(5px, -5px);
+}

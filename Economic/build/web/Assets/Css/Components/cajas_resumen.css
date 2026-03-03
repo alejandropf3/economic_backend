@@ -1,0 +1,31 @@
+/* Hoja de estilos para el componente caja-resumen*/
+
+.caja-resumen {
+    /*Aplicamos tamaño de contenedor y color de fondo*/
+    background: linear-gradient(to right, #0054AF 0%, #002349);
+    height: 50px;
+    width: 100%;
+    /*Asignamos el tipo de display y alineamianto de elementos*/
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    /*Aplicamos padding*/
+    padding: 10px;
+    border-radius: var(--radio_borde-contenedores);
+}
+
+.caja-resumen__titulo {
+    color: var(--color_secundario);
+    font-weight: 300;
+}
+
+.caja-resumen__fecha {
+    color: var(--color_secundario);
+    font-size: var(--tamaño_fuente);
+}
+
+.caja-resumen__link {
+    font-size: var(--tamaño_fuente);
+    color: var(--color_secundario);
+    text-decoration: none;
+}

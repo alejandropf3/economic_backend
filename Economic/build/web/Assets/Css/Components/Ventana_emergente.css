@@ -1,0 +1,269 @@
+/* Hoja de estilos para las ventanas emergentes */
+
+.ventana-salida {
+    /*Desabilitamos la visibilidad por defecto*/
+    visibility: hidden;
+    opacity: 0;
+
+    /*Posicionamos el contenido*/
+    position: fixed;
+    top: 70px;
+    right: 20px;
+    z-index: 99999;
+}
+
+#ventana-salida-confirmar:target {
+    visibility: visible;
+    /* Habilitamos la visualizacion*/
+    opacity: 1;
+}
+
+.ventana-salida__contenido {
+
+    /*Aplicamos display y alineamos los elementos*/
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 5px;
+
+    /*Aplicamos tamaño*/
+    height: 170px;
+    width: 230px;
+    padding: 10px;
+    /*Aplicamos colores, sombra y radio*/
+    background-color: var(--color_secundario);
+    box-shadow: 1px 1px 5px black;
+    border: 1px solid rgba(0, 0, 0, 30%);
+    border-radius: var(--radio_borde-contenedores);
+
+    /*Aplicamos una animacion opcional al aparecer*/
+    transform: scale(0.9);
+    transition: transform 0.3s ease-out;
+}
+
+.ventana-salida__informacion {
+    color: var(--color_texto-oscuro);
+    font-size: var(--tamaño_fuente);
+    padding: 10px 0px;
+    border-top: 1px solid var(--color_linea_divisora);
+    border-bottom: 1px solid var(--color_linea_divisora);
+}
+
+.ventana-salida__link {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    gap: 5px;
+}
+
+.ventana-salida__link p {
+    color: var(--color_texto-oscuro);
+    font-size: var(--tamaño_fuente);
+    font-weight: 700;
+}
+
+.ventana-salida__link i {
+    color: var(--color_texto-oscuro);
+    font-size: var(--tamaño_fuente);
+}
+
+.ventana-salida__icono {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/*======================= Ventana de confirmacion =======================*/
+
+.ventana-confirmacion{
+    /*Desabilitamos la visibilidad por defecto*/
+    visibility: hidden;
+    opacity: 0;
+
+    /*Posicionamos el contenido*/
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 99999;
+}
+
+#ventana-confirmacion-activar:target{
+    /*Habilitamos la visibilidad*/
+    visibility: visible;
+    opacity: 1;
+}
+
+.ventana-confirmacion__contenido{
+    /*Aplicamos display y alineamos los elementos*/
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    gap: 5px;
+    /*Aplicamos tamaño*/
+    width: 370px;
+    height: 180px;
+    padding: 20px 50px;
+    /*Aplicamos colores, sombra y radio*/
+    background-color: var(--color_principal);
+    box-shadow: 1px 1px 7px black;
+    border: 1px solid rgba(0, 0, 0, 30%);
+    border-radius: var(--radio_borde-contenedores);
+    /*Aplicamos una animacion opcional al aparecer*/
+    transform: scale(0.9);
+    transition: transform 0.3s ease-out;
+}
+
+.ventana-confirmacion__titulo{
+    text-align: center;
+    color: var(--color_secundario);
+    font-size: 25px;
+}
+
+/*======================= Ventana de crear y editar categorias =======================*/
+
+.ventana-crear-categoria{
+    /*Desabilitamos la visibilidad por defecto*/
+    visibility: hidden;
+    opacity: 0;
+
+    /*Posicionamos el contenido*/
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 99999;
+}
+
+#ventana-crear-categoria-confirmar:target{
+    /*Habilitamos la visibilidad*/
+    visibility: visible;
+    opacity: 1;
+}
+
+#ventana-crear-categoria-cerrar:target{
+    /*Desabilitamos la visibilidad*/
+    visibility: hidden;
+    opacity: 0;
+}
+
+.ventana-crear-categoria__formulario-crear{
+    /*Aplicamos tamaño*/
+    height: 280px;
+    width: 310px;
+    /*Aplicamos display y alineamos los elementos*/
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px;
+    /*Aplicamos colores, sombra y radio*/
+    background-color: var(--color_secundario);
+    box-shadow: 1px 1px 7px black;
+    border: 1px solid rgba(0, 0, 0, 30%);
+    border-radius: var(--radio_borde-contenedores);
+    /*Aplicamos una animacion opcional al aparecer*/
+    transform: scale(0.9);
+    transition: transform 0.3s ease-out;
+}
+
+.formulario-crear__titulo{
+    font-size: 30px;
+    color: var(--color_terceario);
+}
+
+.contenido__input{
+    /*Aplicamos estilos a los imputs*/
+    height: 45px;
+    width: 100%;
+    background-color: var(--color_capos_formulario);
+    padding: 10px;
+    border-radius: var(--radio_borde-contenedores);
+    border-style: solid;
+    border-color: var(--color_borde_formulario);
+    font-size: var(--tamaño_fuente);
+    outline: none;
+}
+
+.formulario-crear__contenido{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 25px;
+}
+
+.formulario-crear__navegacion{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/*=====================================================================================================*/
+
+.ventana-modificar-categoria{
+    /*Desabilitamos la visibilidad por defecto*/
+    visibility: hidden;
+    opacity: 0;
+
+    /*Posicionamos el contenido*/
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 99999;
+}
+
+#ventana-modificar-categoria-confirmar:target{
+    /*Habilitamos la visibilidad*/
+    visibility: visible;
+    opacity: 1;
+}
+
+#ventana-modificar-categoria-cerrar:target{
+    /*Desabilitamos la visibilidad*/
+    visibility: hidden;
+    opacity: 0;
+}
+
+.ventana-modificar-categoria__formulario-editar{
+    /*Aplicamos tamaño*/
+    height: 280px;
+    width: 310px;
+    /*Aplicamos display y alineamos los elementos*/
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px;
+    /*Aplicamos colores, sombra y radio*/
+    background-color: var(--color_secundario);
+    box-shadow: 1px 1px 7px black;
+    border: 1px solid rgba(0, 0, 0, 30%);
+    border-radius: var(--radio_borde-contenedores);
+    /*Aplicamos una animacion opcional al aparecer*/
+    transform: scale(0.9);
+    transition: transform 0.3s ease-out;
+}
+
+.formulario-editar__titulo{
+    font-size: 30px;
+    color: var(--color_terceario);
+}
+
+.formulario-editar__contenido{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 25px;
+}
+
+.formulario-editar__navegacion{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}

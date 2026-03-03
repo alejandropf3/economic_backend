@@ -1,0 +1,147 @@
+/* hoja de estilos unicos para la configuracion de usaurio*/
+
+.contenedor-izquierda__formulario {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding-top: 20px;
+}
+
+.formulario__campos-usuario {
+  display: flex;
+  flex-direction: column;
+}
+
+.formulario__campos-label {
+  font-size: var(--tamaño_fuente);
+  color: var(--color_secundario);
+  font-size: 25px
+}
+
+.formulario__campos-input {
+  height: 40px;
+  width: 500px;
+  background-color: var(--colo_capos_formulario-oscuro);
+  padding: 10px;
+  border-radius: var(--radio_borde-contenedores);
+  border-style: solid;
+  border-color: var(--color_borde_formulario);
+  font-size: var(--tamaño_fuente);
+  outline: none;
+  color: var(--color_secundario);
+}
+
+.contenedor-derecha__formulario {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.formulario__imagen-label {
+  color: var(--color_secundario);
+  font-size: 30px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.formulario__imagen-input {
+  display: none;
+  /*Sacamos del flujo el input para ocultar el texto extra*/
+}
+
+.formulario__icono {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 260px;
+  width: 260px;
+  border-radius: 50%;
+  background-color: var(--color_secundario);
+  color: var(--color_principal);
+}
+
+/* =================================== Seccion de categorias ========================================= */
+
+
+.contenedor-derecha__caja-categorias{
+  width: 100%;
+  height: 90%;
+  border-radius: var(--radio_borde-contenedores);
+  background-color: var(--color_secundario);
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin-top: auto;
+  grid-row: 2;
+}
+
+.caja-categorias__titulo{
+  color: var(--color_texto-oscuro);
+  font-size: 25px;
+}
+
+.caja-categorias__contenido{
+  /*Asignamos tamaños*/
+  width: 100%;
+  height: 70%;
+  /*Aplicamos un box-shadow interno*/
+  box-shadow: inset 0px 0px 8px rgba(0, 0, 0, 0.25);
+  /*Aplicamos radio de los bordes*/
+  border-radius: var(--radio_borde-contenedores);
+  /*Aplicamos tipo de display y alineamos los objetos*/
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  /*Habilitamos scroll vertical*/
+  overflow-y: auto;
+}
+
+.ingreso{
+  color: var(--color_ingresos);
+}
+
+.egreso{
+  color: var(--color_egresos);
+}
+
+.item__titulo{
+  font-size: 22px;
+}
+
+.item__parrafo{
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.contenido__item{
+  width: 100%;
+  height: 55px;
+  background-color: #EDEDED;
+  /*Aplicamos el display*/
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  /*Aplicamos el padding y el radio del borde*/
+  padding: 10px;
+  border-radius: var(--radio_borde-contenedores);
+  box-shadow: 1px 3px 7px rgba(0, 0, 0, 0.25);
+  transition: transform 900ms ease 0s;
+}
+
+.contenido__item:hover {
+  transform: scale(1.01, 1.06);
+}
+
+.item__navegacion{ /*Aplicamos el display y alineamos los objetos*/
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
