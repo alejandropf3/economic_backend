@@ -122,31 +122,8 @@
 
                 <div class="contenedor-historial__encabezado">
                     <div class="contenedor-historial__selector">
-                        <p class="contenedor-historial__encabezado-texto">Mes:</p>
-                            <select name="" id="" class="contenedor-historial__selector-seleccion">
-                            <option value="Octubre">Octubre</option>
-                            <option value="Septiembre">Septiembre</option>
-                            <option value="Agosto">Agosto</option>
-                            <option value="Julio">Julio</option>
-                            <option value="Junio">Junio</option>
-                            <option value="Mayo">Mayo</option>
-                            <option value="Abril">Abril</option>
-                            <option value="Marzo">Marzo</option>
-                            <option value="Febrero">Febrero</option>
-                            <option value="Marzo">Enero</option>
-                            </select>
-                    </div>
-
-                    <div class="contenedor-historial__selector">
-                        <p class="contenedor-historial__encabezado-texto">Año:</p>
-                        <select name="" id="" class="contenedor-historial__selector-seleccion">
-                            <option value="2025">2025</option>
-                            <option value="2024">2024</option>
-                            <option value="2023">2023</option>
-                            <option value="2022">2022</option>
-                            <option value="2021">2021</option>
-                            <option value="2020">2020</option>
-                        </select>
+                        <p class="contenedor-historial__encabezado-texto">Seleccionar fecha:</p>
+                        <input type="date" name="fecha_seleccion" id="fecha_seleccion" class="contenedor-historial__selector-date">
                     </div>
                 </div>
 

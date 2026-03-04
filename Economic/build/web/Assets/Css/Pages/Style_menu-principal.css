@@ -7,10 +7,22 @@
   grid-row: 2;
   grid-column: 2/3;
   padding-left: 30px;
-
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  gap: 20px;
+  animation: fadeInUp 0.6s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .contenedor__historial {
@@ -21,40 +33,88 @@
   height: 35%;
   width: 100%;
   padding: 20px;
-  background-color: var(--color_secundario);
+  background: linear-gradient(135deg, var(--color_secundario) 0%, #f8f9fa 100%);
   grid-row: 2;
   grid-column: 2/3;
   border-radius: var(--radio_borde-contenedores);
+  box-shadow: 0 8px 32px rgba(0, 35, 73, 0.1);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+}
+
+.contenedor__historial:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 40px rgba(0, 35, 73, 0.15);
 }
 
 .historial__ingresos {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  padding: 10px;
+  border-radius: 8px;
+  background-color: rgba(37, 141, 25, 0.1);
+  transition: all 0.3s ease;
+}
+
+.historial__ingresos:hover {
+  background-color: rgba(37, 141, 25, 0.2);
+  transform: translateX(5px);
 }
 
 .historial__ingresos-texto {
   /*parametros para los textos de ingresos*/
   color: var(--color_ingresos);
   font-size: var(--tamaño_fuente);
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.historial__ingresos:hover .historial__ingresos-texto {
+  color: #1F6B14;
+  transform: scale(1.05);
 }
 
 .historial__egresos {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  padding: 10px;
+  border-radius: 8px;
+  background-color: rgba(194, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.historial__egresos:hover {
+  background-color: rgba(194, 0, 0, 0.2);
+  transform: translateX(5px);
 }
 
 .historial__egresos-texto {
   /*parametros para los textos de egresos*/
   color: var(--color_egresos);
   font-size: var(--tamaño_fuente);
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.historial__egresos:hover .historial__egresos-texto {
+  color: #8B0000;
+  transform: scale(1.05);
 }
 
 .historial__titulo {
   font-weight: var(--grosor_titulo);
   color: var(--color_texto-oscuro);
   font-size: 28px;
+  text-shadow: 2px 2px 4px rgba(0, 35, 73, 0.1);
+  transition: all 0.3s ease;
+}
+
+.historial__titulo:hover {
+  color: var(--color_terceario);
+  transform: translateX(5px);
 }
 
 /* ===================== Seccion de resumenes =======================*/
@@ -67,22 +127,47 @@
   padding: 20px;
   height: 60%;
   width: 100%;
-  background-color: var(--color_secundario);
+  background: linear-gradient(135deg, var(--color_secundario) 0%, #f8f9fa 100%);
   grid-row: 2;
   grid-column: 2/3;
   border-radius: var(--radio_borde-contenedores);
+  box-shadow: 0 8px 32px rgba(0, 35, 73, 0.1);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+}
+
+.contenedor__resumenes:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 40px rgba(0, 35, 73, 0.15);
 }
 
 .resumenes__titulo {
   font-weight: var(--grosor_titulo);
   color: var(--color_texto-oscuro);
-  font-size: 28px
+  font-size: 28px;
+  text-shadow: 2px 2px 4px rgba(0, 35, 73, 0.1);
+  transition: all 0.3s ease;
+}
+
+.resumenes__titulo:hover {
+  color: var(--color_terceario);
+  transform: translateX(5px);
 }
 
 .resumenes__elementos {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 5px;
+  gap: 10px;
+  animation: fadeIn 0.8s ease-out;
+}
 
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }

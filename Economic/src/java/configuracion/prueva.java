@@ -16,7 +16,6 @@ public class prueva {
         ConexionDB hola = new ConexionDB();
         
         hola.getConnection(); //Realizamos una prueva del funcionamiendo de la conexion con la base de datos 
-        
     }
     
 }

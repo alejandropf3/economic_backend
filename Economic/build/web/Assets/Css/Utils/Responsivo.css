@@ -26,12 +26,13 @@
 
     /* -------------------- Layout principal -------------------- */
     body {
-        grid-template-rows: var(--alto_header) auto var(--alto_footer);
+        grid-template-rows: var(--alto_header) 1fr var(--alto_footer);
     }
 
     .main-menu {
-        min-height: var(--alto_main);
+        min-height: 400px;
         padding: 20px 0;
+        overflow-y: auto;
     }
 
     /* -------------------- Header -------------------- */
@@ -196,6 +197,7 @@
     .main-menu {
         padding: 15px;
         min-height: auto;
+        overflow-y: auto;
     }
 
     /* -------------------- Header con hamburguesa -------------------- */

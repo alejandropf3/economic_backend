@@ -1,14 +1,14 @@
 body{ /*Creamos la estructura grid para las paginas*/
-
     display: grid;
-
-    grid-template-rows: var(--alto_header) var(--alto_main) var(--alto_footer);
+    grid-template-rows: var(--alto_header) 1fr var(--alto_footer);
     grid-template-areas: /*Asignamos nombres alas areas*/
         "header"
         "main"
         "footer"
     ;
     min-height: 100vh; /*Definimos el alto minimo*/
+    overflow-x: hidden; /*Evitamos scroll horizontal*/
+    position: relative; /*Para asegurar posicionamiento correcto*/
 }
 
 .main-header{
@@ -22,10 +22,18 @@ body{ /*Creamos la estructura grid para las paginas*/
     grid-area: main;
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
+    padding: 20px 0;
+    overflow-y: auto;
+    min-height: 0; /*Permite que el contenedor pueda hacer scroll*/
 }
 
 .main-footer{
     grid-area: footer;
+    position: sticky; /*Cambia a sticky para mejor comportamiento*/
+    bottom: 0; /*Siempre pegado al fondo*/
+    z-index: 10; /*Asegura que esté por encima del contenido principal*/
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    box-shadow: 0 -4px 20px rgba(0, 35, 73, 0.1); /*Muevo la sombra aquí*/
 }
 

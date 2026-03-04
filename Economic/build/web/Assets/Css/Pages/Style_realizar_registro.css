@@ -4,7 +4,7 @@
     /*Tamaño y color del contenedor*/
     height: 100%;
     width: 100%;
-    background-color: var(--color_secundario);
+    background: linear-gradient(135deg, var(--color_secundario) 0%, #f8f9fa 100%);
     /*Posicionamiento en la grid general*/
     grid-column: 1/3;
     grid-row: 2;
@@ -12,6 +12,18 @@
     display: grid;
     grid-template-rows: 1fr;
     grid-template-columns: 1fr 0.5fr;
+    gap: 30px;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0, 35, 73, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.layout-general__contenedor-registro:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 40px rgba(0, 35, 73, 0.15);
 }
 
 .contenedor-registro__formulario {
@@ -22,6 +34,19 @@
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 16px;
+    padding: 35px;
+    box-shadow: 0 4px 20px rgba(0, 35, 73, 0.08);
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(149, 124, 61, 0.1);
+    transition: all 0.3s ease;
+}
+
+.contenedor-registro__formulario:hover {
+    background: rgba(255, 255, 255, 0.7);
+    box-shadow: 0 8px 30px rgba(0, 35, 73, 0.12);
+    transform: scale(1.01);
 }
 
 .formulario__seccion {
@@ -29,6 +54,19 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: 15px;
+    margin: 10px 0;
+    padding: 15px;
+    background: rgba(149, 124, 61, 0.05);
+    border-radius: 12px;
+    border: 1px solid rgba(149, 124, 61, 0.2);
+    transition: all 0.3s ease;
+}
+
+.formulario__seccion:hover {
+    background: rgba(149, 124, 61, 0.1);
+    transform: translateX(5px);
+    box-shadow: 0 4px 15px rgba(149, 124, 61, 0.15);
 }
 
 /*==================================== Seccion de informacion del formulario ========================================*/
@@ -39,6 +77,17 @@
     align-items: center;
     justify-content: space-between;
     padding: 30px;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.8) 0%, rgba(248, 249, 250, 0.9) 100%);
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 35, 73, 0.08);
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(0, 35, 73, 0.1);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.formulario__informacion:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 30px rgba(0, 35, 73, 0.12);
 }
 
 .formulario__informacion-titulo {
@@ -49,6 +98,14 @@
     color: var(--color_terceario);
     font-size: var(--tamaño_fuente_titulo);
     font-weight: var(--grosor_titulo);
+    text-shadow: 2px 2px 4px rgba(149, 124, 61, 0.2);
+    margin-bottom: 10px;
+    transition: all 0.3s ease;
+}
+
+.formulario__informacion-titulo:hover {
+    transform: scale(1.05);
+    color: var(--color_principal);
 }
 
 .formulario__informacion-lista {
@@ -57,11 +114,50 @@
     flex-direction: column;
     font-size: var(--tamaño_fuente);
     color: var(--color_texto-oscuro);
-    gap: 35px;
+    gap: 25px;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.6);
+    border-radius: 12px;
+    border-left: 4px solid var(--color_terceario);
+    transition: all 0.3s ease;
+}
+
+.formulario__informacion-lista:hover {
+    background: rgba(255, 255, 255, 0.8);
+    transform: translateX(5px);
+    box-shadow: 0 4px 15px rgba(149, 124, 61, 0.1);
 }
 
 .formulario__informacion-lista li {
     margin-left: 30px;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(149, 124, 61, 0.1);
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.formulario__informacion-lista li:last-child {
+    border-bottom: none;
+}
+
+.formulario__informacion-lista li:hover {
+    color: var(--color_terceario);
+    transform: translateX(10px);
+    padding-left: 10px;
+}
+
+.formulario__informacion-lista li::before {
+    content: '▸';
+    position: absolute;
+    left: -20px;
+    color: var(--color_terceario);
+    font-size: 18px;
+    transition: all 0.3s ease;
+}
+
+.formulario__informacion-lista li:hover::before {
+    transform: scale(1.2);
+    left: -25px;
 }
 
 .formulario__informacion-opciones {
@@ -69,4 +165,17 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: 20px;
+    margin-top: 20px;
+    padding: 20px;
+    background: rgba(149, 124, 61, 0.05);
+    border-radius: 12px;
+    border: 1px solid rgba(149, 124, 61, 0.2);
+    transition: all 0.3s ease;
+}
+
+.formulario__informacion-opciones:hover {
+    background: rgba(149, 124, 61, 0.1);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(149, 124, 61, 0.15);
 }
