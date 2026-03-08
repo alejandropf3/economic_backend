@@ -32,6 +32,8 @@
 
                 <input type="password" name="txtConfirmar" class="formulario__input" placeholder="Confirma la contraseña" required>
 
+                <span class="mensaje_error">ingreso un texto</span>
+                
                 <nav class="formulario__navegacion">
                     <button class="boton" type="submit">Confirmar</button>
                     <a href="../../index.jsp" class="formulario__link">¿Ya tienes cuenta?</a>
@@ -41,6 +43,6 @@
 
         </section>
     </main>
-                <script src="../../Assets/JS/validaciones.js"></script>
+    <script src="../../Assets/Js/script_formularios.js"></script>
 </body>
 </html>

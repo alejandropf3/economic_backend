@@ -1,0 +1,11 @@
+
+.error{
+    border-color: var(--color_error); 
+}
+
+.mensaje_error {
+    color: var(--color_error);
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
+    display: none;
+}
