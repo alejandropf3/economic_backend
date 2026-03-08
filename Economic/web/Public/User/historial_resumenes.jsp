@@ -135,60 +135,6 @@
                         <a href="" class="caja-resumen__link">Ver tabla</a>
                     </div>
 
-                    <div class="caja-resumen">
-                        <h2 class="caja-resumen__titulo">Resumen semanal</h2>
-                        <p class="caja-resumen__fecha">Dias 20/26</p>
-                        <a href="" class="caja-resumen__link">Ver tabla</a>
-                    </div>
-
-                    <div class="caja-resumen">
-                        <h2 class="caja-resumen__titulo">Resumen semanal</h2>
-                        <p class="caja-resumen__fecha">Dias 20/26</p>
-                        <a href="" class="caja-resumen__link">Ver tabla</a>
-                    </div>
-
-                    <div class="caja-resumen">
-                        <h2 class="caja-resumen__titulo">Resumen semanal</h2>
-                        <p class="caja-resumen__fecha">Dias 20/26</p>
-                        <a href="" class="caja-resumen__link">Ver tabla</a>
-                    </div>
-
-                    <div class="caja-resumen">
-                        <h2 class="caja-resumen__titulo">Resumen semanal</h2>
-                        <p class="caja-resumen__fecha">Dias 20/26</p>
-                        <a href="" class="caja-resumen__link">Ver tabla</a>
-                    </div>
-
-                    <div class="caja-resumen">
-                        <h2 class="caja-resumen__titulo">Resumen semanal</h2>
-                        <p class="caja-resumen__fecha">Dias 20/26</p>
-                        <a href="" class="caja-resumen__link">Ver tabla</a>
-                    </div>
-
-                    <div class="caja-resumen">
-                        <h2 class="caja-resumen__titulo">Resumen semanal</h2>
-                        <p class="caja-resumen__fecha">Dias 20/26</p>
-                        <a href="" class="caja-resumen__link">Ver tabla</a>
-                    </div>
-
-                    <div class="caja-resumen">
-                        <h2 class="caja-resumen__titulo">Resumen semanal</h2>
-                        <p class="caja-resumen__fecha">Dias 20/26</p>
-                        <a href="" class="caja-resumen__link">Ver tabla</a>
-                    </div>
-
-                    <div class="caja-resumen">
-                        <h2 class="caja-resumen__titulo">Resumen semanal</h2>
-                        <p class="caja-resumen__fecha">Dias 20/26</p>
-                        <a href="" class="caja-resumen__link">Ver tabla</a>
-                    </div>
-
-                    <div class="caja-resumen">
-                        <h2 class="caja-resumen__titulo">Resumen semanal</h2>
-                        <p class="caja-resumen__fecha">Dias 20/26</p>
-                        <a href="" class="caja-resumen__link">Ver tabla</a>
-                    </div>
-
                 </div>
 
             </div>

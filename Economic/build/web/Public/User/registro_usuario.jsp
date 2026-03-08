@@ -37,33 +37,6 @@
                     <a href="../../index.jsp" class="formulario__link">¿Ya tienes cuenta?</a>
                 </nav>
 
-                <% if(request.getParameter("res") != null) { %>
-                    <p style="color: blue; text-align: center;">
-                        <%= request.getParameter("res").equals("exito") ? "¡Registrado correctamente!" : "Error al registrar" %>
-                    </p>
-                <% } %>
-                
-                <% 
-                    String res = request.getParameter("res");
-                    if(res != null) { 
-                        String mensaje = "";
-                        String color = "red";
-
-                        switch(res) {
-                            case "exito": mensaje = "¡Registro exitoso!"; color = "green"; break;
-                            case "vacio": mensaje = "Por favor, completa todos los campos."; break;
-                            case "pass_error": mensaje = "Las contraseñas no coinciden."; break;
-                            case "nombre_duplicado": mensaje = "Este nombre de usuario ya está registrado."; break;
-                            case "correo_duplicado": mensaje = "Este correo electrónico ya está en uso."; break;
-                            case "error": mensaje = "Ocurrió un error en el servidor."; break;
-                            default: mensaje = "Inténtalo de nuevo."; break;
-                        }
-                %>
-                    <p style="color: <%= color %>; text-align: center; font-weight: bold;">
-                        <%= mensaje %>
-                    </p>
-                <% } %>
-
             </form>
 
         </section>

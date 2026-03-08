@@ -42,9 +42,6 @@
                     <a href="Public/User/registro_usuario.jsp" class="formulario__link">¿Aun no tienes una cuenta?</a>
                 </nav>
 
-                <% if(request.getParameter("res") != null) { %>
-                    <p style="color: red; text-align: center;">Correo o contraseña incorrectos.</p>
-                <% } %>
             </form>
         </section>
     </main>
