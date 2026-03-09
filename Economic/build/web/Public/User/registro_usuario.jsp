@@ -24,13 +24,13 @@
 
             <form action="/Economic/UsuarioControlador" method="POST" class="formulario-registro__form">
                 
-                <input type="text" name="txtNombre" class="formulario__input" placeholder="Nombre" required>
+                <input type="text" name="txtNombre" class="formulario__input" placeholder="Nombre" >
 
-                <input type="email" name="txtEmail" class="formulario__input" placeholder="Correo electronico">
+                <input type="email" name="txtEmail" class="formulario__input" placeholder="Correo electronico" >
 
-                <input type="password" name="txtContrasena" class="formulario__input" placeholder="Contraseña" required>
+                <input type="password" name="txtContrasena" class="formulario__input" placeholder="Contraseña" >
 
-                <input type="password" name="txtConfirmar" class="formulario__input" placeholder="Confirma la contraseña" required>
+                <input type="password" name="txtConfirmar" class="formulario__input" placeholder="Confirma la contraseña" >
 
                 <span class="mensaje_error">ingreso un texto</span>
                 
