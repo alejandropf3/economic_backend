@@ -22,7 +22,7 @@ body{ /*Creamos la estructura grid para las paginas*/
     grid-area: main;
     display: flex;
     justify-content: center;
-    align-items: flex-start;
+    align-items: center;
     padding: 20px 0;
     overflow-y: auto;
     min-height: 0; /*Permite que el contenedor pueda hacer scroll*/

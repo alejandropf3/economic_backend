@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Realizar registro</title>
     <link rel="stylesheet" href="../../Assets/Styles_principal.css">
+    <script src="../../Assets/Js/validacion_transaccion.js" defer></script>
 </head>
 
 <body>
@@ -124,18 +125,20 @@
 
                 <div class="contenedor-registro__formulario">
 
-                    <input type="number" class="formulario__input--registro" placeholder="Valor de la transaccion">
+                    <input type="number" name="valor" class="formulario__input--registro" placeholder="Valor de la transaccion">
                     <div class="formulario__seccion">
-                        <select name="" id="" class="seccion__caja-eleccion">
+                        <select name="categoria" id="categoria" class="seccion__caja-eleccion">
                             <option value="" disabled selected>Categoria</option>
                             <option value="Octubre">Octubre</option>
                         </select>
 
-                        <input type="text" class="seccion__input--registro" placeholder="Tipo">
+                        <input type="text" name="tipo" class="seccion__input--registro" placeholder="Tipo">
                     </div>
-                    <input type="text" class="formulario__input--registro" placeholder="Fecha de creacion">
-                    <textarea name="" id="" class="formulario__caja-texto" placeholder="Descripcion"></textarea>
+                    <input type="text" name="fecha" class="formulario__input--registro" placeholder="Fecha de creacion">
+                    <textarea name="descripcion" id="descripcion" class="formulario__caja-texto" placeholder="Descripcion"></textarea>
                 </div>
+
+                <span class="mensaje_error"></span>
 
                 <div class="formulario__informacion">
 

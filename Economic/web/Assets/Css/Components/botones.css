@@ -204,8 +204,8 @@
     justify-content: center;
     align-items: center;
     /*Asignamos tamaños al boton */
-    height: 30px;
-    width: 170px;
+    height: 40px;
+    width: 230px;
     /*Aplicamos color al fondo y una sombra*/
     background-color: var(--color_terceario);
     box-shadow: 1px 1px 7px rgba(0, 0, 0, 0.500);

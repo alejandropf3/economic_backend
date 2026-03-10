@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 
 <head>
@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Codigo de recuperacion</title>
     <link rel="stylesheet" href="../../Assets/Styles_principal.css">
+    <script src="../../Assets/Js/validacion_codigo.js" defer></script>
 </head>
 
 <body>
@@ -21,19 +22,21 @@
         <section class="formulario-codigo">
 
             <div class="formulario__titulo"> <!-- Contenedor del titulo del formulario -->
-                <h2>Recuperacion de contraseña</h2>
+                <h2>Recuperacion de contraseÃ±a</h2>
                 <hr class="linea">
             </div>
 
             <div class="formulario__mensaje"> <!-- Contenedor del texto del formulario -->
-                <p class="formulario__texto">Hemos enviado un codigo de verificacion para recuperar la contraseña a:</p>
+                <p class="formulario__texto">Hemos enviado un codigo de verificacion para recuperar la contraseÃ±a a:</p>
                 <p>Cor****@gmail.com</p>
                 <hr class="linea--texto">
             </div>
 
-            <form action="cambio_contrase�a.jsp" method="get" class="formulario-codigo__form">
-                <label for="" class="formulario__label">Ingresa el codigo</label>
-                <input type="text" class="formulario__input">
+            <form action="cambio_contraseña.jsp" method="get" class="formulario-codigo__form">
+                <label for="codigo" class="formulario__label">Ingresa el codigo</label>
+                <input type="text" name="codigo" class="formulario__input">
+
+                <span class="mensaje_error"></span>
 
                 <nav class="formulario__navegacion">
                     <button class="boton" type="submit">Confirmar</button>
