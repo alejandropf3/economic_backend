@@ -38,7 +38,10 @@ public class LoginControlador extends HttpServlet {
             session.setAttribute("usuario", user);
             response.sendRedirect(request.getContextPath() + "/Public/User/menu_principal.jsp");
         } else {
-            response.sendRedirect(request.getContextPath() + "/index.jsp?res=error");
+            // Verificar si el correo existe para dar mensaje específico
+            boolean correoExiste = dao.existeCorreo(correo);
+            String mensajeError = correoExiste ? "invalid_password" : "user_not_found";
+            response.sendRedirect(request.getContextPath() + "/index.jsp?res=" + mensajeError);
         }
     }
 }

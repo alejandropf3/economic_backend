@@ -20,3 +20,4 @@
 @import url(Css/Components/sidebar.css);/* Componente del menú hamburguesa y sidebar */
 @import url(Css/Utils/Responsivo.css);/* Media queries para responsive design */
 @import url(Css/Utils/Errores.css);
+@import url(Css/Utils/campo-error.css);

@@ -335,7 +335,7 @@
 }
 
 .seccion__caja-eleccion {
-    width: 45%;
+    width: 90%;
     height: 70px;
     padding: 10px;
     background-color: var(--color_capos_formulario);
@@ -361,7 +361,7 @@
 }
 
 .seccion__input--registro {
-    width: 45%;
+    width: 100%;
     height: 70px;
     padding: 10px;
     background-color: var(--color_capos_formulario);
@@ -387,7 +387,7 @@
 
 .formulario__caja-texto {
     width: 100%;
-    height: 30%;
+    height: 160px;
     padding: 10px;
     background-color: var(--color_capos_formulario);
     border-radius: var(--radio_borde-contenedores);

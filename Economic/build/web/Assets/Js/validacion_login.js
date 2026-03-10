@@ -44,8 +44,7 @@ const validar = (formulario, reglas) => {
         campo: nombreCampo
       };
     }
-  }
-  
+  } 
   return {
     esValido: true
   };
@@ -65,18 +64,16 @@ const reglas = {
     txtCorreo: { 
         required: true, 
         email: true,
-        max: 100,
         mensaje: "El campo correo electrónico es obligatorio",
-        emailMensaje: "El formato del correo electrónico no es válido (ej: usuario@dominio.com)",
-        maxMensaje: "El correo electrónico no debe exceder 100 caracteres"
+        emailMensaje: "El formato del correo electrónico no es válido (ej: usuario@dominio.com)"
     },
     txtContrasena: { 
         required: true, 
-        min: 6,
-        max: 50,
+        min: 8,
+        max: 15,
         mensaje: "El campo contraseña es obligatorio",
-        minMensaje: "La contraseña debe tener como mínimo 6 caracteres",
-        maxMensaje: "La contraseña no debe exceder 50 caracteres"
+        minMensaje: "La contraseña debe tener como mínimo 8 caracteres",
+        maxMensaje: "La contraseña no debe exceder 15 caracteres"
     }
 };
 
@@ -100,6 +97,41 @@ const limpiar_errores = () => {
 
 // Esperamos a que el DOM esté listo
 document.addEventListener('DOMContentLoaded', function () {
+    // Mostrar mensajes de error del servidor
+    const urlParams = new URLSearchParams(window.location.search);
+    const res = urlParams.get('res');
+    const mensajeError = document.querySelector('.mensaje_error');
+
+    if (mensajeError && res) {
+        let mensaje = '';
+
+        switch(res) {
+            case 'user_not_found':
+                mensaje = 'El usuario no existe en el sistema';
+                break;
+            case 'invalid_password':
+                mensaje = 'La contraseña es incorrecta';
+                break;
+            case 'error':
+                mensaje = 'Error al iniciar sesión. Verifique sus credenciales';
+                break;
+            default:
+                mensaje = 'Error desconocido';
+        }
+
+        mensajeError.textContent = mensaje;
+        mensajeError.style.display = 'block';
+
+        // Marcar campos correspondientes como error
+        if (res === 'user_not_found' || res === 'invalid_password') {
+            const emailInput = document.querySelector('input[name="txtCorreo"]');
+            const passInput = document.querySelector('input[name="txtContrasena"]');
+
+            if (emailInput) emailInput.classList.add('error');
+            if (passInput) passInput.classList.add('error');
+        }
+    }
+    
     if (!formulario) return;
     
     // Limpiar errores al escribir

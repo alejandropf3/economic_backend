@@ -51,7 +51,7 @@ public class UsuarioControlador extends HttpServlet {
         user.setContrasena(passEncriptada);
 
         if (dao.registrar(user)) {
-            response.sendRedirect(request.getContextPath() + "/index.jsp?res=exito");
+            response.sendRedirect(request.getContextPath() + "/index.jsp");
         } else {
             response.sendRedirect(request.getContextPath() + "/Public/User/registro_usuario.jsp?res=error");
         }

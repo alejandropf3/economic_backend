@@ -23,6 +23,15 @@ const validar = (formulario, reglas) => {
         campo: nombreCampo
       };
     }
+    
+        // Validación de longitud máxima
+    if (regla.max && elemento.value.length > regla.max) {
+      return {
+        esValido: false,
+        mensaje: `El campo no debe exceder ${regla.max} caracteres`,
+        campo: nombreCampo
+      };
+    }
   }
   
   return {
@@ -36,8 +45,8 @@ const mensaje_error = document.querySelector('.mensaje_error');
 const reglas = {
     txtNombre: { required: true, mensaje: "El campo nombre es obligatorio" },
     txtEmail: { required: true, mensaje: "El campo email es obligatorio" },
-    txtContrasena: { required: true, min: 8, mensaje: "El campo contraseña es obligatorio" },
-    txtConfirmar: { required: true, min: 8, mensaje: "El campo confirmar contraseña es obligatorio" }
+    txtContrasena: { required: true, min: 8, max: 15, mensaje: "El campo contraseña es obligatorio" },
+    txtConfirmar: { required: true, min: 8, max: 15, mensaje: "El campo confirmar contraseña es obligatorio" }
 };
 
 const mostrar_errores = (error, campo = null) => {
@@ -67,6 +76,29 @@ const limpiar_errores = () => {
 // Esperamos a que el DOM esté listo
 document.addEventListener('DOMContentLoaded', function () {
     if (!formulario) return;
+    
+    const urlParams = new URLSearchParams(window.location.search);
+    const res = urlParams.get('res');
+    const mensajeError = document.querySelector('.mensaje_error');
+    
+    if (mensajeError && res) {
+        let mensaje = '';
+
+        switch(res) {
+            case 'correo_duplicado':
+                mensaje = 'El correo ya esta registrado en el sistema';
+                break;
+        }
+
+        mensajeError.textContent = mensaje;
+        mensajeError.style.display = 'block';
+
+        // Marcar campos correspondientes como error
+        if (res === 'correo_duplicado') {
+            const emailInput = document.querySelector('input[name="txtEmail"]');
+            if (emailInput) emailInput.classList.add('error');
+        }
+    }
     
     formulario.addEventListener('submit', function (e) {
         e.preventDefault();

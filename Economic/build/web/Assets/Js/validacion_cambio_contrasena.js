@@ -23,6 +23,15 @@ const validar = (formulario, reglas) => {
         campo: nombreCampo
       };
     }
+    
+    // Validación de longitud máxima
+    if (regla.max && elemento.value.length > regla.max) {
+      return {
+        esValido: false,
+        mensaje: regla.maxMensaje || `El campo no debe exceder ${regla.max} caracteres`,
+        campo: nombreCampo
+      };
+    }
   }
   
   return {
@@ -44,15 +53,18 @@ const reglas = {
     nuevaContrasena: { 
         required: true, 
         min: 8,
-        max: 50,
+        max: 15,
         mensaje: "El campo nueva contraseña es obligatorio",
-        minMensaje: "La contraseña debe tener como mínimo 8 caracteres"
+        minMensaje: "La contraseña debe tener como mínimo 8 caracteres",
+        maxMensaje: "La contraseña no debe exceder 15 caracteres"
     },
     confirmarContrasena: { 
         required: true, 
         min: 8,
+        max: 15,
         mensaje: "El campo confirmar contraseña es obligatorio",
-        minMensaje: "La confirmación debe tener como mínimo 8 caracteres"
+        minMensaje: "La confirmación debe tener como mínimo 8 caracteres",
+        maxMensaje: "La confirmación no debe exceder 15 caracteres"
     }
 };
 

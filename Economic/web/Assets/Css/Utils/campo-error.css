@@ -1,0 +1,76 @@
+/* Estilos para errores de campo individuales */
+
+.campo-formulario {
+    position: relative;
+    margin-bottom: 0.5rem;
+    width: 100%;
+}
+
+.campo-error {
+    display: none;
+    color: var(--color_error);
+    font-size: 0.75rem;
+    margin-top: 0.25rem;
+    font-weight: 500;
+    line-height: 1.2;
+    padding: 0 5px;
+    min-height: 16px;
+}
+
+/* Ajustes específicos para diferentes tipos de campos */
+.campo-formulario .formulario__input--registro + .campo-error,
+.campo-formulario .seccion__input--registro + .campo-error,
+.campo-formulario .formulario__caja-texto + .campo-error {
+    margin-top: 0.25rem;
+}
+
+.campo-formulario .seccion__caja-eleccion + .campo-error {
+    margin-top: 0.25rem;
+}
+
+/* Animación sutil para mostrar errores */
+.campo-error {
+    animation: fadeInError 0.3s ease-in-out;
+}
+
+@keyframes fadeInError {
+    from {
+        opacity: 0;
+        transform: translateY(-3px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Ajustes para el contenedor principal */
+.contenedor-registro__formulario {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+/* Ajustes para la sección de categoria y tipo */
+.formulario__seccion {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+}
+
+.formulario__seccion .campo-formulario {
+    flex: 1;
+    margin-bottom: 0;
+}
+
+/* Evitar que los errores afecten el layout */
+.campo-formulario {
+    display: flex;
+    flex-direction: column;
+}
+
+.campo-formulario input,
+.campo-formulario select,
+.campo-formulario textarea {
+    margin-bottom: 0;
+}

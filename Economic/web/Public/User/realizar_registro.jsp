@@ -125,20 +125,32 @@
 
                 <div class="contenedor-registro__formulario">
 
-                    <input type="number" name="valor" class="formulario__input--registro" placeholder="Valor de la transaccion">
-                    <div class="formulario__seccion">
-                        <select name="categoria" id="categoria" class="seccion__caja-eleccion">
-                            <option value="" disabled selected>Categoria</option>
-                            <option value="Octubre">Octubre</option>
-                        </select>
-
-                        <input type="text" name="tipo" class="seccion__input--registro" placeholder="Tipo">
+                    <div class="campo-formulario">
+                        <input type="number" name="valor" class="formulario__input--registro" placeholder="Valor de la transaccion">
+                        <span class="mensaje_error campo-error"></span>
                     </div>
-                    <input type="text" name="fecha" class="formulario__input--registro" placeholder="Fecha de creacion">
-                    <textarea name="descripcion" id="descripcion" class="formulario__caja-texto" placeholder="Descripcion"></textarea>
+                    <div class="formulario__seccion">
+                        <div class="campo-formulario">
+                            <select name="categoria" id="categoria" class="seccion__caja-eleccion">
+                                <option value="" disabled selected>Categoria</option>
+                                <option value="Octubre">Octubre</option>
+                            </select>
+                            <span class="mensaje_error campo-error"></span>
+                        </div>
+                        <div class="campo-formulario">
+                            <input type="text" name="tipo" class="seccion__input--registro" placeholder="Tipo">
+                            <span class="mensaje_error campo-error"></span>
+                        </div>
+                    </div>
+                    <div class="campo-formulario">
+                        <input type="text" name="fecha" class="formulario__input--registro" placeholder="Fecha de creacion">
+                        <span class="mensaje_error campo-error"></span>
+                    </div>
+                    <div class="campo-formulario">
+                        <textarea name="descripcion" id="descripcion" class="formulario__caja-texto" placeholder="Descripcion"></textarea>
+                        <span class="mensaje_error campo-error"></span>
+                    </div>
                 </div>
-
-                <span class="mensaje_error"></span>
 
                 <div class="formulario__informacion">
 

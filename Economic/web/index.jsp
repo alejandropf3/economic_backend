@@ -13,7 +13,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="./Assets/Styles_principal.css">
-    <script src="./Assets/Js/validacion_login.js" defer></script>
+    <script src="Assets/Js/validacion_login.js" defer></script>
+    
 </head>
 
 <body>

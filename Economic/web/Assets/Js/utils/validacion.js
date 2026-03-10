@@ -22,6 +22,15 @@ export const validar = (formulario, reglas) => {
         campo: nombreCampo
       };
     }
+    
+    // Validación de longitud máxima
+    if (regla.max && elemento.value.length > regla.max) {
+      return {
+        esValido: false,
+        mensaje: `El campo no debe exceder ${regla.max} caracteres`,
+        campo: nombreCampo
+      };
+    }
   }
   
   return {

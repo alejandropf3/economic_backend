@@ -123,19 +123,29 @@ const reglas = {
 const mostrar_errores = (error, campo = null) => {
     // Limpiar errores anteriores
     document.querySelectorAll('.error').forEach(el => el.classList.remove('error'));
+    document.querySelectorAll('.campo-error').forEach(el => el.style.display = 'none');
     
     if (campo) {
+        // Marcar el campo con error
         const elemento = document.querySelector(`[name="${campo}"]`);
         if (elemento) elemento.classList.add("error");
+        
+        // Mostrar mensaje específico debajo del campo
+        const contenedorCampo = elemento.closest('.campo-formulario');
+        if (contenedorCampo) {
+            const spanError = contenedorCampo.querySelector('.campo-error');
+            if (spanError) {
+                spanError.textContent = error;
+                spanError.style.display = 'block';
+            }
+        }
     }
-    
-    mensaje_error.textContent = error;
-    mensaje_error.style.display = "block";
 };
 
 const limpiar_errores = () => {
     document.querySelectorAll('.error').forEach(el => el.classList.remove('error'));
-    mensaje_error.style.display = "none";
+    document.querySelectorAll('.campo-error').forEach(el => el.style.display = 'none');
+    if (mensaje_error) mensaje_error.style.display = "none";
 };
 
 // Esperamos a que el DOM esté listo
