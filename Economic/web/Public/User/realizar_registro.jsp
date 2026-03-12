@@ -1,3 +1,4 @@
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="es">
 
@@ -17,7 +18,7 @@
     <!-- Overlay del sidebar -->
     <label for="sidebar-toggle" class="sidebar__overlay"></label>
 
-    <!-- Sidebar para móvil -->
+    <!-- Sidebar para mÃ³vil -->
     <aside class="sidebar">
         <div class="sidebar__contenido">
             <div class="sidebar__header">
@@ -38,7 +39,7 @@
                 </a>
                 <a href="historial_resumenes.jsp" class="sidebar__link">
                     <i class="bi bi-file-text-fill"></i>
-                    Historial de resúmenes
+                    Historial de resumenes
                 </a>
                 <a href="configuracion_usuario.jsp" class="sidebar__link">
                     <i class="bi bi-gear-fill"></i>
@@ -69,7 +70,7 @@
         <div class="encabezado">
             <h1 class="encabezado__logo">ECONOMIC</h1>
 
-            <!-- Botón hamburguesa para móvil -->
+            <!-- BotÃ³n hamburguesa para mÃ³vil -->
             <label for="sidebar-toggle" class="hamburguesa">
                 <span class="hamburguesa__linea"></span>
                 <span class="hamburguesa__linea"></span>
@@ -79,7 +80,7 @@
             <nav class="encabezado__navegacion">
                 <a href="menu_principal.jsp" class="encabezado__link">Inicio</a>
                 <a href="historial_transacciones.jsp" class="encabezado__link">Historial de transacciones</a>
-                <a href="historial_resumenes.jsp" class="encabezado__link">Historial de resúmenes</a>
+                <a href="historial_resumenes.jsp" class="encabezado__link">Historial de resumenes</a>
                 <a href="configuracion_usuario.jsp" class="encabezado__link">Opciones</a>
 
                 <a href="#ventana-salida-confirmar" class="encabezado__icono">

@@ -1,3 +1,4 @@
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 ﻿<!DOCTYPE html>
 <html lang="es">
 
@@ -21,7 +22,7 @@
         <section class="formulario-cambio-contrasena">
 
             <div class="formulario__titulo"> <!-- Contenedor del titulo del formulario -->
-                <h2>Cambio de contraseÃ±a</h2>
+                <h2>Cambio de contraseña</h2>
                 <hr class="linea">
             </div>
 

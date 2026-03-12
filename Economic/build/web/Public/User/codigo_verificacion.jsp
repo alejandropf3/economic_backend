@@ -1,3 +1,4 @@
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 ﻿<!DOCTYPE html>
 <html lang="es">
 
@@ -22,12 +23,12 @@
         <section class="formulario-codigo">
 
             <div class="formulario__titulo"> <!-- Contenedor del titulo del formulario -->
-                <h2>Recuperacion de contraseÃ±a</h2>
+                <h2>Recuperacion de contraseña</h2>
                 <hr class="linea">
             </div>
 
             <div class="formulario__mensaje"> <!-- Contenedor del texto del formulario -->
-                <p class="formulario__texto">Hemos enviado un codigo de verificacion para recuperar la contraseÃ±a a:</p>
+                <p class="formulario__texto">Hemos enviado un codigo de verificacion para recuperar la contraseña a:</p>
                 <p>Cor****@gmail.com</p>
                 <hr class="linea--texto">
             </div>

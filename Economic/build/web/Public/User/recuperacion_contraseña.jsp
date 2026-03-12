@@ -1,3 +1,4 @@
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 ﻿<!DOCTYPE html>
 <html lang="es">
 
@@ -22,7 +23,7 @@
         <section class="formulario-recuperacion">
 
             <div class="formulario__titulo"> <!-- Contenedor del titulo del formulario -->
-                <h2>Recuperacion de contraseÃ±a</h2>
+                <h2>Recuperacion de contraseña</h2>
                 <hr class="linea">
             </div>
 

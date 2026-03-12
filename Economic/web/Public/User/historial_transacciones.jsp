@@ -1,3 +1,4 @@
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="es">
 
@@ -16,7 +17,7 @@
     <!-- Overlay del sidebar -->
     <label for="sidebar-toggle" class="sidebar__overlay"></label>
 
-    <!-- Sidebar para móvil -->
+    <!-- Sidebar para mÃ³vil -->
     <aside class="sidebar">
         <div class="sidebar__contenido">
             <div class="sidebar__header">
@@ -37,7 +38,7 @@
                 </a>
                 <a href="historial_resumenes.jsp" class="sidebar__link">
                     <i class="bi bi-file-text-fill"></i>
-                    Historial de resúmenes
+                    Historial de resumenes
                 </a>
                 <a href="configuracion_usuario.jsp" class="sidebar__link">
                     <i class="bi bi-gear-fill"></i>
@@ -68,7 +69,7 @@
         <div class="encabezado">
             <h1 class="encabezado__logo">ECONOMIC</h1>
 
-            <!-- Botón hamburguesa para móvil -->
+            <!-- BotÃ³n hamburguesa para mÃ³vil -->
             <label for="sidebar-toggle" class="hamburguesa">
                 <span class="hamburguesa__linea"></span>
                 <span class="hamburguesa__linea"></span>
@@ -78,7 +79,7 @@
             <nav class="encabezado__navegacion">
                 <a href="menu_principal.jsp" class="encabezado__link">Inicio</a>
                 <a href="historial_transacciones.jsp" class="encabezado__link">Historial de transacciones</a>
-                <a href="historial_resumenes.jsp" class="encabezado__link">Historial de resúmenes</a>
+                <a href="historial_resumenes.jsp" class="encabezado__link">Historial de resumenes</a>
                 <a href="configuracion_usuario.jsp" class="encabezado__link">Opciones</a>
 
                 <a href="#ventana-salida-confirmar" class="encabezado__icono">
@@ -144,7 +145,7 @@
                         </select>
                     </div>
                     <div class="filtro-item">
-                        <label for="filtro-categoria" class="filtro-label">Categoría:</label>
+                        <label for="filtro-categoria" class="filtro-label">Categori­a:</label>
                         <select id="filtro-categoria" class="filtro-select">
                             <option value="todas">Todas</option>
                             <option value="comida">Comida</option>
@@ -171,7 +172,7 @@
                                     Valor <i class="bi bi-arrow-down-up"></i>
                                 </th>
                                 <th class="sortable" data-column="categoria">
-                                    Categoría <i class="bi bi-arrow-down-up"></i>
+                                    Categori­a <i class="bi bi-arrow-down-up"></i>
                                 </th>
                                 <th>Descripción</th>
                                 <th class="sortable" data-column="fecha">
@@ -266,7 +267,7 @@
                                 <td>Ingreso +</td>
                                 <td>$200.00</td>
                                 <td><span class="categoria-badge">Venta</span></td>
-                                <td class="descripcion">Venta de artículos usados</td>
+                                <td class="descripcion">Venta de artí­culos usados</td>
                                 <td class="fecha">2024-01-10</td>
                                 <td class="acciones">
                                     <button class="accion-btn editar-btn" title="Editar">

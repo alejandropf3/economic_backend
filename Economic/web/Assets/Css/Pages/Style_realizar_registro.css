@@ -146,15 +146,6 @@
     padding-left: 10px;
 }
 
-.formulario__informacion-lista li::before {
-    content: '▸';
-    position: absolute;
-    left: -20px;
-    color: var(--color_terceario);
-    font-size: 18px;
-    transition: all 0.3s ease;
-}
-
 .formulario__informacion-lista li:hover::before {
     transform: scale(1.2);
     left: -25px;

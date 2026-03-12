@@ -52,27 +52,7 @@
 
     <!-- Seccion de pie de pagina -->
     <footer class="main-footer">
-        <div class="pie-pagina">
-            <nav class="pie-pagina__navegacion">
-                <a href="https://github.com/alejandropf3" class="pie-pagina__link-icono"><i
-                        class="bi bi-github"></i></a>
-                <a href="" class="pie-pagina__link-icono"><i class="bi bi-instagram"></i></a>
-                <a href="" class="pie-pagina__link-icono"><i class="bi bi-facebook"></i></a>
-            </nav>
-
-            <h2 class="pie-pagina__logo">ECONOMIC</h2>
-
-            <div class="pie-pagina__contacto">
-                <div class="pie-pagina__contacto-informacion">
-                    <i class="bi bi-envelope-fill"></i>
-                    <p>alejandropefa31@gmail.com</p>
-                </div>
-                <div class="pie-pagina__contacto-informacion">
-                    <i class="bi bi-telephone-fill"></i>
-                    <p>+57 3102317070</p>
-                </div>
-            </div>
-        </div>
+        
     </footer>
 
 
