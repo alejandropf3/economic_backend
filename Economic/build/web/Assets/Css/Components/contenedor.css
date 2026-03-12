@@ -5,9 +5,7 @@
     height: 100%;
     width: 100%;
     /*Asignamos el display y el alineamiento de elementos*/
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    padding-right: 10px;
     grid-row: 2;
     grid-column: 1;
 }
