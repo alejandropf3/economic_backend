@@ -1,6 +1,13 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="java.util.List"%>
 <%@page import="modelo.Categoria"%>
+<%@page import="modelo.Usuario"%>
+<%-- Recuperar usuario de sesión --%>
+<%
+    Usuario usuarioSesion = (Usuario) session.getAttribute("usuario");
+    String nombreUsuario = usuarioSesion != null ? usuarioSesion.getNombre() : "";
+    String correoUsuario = usuarioSesion != null ? usuarioSesion.getCorreo() : "";
+%>
 <%-- Redirigir al controlador si se accede directamente al JSP --%>
 <%
     if (request.getAttribute("categorias") == null) {
@@ -79,8 +86,8 @@
                         <i class="bi bi-person-fill"></i>
                     </div>
                     <div class="sidebar__usuario-datos">
-                        <p class="sidebar__usuario-nombre">Nombre de usuario</p>
-                        <p class="sidebar__usuario-email">Cor****@gmail.com</p>
+                        <p class="sidebar__usuario-nombre"><%= nombreUsuario %></p>
+                        <p class="sidebar__usuario-email"><%= correoUsuario %></p>
                     </div>
                 </div>
                 <a href="${pageContext.request.contextPath}/index.jsp" class="sidebar__salir">
@@ -119,11 +126,11 @@
                             <div class="encabezado__icono">
                                 <i class="bi bi-person-fill"></i>
                             </div>
-                            <p>Nombre de usuario</p>
+                            <p class="sidebar__usuario-nombre"><%= nombreUsuario %></p>
                         </div>
                         <div class="ventana-salida__informacion">
                             <p>Email</p>
-                            <p>Cor****@gmail.com</p>
+                            <p class="sidebar__usuario-email"><%= correoUsuario %></p>
                         </div>
                         <a href="${pageContext.request.contextPath}/index.jsp" class="ventana-salida__link">
                             <i class="bi bi-box-arrow-right"></i>
@@ -146,23 +153,28 @@
                 <form action="" method="get" class="contenedor-izquierda__formulario">
                     <div class="formulario__campos-usuario">
                         <label for="nombre_usuario" class="formulario__campos-label">Nombre</label>
-                        <input type="text" id="nombre_usuario" class="formulario__campos-input" placeholder="Nombre de usuario">
+                        <input type="text" id="nombre_usuario" class="formulario__campos-input"
+                               value="<%= nombreUsuario %>" placeholder="Nombre de usuario" readonly>
                     </div>
                     <div class="formulario__campos-usuario">
                         <label for="contraseña_usuario" class="formulario__campos-label">Contraseña</label>
-                        <input type="text" id="contraseña_usuario" class="formulario__campos-input" placeholder="Contra123">
+                        <input type="password" id="contraseña_usuario" class="formulario__campos-input"
+                               value="••••••••" placeholder="Contra123" readonly>
                     </div>
                     <div class="formulario__campos-usuario">
                         <label for="correo_usuario" class="formulario__campos-label">Correo electronico</label>
-                        <input type="email" id="correo_usuario" class="formulario__campos-input" placeholder="Cor****@gmail.com">
+                        <input type="email" id="correo_usuario" class="formulario__campos-input"
+                               value="<%= correoUsuario %>" placeholder="Cor****@gmail.com" readonly>
                     </div>
                     <div class="formulario__campos-usuario">
                         <label for="respado_correo_usuario" class="formulario__campos-label">Respaldo correo electronico</label>
-                        <input type="email" id="respado_correo_usuario" class="formulario__campos-input" placeholder="Res****@gmail.com">
+                        <input type="email" id="respado_correo_usuario" class="formulario__campos-input"
+                               placeholder="Res****@gmail.com" readonly>
                     </div>
                     <div class="formulario__campos-usuario">
                         <label for="dinero_diponible" class="formulario__campos-label">Dinero disponible</label>
-                        <input type="number" id="dinero_diponible" class="formulario__campos-input" placeholder="$0.00">
+                        <input type="number" id="dinero_diponible" class="formulario__campos-input"
+                               placeholder="$0.00" readonly>
                     </div>
                 </form>
             </div>
