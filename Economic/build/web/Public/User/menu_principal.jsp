@@ -1,4 +1,11 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="modelo.Usuario"%>
+<%-- Recuperar usuario de sesión --%>
+<%
+    Usuario usuarioSesion = (Usuario) session.getAttribute("usuario");
+    String nombreUsuario = usuarioSesion != null ? usuarioSesion.getNombre() : "";
+    String correoUsuario = usuarioSesion != null ? usuarioSesion.getCorreo() : "";
+%>
 <!DOCTYPE html>
 <html lang="es">
 
@@ -52,13 +59,13 @@
                         <i class="bi bi-person-fill"></i>
                     </div>
                     <div class="sidebar__usuario-datos">
-                        <p class="sidebar__usuario-nombre">Nombre de usuario</p>
-                        <p class="sidebar__usuario-email">Cor****@gmail.com</p>
+                        <p class="sidebar__usuario-nombre"><%= nombreUsuario %></p>
+                        <p class="sidebar__usuario-email"><%= correoUsuario %></p>
                     </div>
                 </div>
                 <a href="../../index.jsp" class="sidebar__salir">
                     <i class="bi bi-box-arrow-right"></i>
-                    Cerrar sesiÃ³n
+                    Cerrar sesión
                 </a>
             </div>
         </div>
@@ -93,12 +100,12 @@
                             <div class="encabezado__icono">
                                 <i class="bi bi-person-fill"></i>
                             </div>
-                            <p>Nombre de usuario</p>
+                            <p class="sidebar__usuario-nombre"><%= nombreUsuario %></p>
                         </div>
 
                         <div class="ventana-salida__informacion">
                             <p>Email</p>
-                            <p>Cor****@gmail.com</p>
+                            <p class="sidebar__usuario-email"><%= correoUsuario %></p>
                         </div>
 
                         <a href="../../index.jsp" class="ventana-salida__link">
