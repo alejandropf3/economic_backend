@@ -1,7 +1,9 @@
 package controlador;
  
 import dao.CategoriaDao;
+import dao.UsuarioDao;
 import modelo.Categoria;
+import modelo.Usuario;
 import java.io.IOException;
 import java.util.List;
 import jakarta.servlet.ServletException;
@@ -9,46 +11,59 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
  
 @WebServlet(name = "CategoriaControlador", urlPatterns = {"/CategoriaControlador"})
 public class CategoriaControlador extends HttpServlet {
  
-    /**
-     * GET → Carga la lista de categorías y redirige a la vista.
-     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
  
-        CategoriaDao dao = new CategoriaDao();
-        List<Categoria> categorias = dao.listar();
+        HttpSession session = request.getSession(false);
+        if (session == null || session.getAttribute("usuario") == null) {
+            response.sendRedirect(request.getContextPath() + "/index.jsp");
+            return;
+        }
  
-        // Enviamos la lista a la vista como atributo del request
+        Usuario usuarioSesion = (Usuario) session.getAttribute("usuario");
+        long idUsuario = usuarioSesion.getIdUsuario();
+ 
+        // Cargar solo las categorías de este usuario
+        CategoriaDao categoriaDao = new CategoriaDao();
+        List<Categoria> categorias = categoriaDao.listarPorUsuario(idUsuario);
+ 
         request.setAttribute("categorias", categorias);
         request.getRequestDispatcher("/Public/User/configuracion_usuario.jsp")
                .forward(request, response);
     }
  
-    /**
-     * POST → Gestiona crear, editar y eliminar según el parámetro "accion".
-     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
  
         request.setCharacterEncoding("UTF-8");
  
+        HttpSession session = request.getSession(false);
+        if (session == null || session.getAttribute("usuario") == null) {
+            response.sendRedirect(request.getContextPath() + "/index.jsp");
+            return;
+        }
+ 
+        Usuario usuarioSesion = (Usuario) session.getAttribute("usuario");
+        long idUsuario = usuarioSesion.getIdUsuario();
+ 
         String accion = request.getParameter("accion");
         CategoriaDao dao = new CategoriaDao();
  
         switch (accion != null ? accion : "") {
  
-            // ── CREAR ──────────────────────────────────────────────────────────
             case "crear": {
                 String nombre = request.getParameter("txtNombreCategoria");
                 String tipo   = request.getParameter("txtTipoCategoria");
  
-                String resultado = utils.validarCategorias.validarCrear(nombre, tipo, dao);
+                // Pasar idUsuario a la validación
+                String resultado = utils.validarCategorias.validarCrear(nombre, tipo, idUsuario, dao);
  
                 if (!resultado.equals("ok")) {
                     response.sendRedirect(request.getContextPath()
@@ -59,6 +74,7 @@ public class CategoriaControlador extends HttpServlet {
                 Categoria categoria = new Categoria();
                 categoria.setNombreCategoria(nombre.trim());
                 categoria.setTipoTransaccion(tipo);
+                categoria.setIdUsuario(idUsuario);
  
                 if (dao.crear(categoria)) {
                     response.sendRedirect(request.getContextPath() + "/CategoriaControlador");
@@ -69,14 +85,14 @@ public class CategoriaControlador extends HttpServlet {
                 break;
             }
  
-            // ── EDITAR ─────────────────────────────────────────────────────────
             case "editar": {
                 String idStr  = request.getParameter("txtIdCategoria");
                 String nombre = request.getParameter("txtNombreCategoria");
                 String tipo   = request.getParameter("txtTipoCategoria");
- 
                 int id = Integer.parseInt(idStr);
-                String resultado = utils.validarCategorias.validarEditar(nombre, tipo, id, dao);
+ 
+                String resultado = utils.validarCategorias.validarEditar(
+                        nombre, tipo, id, idUsuario, dao);
  
                 if (!resultado.equals("ok")) {
                     response.sendRedirect(request.getContextPath()
@@ -88,6 +104,7 @@ public class CategoriaControlador extends HttpServlet {
                 categoria.setIdCategoria(id);
                 categoria.setNombreCategoria(nombre.trim());
                 categoria.setTipoTransaccion(tipo);
+                categoria.setIdUsuario(idUsuario);
  
                 if (dao.editar(categoria)) {
                     response.sendRedirect(request.getContextPath() + "/CategoriaControlador");
@@ -98,12 +115,11 @@ public class CategoriaControlador extends HttpServlet {
                 break;
             }
  
-            // ── ELIMINAR ───────────────────────────────────────────────────────
             case "eliminar": {
                 String idStr = request.getParameter("txtIdCategoria");
                 int id = Integer.parseInt(idStr);
  
-                if (dao.eliminar(id)) {
+                if (dao.eliminar(id, idUsuario)) {
                     response.sendRedirect(request.getContextPath() + "/CategoriaControlador");
                 } else {
                     response.sendRedirect(request.getContextPath()
@@ -119,6 +135,6 @@ public class CategoriaControlador extends HttpServlet {
  
     @Override
     public String getServletInfo() {
-        return "Controlador para gestión de categorías (crear, editar, eliminar)";
+        return "Controlador para gestión de categorías por usuario";
     }
 }

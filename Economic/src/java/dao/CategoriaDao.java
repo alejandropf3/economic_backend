@@ -15,14 +15,15 @@ public class CategoriaDao {
     Connection con;
     PreparedStatement ps;
  
-    // ─── CREAR ────────────────────────────────────────────────────────────────
+    // ── CREAR ─────────────────────────────────────────────────────────────────
     public boolean crear(Categoria categoria) {
-        String sql = "INSERT INTO Categoria (Tipo_transaccion, Nombre_categoria) VALUES (?, ?)";
+        String sql = "INSERT INTO Categoria (Tipo_transaccion, Nombre_categoria, ID_usuario) VALUES (?, ?, ?)";
         try {
             con = cn.getConnection();
             ps = con.prepareStatement(sql);
             ps.setString(1, categoria.getTipoTransaccion());
             ps.setString(2, categoria.getNombreCategoria());
+            ps.setLong(3, categoria.getIdUsuario());
             ps.executeUpdate();
             return true;
         } catch (SQLException e) {
@@ -33,19 +34,22 @@ public class CategoriaDao {
         }
     }
  
-    // ─── LISTAR TODAS ─────────────────────────────────────────────────────────
-    public List<Categoria> listar() {
-        String sql = "SELECT ID_categoria, Tipo_transaccion, Nombre_categoria FROM Categoria";
+    // ── LISTAR POR USUARIO ────────────────────────────────────────────────────
+    public List<Categoria> listarPorUsuario(long idUsuario) {
+        String sql = "SELECT ID_categoria, Tipo_transaccion, Nombre_categoria, ID_usuario " +
+                     "FROM Categoria WHERE ID_usuario = ?";
         List<Categoria> lista = new ArrayList<>();
         try {
             con = cn.getConnection();
             ps = con.prepareStatement(sql);
+            ps.setLong(1, idUsuario);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 Categoria c = new Categoria();
                 c.setIdCategoria(rs.getInt("ID_categoria"));
                 c.setTipoTransaccion(rs.getString("Tipo_transaccion"));
                 c.setNombreCategoria(rs.getString("Nombre_categoria"));
+                c.setIdUsuario(rs.getLong("ID_usuario"));
                 lista.add(c);
             }
         } catch (SQLException e) {
@@ -56,15 +60,18 @@ public class CategoriaDao {
         return lista;
     }
  
-    // ─── EDITAR ───────────────────────────────────────────────────────────────
+    // ── EDITAR ────────────────────────────────────────────────────────────────
     public boolean editar(Categoria categoria) {
-        String sql = "UPDATE Categoria SET Tipo_transaccion = ?, Nombre_categoria = ? WHERE ID_categoria = ?";
+        // Incluye ID_usuario en el WHERE para evitar que un usuario edite categorías de otro
+        String sql = "UPDATE Categoria SET Tipo_transaccion = ?, Nombre_categoria = ? " +
+                     "WHERE ID_categoria = ? AND ID_usuario = ?";
         try {
             con = cn.getConnection();
             ps = con.prepareStatement(sql);
             ps.setString(1, categoria.getTipoTransaccion());
             ps.setString(2, categoria.getNombreCategoria());
             ps.setInt(3, categoria.getIdCategoria());
+            ps.setLong(4, categoria.getIdUsuario());
             ps.executeUpdate();
             return true;
         } catch (SQLException e) {
@@ -75,13 +82,15 @@ public class CategoriaDao {
         }
     }
  
-    // ─── ELIMINAR ─────────────────────────────────────────────────────────────
-    public boolean eliminar(int idCategoria) {
-        String sql = "DELETE FROM Categoria WHERE ID_categoria = ?";
+    // ── ELIMINAR ──────────────────────────────────────────────────────────────
+    public boolean eliminar(int idCategoria, long idUsuario) {
+        // Incluye ID_usuario en el WHERE para evitar que un usuario elimine categorías de otro
+        String sql = "DELETE FROM Categoria WHERE ID_categoria = ? AND ID_usuario = ?";
         try {
             con = cn.getConnection();
             ps = con.prepareStatement(sql);
             ps.setInt(1, idCategoria);
+            ps.setLong(2, idUsuario);
             ps.executeUpdate();
             return true;
         } catch (SQLException e) {
@@ -92,13 +101,15 @@ public class CategoriaDao {
         }
     }
  
-    // ─── VALIDAR NOMBRE DUPLICADO ─────────────────────────────────────────────
-    public boolean existeNombre(String nombreCategoria) {
-        String sql = "SELECT COUNT(*) FROM Categoria WHERE Nombre_categoria = ?";
+    // ── VALIDAR NOMBRE DUPLICADO POR USUARIO ──────────────────────────────────
+    public boolean existeNombre(String nombreCategoria, long idUsuario) {
+        String sql = "SELECT COUNT(*) FROM Categoria " +
+                     "WHERE Nombre_categoria = ? AND ID_usuario = ?";
         try {
             con = cn.getConnection();
             ps = con.prepareStatement(sql);
             ps.setString(1, nombreCategoria);
+            ps.setLong(2, idUsuario);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) return rs.getInt(1) > 0;
         } catch (SQLException e) {
@@ -109,14 +120,16 @@ public class CategoriaDao {
         return false;
     }
  
-    // ─── VALIDAR NOMBRE DUPLICADO EXCLUYENDO ID ACTUAL (para editar) ──────────
-    public boolean existeNombreExcluyendoId(String nombreCategoria, int idCategoria) {
-        String sql = "SELECT COUNT(*) FROM Categoria WHERE Nombre_categoria = ? AND ID_categoria != ?";
+    // ── VALIDAR NOMBRE DUPLICADO EXCLUYENDO ID ACTUAL (para editar) ───────────
+    public boolean existeNombreExcluyendoId(String nombreCategoria, int idCategoria, long idUsuario) {
+        String sql = "SELECT COUNT(*) FROM Categoria " +
+                     "WHERE Nombre_categoria = ? AND ID_categoria != ? AND ID_usuario = ?";
         try {
             con = cn.getConnection();
             ps = con.prepareStatement(sql);
             ps.setString(1, nombreCategoria);
             ps.setInt(2, idCategoria);
+            ps.setLong(3, idUsuario);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) return rs.getInt(1) > 0;
         } catch (SQLException e) {

@@ -10,14 +10,16 @@ public class Categoria {
     private int idCategoria;
     private String tipoTransaccion; // "Ingreso" o "Egreso"
     private String nombreCategoria;
+    private long idUsuario; // relación con Usuario
  
     // --- Constructores ---
     /** Constructor vacío: el DAO lo usa para crear el objeto y llenarlo con setters */
     public Categoria() {}
  
-    public Categoria(String tipoTransaccion, String nombreCategoria) {
+    public Categoria(String tipoTransaccion, String nombreCategoria, long idUsuario) {
         this.tipoTransaccion = tipoTransaccion;
         this.nombreCategoria = nombreCategoria;
+        this.idUsuario = idUsuario;
     }
  
     // --- Getters y Setters ---
@@ -30,4 +32,7 @@ public class Categoria {
  
     public String getNombreCategoria() { return nombreCategoria; }
     public void setNombreCategoria(String nombreCategoria) { this.nombreCategoria = nombreCategoria; }
+    
+    public long getIdUsuario() { return idUsuario; }
+    public void setIdUsuario(long idUsuario) { this.idUsuario = idUsuario;}
 }
