@@ -8,6 +8,8 @@ public class Transaccion {
     private long idTransaccion;
     private long idUsuario;
     private int idCategoria;
+    private String nombreCategoria;
+    private String tipoTransaccion;
     private BigDecimal valorTransaccion;
     private String descripcion;
     private LocalDate fechaRealizacion;
@@ -22,6 +24,12 @@ public class Transaccion {
  
     public int getIdCategoria() { return idCategoria; }
     public void setIdCategoria(int idCategoria) { this.idCategoria = idCategoria; }
+ 
+    public String getNombreCategoria() { return nombreCategoria; }
+    public void setNombreCategoria(String nombreCategoria) { this.nombreCategoria = nombreCategoria; }
+ 
+    public String getTipoTransaccion() { return tipoTransaccion; }
+    public void setTipoTransaccion(String tipoTransaccion) { this.tipoTransaccion = tipoTransaccion; }
  
     public BigDecimal getValorTransaccion() { return valorTransaccion; }
     public void setValorTransaccion(BigDecimal valorTransaccion) { this.valorTransaccion = valorTransaccion; }
