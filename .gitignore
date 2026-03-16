@@ -1,1 +1,16 @@
-/Economic/dist/
+
+# ── Archivos compilados ──────────────────────────────────
+build/
+dist/
+*.class
+
+# ── NetBeans ─────────────────────────────────────────────
+nbproject/private/
+nbproject/Makefile-*.mk
+nbproject/Package-*.bash
+nbbuild/
+nbdist/
+
+# ── Otros ────────────────────────────────────────────────
+*.log
+*.tmp
