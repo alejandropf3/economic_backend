@@ -170,3 +170,161 @@
     transform: translateY(-2px);
     box-shadow: 0 4px 15px rgba(149, 124, 61, 0.15);
 }
+
+/* ── Badge indicador de tipo Ingreso / Egreso ── */
+.tipo-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+    opacity: 0;
+    transform: translateY(4px);
+    white-space: nowrap;
+}
+ 
+.tipo-badge.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+ 
+.tipo-badge.ingreso {
+    background: rgba(37, 141, 25, 0.12);
+    color: var(--color_ingresos);
+    border: 1.5px solid rgba(37, 141, 25, 0.3);
+}
+ 
+.tipo-badge.egreso {
+    background: rgba(194, 0, 0, 0.10);
+    color: var(--color_egresos);
+    border: 1.5px solid rgba(194, 0, 0, 0.3);
+}
+ 
+/* ── Ventana de confirmación de transacción ── */
+.ventana-confirmacion-registro {
+    visibility: hidden;
+    opacity: 0;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 99999;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+ 
+.ventana-confirmacion-registro.activa {
+    visibility: visible;
+    opacity: 1;
+}
+ 
+.confirmacion__contenido {
+    width: 380px;
+    background: linear-gradient(160deg, #ffffff 0%, #f4f6f9 100%);
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow:
+        0 2px 0 rgba(255, 255, 255, 0.9) inset,
+        0 20px 60px rgba(0, 35, 73, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    position: relative;
+    transform: scale(0.92) translateY(10px);
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+ 
+.ventana-confirmacion-registro.activa .confirmacion__contenido {
+    transform: scale(1) translateY(0);
+}
+ 
+.confirmacion__contenido::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--color_principal), var(--color_terceario));
+}
+ 
+.confirmacion__header {
+    background: linear-gradient(135deg, var(--color_principal) 0%, #003977 100%);
+    padding: 20px 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+ 
+.confirmacion__header-icono {
+    width: 42px;
+    height: 42px;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    flex-shrink: 0;
+}
+ 
+.confirmacion__header-icono i {
+    color: var(--color_secundario);
+    font-size: 20px;
+}
+ 
+.confirmacion__header p {
+    color: var(--color_secundario);
+    font-size: 16px;
+    font-weight: 600;
+    margin: 0;
+}
+ 
+.confirmacion__body {
+    padding: 20px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+ 
+.confirmacion__fila {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 14px;
+    background: rgba(0, 35, 73, 0.03);
+    border-radius: 10px;
+    border: 1px solid rgba(0, 35, 73, 0.06);
+    transition: background 0.2s ease;
+}
+ 
+.confirmacion__fila:hover {
+    background: rgba(0, 35, 73, 0.06);
+}
+ 
+.confirmacion__fila-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: rgba(0, 35, 73, 0.5);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+}
+ 
+.confirmacion__fila-valor {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--color_texto-oscuro);
+}
+ 
+.confirmacion__fila-valor.ingreso {
+    color: var(--color_ingresos);
+}
+ 
+.confirmacion__fila-valor.egreso {
+    color: var(--color_egresos);
+}
+ 
+.confirmacion__footer {
+    padding: 16px 24px 20px;
+    display: flex;
+    gap: 10px;
+}

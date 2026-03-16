@@ -74,3 +74,18 @@
 .campo-formulario textarea {
     margin-bottom: 0;
 }
+
+
+/* ── Estado de error en inputs del registro de transacción ── */
+.formulario__input--registro.error,
+.seccion__caja-eleccion.error,
+.formulario__caja-texto.error {
+    border-color: var(--color_error) !important;
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1) !important;
+}
+ 
+/* ── Clase visible para span de error (alternativa a display:block inline) ── */
+.campo-error.visible {
+    display: block;
+}
+ 
