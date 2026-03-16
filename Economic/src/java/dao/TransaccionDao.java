@@ -169,5 +169,40 @@ public class TransaccionDao {
         }
         return new java.math.BigDecimal[]{ java.math.BigDecimal.ZERO, java.math.BigDecimal.ZERO };
     }
+    
+    public Transaccion obtenerUltimaPorTipo(long idUsuario, String tipo) {
+    String sql = "SELECT T.ID_transaccion, T.ID_usuario, T.ID_categoria, " +
+                 "C.Nombre_categoria, C.Tipo_transaccion, T.Valor_transaccion, " +
+                 "T.Descripcion, T.Fecha_realizacion " +
+                 "FROM Transacciones T " +
+                 "JOIN Categoria C ON T.ID_categoria = C.ID_categoria " +
+                 "WHERE T.ID_usuario = ? AND C.Tipo_transaccion = ? " +
+                 "ORDER BY T.Fecha_realizacion DESC, T.ID_transaccion DESC " +
+                 "LIMIT 1";
+    try {
+        con = cn.getConnection();
+        ps = con.prepareStatement(sql);
+        ps.setLong(1, idUsuario);
+        ps.setString(2, tipo);
+        ResultSet rs = ps.executeQuery();
+        if (rs.next()) {
+            Transaccion t = new Transaccion();
+            t.setIdTransaccion(rs.getLong("ID_transaccion"));
+            t.setIdUsuario(rs.getLong("ID_usuario"));
+            t.setIdCategoria(rs.getInt("ID_categoria"));
+            t.setNombreCategoria(rs.getString("Nombre_categoria"));
+            t.setTipoTransaccion(rs.getString("Tipo_transaccion"));
+            t.setValorTransaccion(rs.getBigDecimal("Valor_transaccion"));
+            t.setDescripcion(rs.getString("Descripcion"));
+            t.setFechaRealizacion(rs.getDate("Fecha_realizacion").toLocalDate());
+            return t;
+        }
+    } catch (SQLException e) {
+        System.err.println("Error en obtenerUltimaPorTipo: " + e.getMessage());
+    } finally {
+        try { if (con != null) con.close(); } catch (SQLException e) {}
+    }
+    return null; // null significa que no hay transacciones de ese tipo aún
+}
 }
  

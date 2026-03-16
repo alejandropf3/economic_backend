@@ -171,3 +171,13 @@
     opacity: 1;
   }
 }
+
+/* ── Balance dinámico positivo / negativo ── */
+.balance--positivo {
+    color: var(--color_ingresos);
+}
+ 
+.balance--negativo {
+    color: var(--color_egresos);
+}
+ 

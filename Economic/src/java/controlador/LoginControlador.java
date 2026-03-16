@@ -36,7 +36,7 @@ public class LoginControlador extends HttpServlet {
         if (user != null) {
             HttpSession session = request.getSession();
             session.setAttribute("usuario", user);
-            response.sendRedirect(request.getContextPath() + "/Public/User/menu_principal.jsp");
+            response.sendRedirect(request.getContextPath() + "/MenuControlador");
         } else {
             // Verificar si el correo existe para dar mensaje específico
             boolean correoExiste = dao.existeCorreo(correo);
