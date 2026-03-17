@@ -2,13 +2,18 @@
 <%@page import="java.util.List"%>
 <%@page import="modelo.Categoria"%>
 <%@page import="modelo.Usuario"%>
-<%-- Recuperar usuario de sesión --%>
+
+<%-- PASO 1: Recuperar usuario y resImagen PRIMERO --%>
 <%
-    Usuario usuarioSesion = (Usuario) session.getAttribute("usuario");
-    String nombreUsuario = usuarioSesion != null ? usuarioSesion.getNombre() : "";
-    String correoUsuario = usuarioSesion != null ? usuarioSesion.getCorreo() : "";
+    Usuario usuarioSesion  = (Usuario) session.getAttribute("usuario");
+    String nombreUsuario   = usuarioSesion != null ? usuarioSesion.getNombre() : "";
+    String correoUsuario   = usuarioSesion != null ? usuarioSesion.getCorreo()  : "";
+    String urlImagenPerfil = usuarioSesion != null && usuarioSesion.getUrlImagen() != null
+                             ? usuarioSesion.getUrlImagen() : null;
+    String resImagen       = request.getParameter("resImagen");
 %>
-<%-- Redirigir al controlador si se accede directamente al JSP --%>
+
+<%-- PASO 2: Redirigir si no viene del controlador --%>
 <%
     if (request.getAttribute("categorias") == null) {
         response.sendRedirect(request.getContextPath() + "/CategoriaControlador");
@@ -58,11 +63,11 @@
             </div>
 
             <nav class="sidebar__navegacion">
-                <a href="${pageContext.request.contextPath}/Public/User/menu_principal.jsp" class="sidebar__link">
+                <a href="${pageContext.request.contextPath}/MenuControlador" class="sidebar__link">
                     <i class="bi bi-house-fill"></i>
                     Inicio
                 </a>
-                <a href="${pageContext.request.contextPath}/Public/User/historial_transacciones.jsp" class="sidebar__link">
+                <a href="${pageContext.request.contextPath}/HistorialControlador" class="sidebar__link">
                     <i class="bi bi-clock-history"></i>
                     Historial de transacciones
                 </a>
@@ -74,7 +79,7 @@
                     <i class="bi bi-gear-fill"></i>
                     Opciones
                 </a>
-               <a href="${pageContext.request.contextPath}/Public/Admin/administrar_usuarios.jsp" class="sidebar__link">
+                <a href="${pageContext.request.contextPath}/Public/Admin/administrar_usuarios.jsp" class="sidebar__link">
                     <i class="bi bi-people-fill"></i>
                     Admin
                 </a>
@@ -83,7 +88,13 @@
             <div class="sidebar__usuario">
                 <div class="sidebar__usuario-info">
                     <div class="sidebar__usuario-icono">
-                        <i class="bi bi-person-fill"></i>
+                        <% if (urlImagenPerfil != null) { %>
+                            <img src="<%= urlImagenPerfil %>"
+                                 alt="Foto de perfil"
+                                 style="width:100%; height:100%; border-radius:50%; object-fit:cover;">
+                        <% } else { %>
+                            <i class="bi bi-person-fill"></i>
+                        <% } %>
                     </div>
                     <div class="sidebar__usuario-datos">
                         <p class="sidebar__usuario-nombre"><%= nombreUsuario %></p>
@@ -110,8 +121,8 @@
             </label>
 
             <nav class="encabezado__navegacion">
-                <a href="${pageContext.request.contextPath}/Public/User/menu_principal.jsp" class="encabezado__link">Inicio</a>
-                <a href="${pageContext.request.contextPath}/Public/User/historial_transacciones.jsp" class="encabezado__link">Historial de transacciones</a>
+                <a href="${pageContext.request.contextPath}/MenuControlador" class="encabezado__link">Inicio</a>
+                <a href="${pageContext.request.contextPath}/HistorialControlador" class="encabezado__link">Historial de transacciones</a>
                 <a href="${pageContext.request.contextPath}/Public/User/historial_resumenes.jsp" class="encabezado__link">Historial de resúmenes</a>
                 <a href="${pageContext.request.contextPath}/CategoriaControlador" class="encabezado__link">Opciones</a>
                 <a href="${pageContext.request.contextPath}/Public/Admin/administrar_usuarios.jsp" class="encabezado__link">Admin</a>
@@ -124,13 +135,19 @@
                     <div class="ventana-salida__contenido">
                         <div class="ventana-salida__icono">
                             <div class="encabezado__icono">
-                                <i class="bi bi-person-fill"></i>
+                                <% if (urlImagenPerfil != null) { %>
+                                    <img src="<%= urlImagenPerfil %>"
+                                         alt="Foto de perfil"
+                                         style="width:100%; height:100%; border-radius:50%; object-fit:cover;">
+                                <% } else { %>
+                                    <i class="bi bi-person-fill"></i>
+                                <% } %>
                             </div>
-                            <p class="sidebar__usuario-nombre"><%= nombreUsuario %></p>
+                            <p><%= nombreUsuario %></p>
                         </div>
                         <div class="ventana-salida__informacion">
                             <p>Email</p>
-                            <p class="sidebar__usuario-email"><%= correoUsuario %></p>
+                            <p><%= correoUsuario %></p>
                         </div>
                         <a href="${pageContext.request.contextPath}/index.jsp" class="ventana-salida__link">
                             <i class="bi bi-box-arrow-right"></i>
@@ -180,17 +197,61 @@
             </div>
 
             <div class="main-menu__contenedor-derecha">
-                <form action="" method="get" class="contenedor-derecha__formulario">
+
+                <%-- ══ FORMULARIO IMAGEN DE PERFIL ══ --%>
+                <form action="${pageContext.request.contextPath}/ImagenControlador"
+                      method="post"
+                      enctype="multipart/form-data"
+                      class="contenedor-derecha__formulario">
+
+                    <%-- Imagen de perfil: foto si existe, SVG por defecto si no --%>
                     <div class="formulario__icono">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="180px" height="180px" fill="currentColor"
-                            class="bi bi-person-fill" viewBox="0 0 16 16">
-                            <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6" />
-                        </svg>
+                        <% if (urlImagenPerfil != null) { %>
+                            <img src="<%= urlImagenPerfil %>"
+                                 alt="Foto de perfil"
+                                 style="width:180px; height:180px; border-radius:50%;
+                                        object-fit:cover; border:3px solid var(--color_terceario);">
+                        <% } else { %>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="180px" height="180px"
+                                 fill="currentColor" class="bi bi-person-fill" viewBox="0 0 16 16">
+                                <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/>
+                            </svg>
+                        <% } %>
                     </div>
+
+                    <%-- Mensajes de resultado --%>
+                    <% if ("ok".equals(resImagen)) { %>
+                        <p style="color:var(--color_ingresos); font-size:13px; font-weight:600; text-align:center;">
+                            ✓ Foto actualizada correctamente.
+                        </p>
+                    <% } else if (resImagen != null && !resImagen.isEmpty()) {
+                        String mensajeErrorImg = "";
+                        switch (resImagen) {
+                            case "vacio":            mensajeErrorImg = "Debes seleccionar una imagen."; break;
+                            case "formato_invalido": mensajeErrorImg = "Solo se permiten JPG, PNG o WEBP."; break;
+                            case "error":            mensajeErrorImg = "Error al guardar. Intenta de nuevo."; break;
+                        }
+                    %>
+                        <p style="color:var(--color_egresos); font-size:13px; font-weight:600; text-align:center;">
+                            <%= mensajeErrorImg %>
+                        </p>
+                    <% } %>
+
                     <div class="formulario__campo-imagen">
                         <label for="foto_usuario" class="formulario__imagen-label">Cambiar foto</label>
-                        <input type="file" class="formulario__imagen-input" id="foto_usuario">
+                        <input type="file"
+                               name="foto_usuario"
+                               id="foto_usuario"
+                               class="formulario__imagen-input"
+                               accept="image/jpeg, image/png, image/webp">
+                        <p style="font-size:11px; color:rgba(0,35,73,0.45); margin-top:4px; text-align:center;">
+                            JPG, PNG o WEBP · Máximo 2 MB
+                        </p>
+                        <button type="submit" class="boton--guardar" style="margin-top:10px; width:100%;">
+                            Guardar foto
+                        </button>
                     </div>
+
                 </form>
 
                 <!-- Caja de categorías -->
@@ -214,7 +275,6 @@
                     <h2 class="formulario-crear__titulo">Crear categoria</h2>
 
                     <div class="formulario-crear__contenido">
-
                         <input type="text"
                                name="txtNombreCategoria"
                                placeholder="Nombre categoria"
@@ -227,7 +287,6 @@
                             <option value="Egreso">Egreso -</option>
                         </select>
                         <span id="error-crear-tipo" class="formulario__span-error" style="display:none;"></span>
-
                     </div>
 
                     <nav class="formulario-crear__navegacion">
@@ -249,7 +308,6 @@
                     <h2 class="formulario-editar__titulo">Editar categoria</h2>
 
                     <div class="formulario-editar__contenido">
-
                         <input type="text"
                                name="txtNombreCategoria"
                                placeholder="Nuevo nombre categoria"
@@ -262,7 +320,6 @@
                             <option value="Egreso">Egreso -</option>
                         </select>
                         <span id="error-editar-tipo" class="formulario__span-error" style="display:none;"></span>
-
                     </div>
 
                     <nav class="formulario-editar__navegacion">
@@ -294,7 +351,7 @@
     </script>
 
     <script src="${pageContext.request.contextPath}/Assets/Js/categorias_dinamicas.js"></script>
-<script src="${pageContext.request.contextPath}/Assets/Js/validacion_categoria.js"></script>
+    <script src="${pageContext.request.contextPath}/Assets/Js/validacion_categoria.js"></script>
 
 </body>
 </html>

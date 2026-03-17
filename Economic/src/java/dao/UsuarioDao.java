@@ -96,14 +96,13 @@ public class UsuarioDao {
     }
     
     public Usuario iniciarSesion(String correo, String contrasena) {
-        // Buscamos el ID_usuario desde la tabla Email y luego los datos en Usuario
-        String sql = "SELECT U.*, E.Correo_electronico " +
+        String sql = "SELECT U.*, E.Correo_electronico, I.Url_imagen " +
                      "FROM Usuario U " +
                      "JOIN Email E ON U.ID_usuario = E.ID_usuario " +
+                     "LEFT JOIN Imagenes I ON U.ID_usuario = I.ID_usuario " +
                      "WHERE E.Correo_electronico = ? AND U.Contraseña = ?";
 
         Usuario user = null;
-
         try {
             con = cn.getConnection();
             ps = con.prepareStatement(sql);
@@ -117,6 +116,7 @@ public class UsuarioDao {
                 user.setNombre(rs.getString("Nombre"));
                 user.setContrasena(rs.getString("Contraseña"));
                 user.setCorreo(rs.getString("Correo_electronico"));
+                user.setUrlImagen(rs.getString("Url_imagen")); // puede ser null si no tiene imagen
             }
         } catch (SQLException e) {
             System.err.println("Error en Login DAO: " + e.getMessage());

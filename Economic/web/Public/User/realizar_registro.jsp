@@ -10,6 +10,8 @@
     Usuario usuarioSesion = (Usuario) session.getAttribute("usuario");
     String nombreUsuario = usuarioSesion != null ? usuarioSesion.getNombre() : "";
     String correoUsuario = usuarioSesion != null ? usuarioSesion.getCorreo() : "";
+    String urlImagenPerfil = usuarioSesion != null && usuarioSesion.getUrlImagen() != null
+                             ? usuarioSesion.getUrlImagen() : null;
     List<Categoria> categorias = (List<Categoria>) request.getAttribute("categorias");
 %>
 <!DOCTYPE html>
@@ -53,7 +55,13 @@
             <div class="sidebar__usuario">
                 <div class="sidebar__usuario-info">
                     <div class="sidebar__usuario-icono">
-                        <i class="bi bi-person-fill"></i>
+                        <% if (urlImagenPerfil != null) { %>
+                            <img src="<%= urlImagenPerfil %>"
+                                 alt="Foto de perfil"
+                                 style="width:100%; height:100%; border-radius:50%; object-fit:cover;">
+                        <% } else { %>
+                            <i class="bi bi-person-fill"></i>
+                        <% } %>
                     </div>
                     <div class="sidebar__usuario-datos">
                         <p class="sidebar__usuario-nombre"><%= nombreUsuario %></p>
@@ -87,7 +95,13 @@
                     <div class="ventana-salida__contenido">
                         <div class="ventana-salida__icono">
                             <div class="encabezado__icono">
-                                <i class="bi bi-person-fill"></i>
+                                <% if (urlImagenPerfil != null) { %>
+                                    <img src="<%= urlImagenPerfil %>"
+                                         alt="Foto de perfil"
+                                         style="width:100%; height:100%; border-radius:50%; object-fit:cover;">
+                                <% } else { %>
+                                    <i class="bi bi-person-fill"></i>
+                                <% } %>
                             </div>
                             <p><%= nombreUsuario %></p>
                         </div>
