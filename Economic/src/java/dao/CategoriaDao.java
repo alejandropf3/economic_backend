@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import configuracion.ConexionDB;
@@ -16,17 +17,38 @@ public class CategoriaDao {
     PreparedStatement ps;
  
     // ── CREAR ─────────────────────────────────────────────────────────────────
+    // Inserta en Categoria y luego en Usuario_Categoria (transacción)
     public boolean crear(Categoria categoria) {
-        String sql = "INSERT INTO Categoria (Tipo_transaccion, Nombre_categoria, ID_usuario) VALUES (?, ?, ?)";
+        String sqlCategoria = "INSERT INTO Categoria (Tipo_transaccion, Nombre_categoria) VALUES (?, ?)";
+        String sqlRelacion  = "INSERT INTO Usuario_Categoria (ID_usuario, ID_categoria) VALUES (?, ?)";
         try {
             con = cn.getConnection();
-            ps = con.prepareStatement(sql);
+            con.setAutoCommit(false);
+ 
+            // 1. Insertar en Categoria y obtener ID generado
+            ps = con.prepareStatement(sqlCategoria, Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, categoria.getTipoTransaccion());
             ps.setString(2, categoria.getNombreCategoria());
-            ps.setLong(3, categoria.getIdUsuario());
             ps.executeUpdate();
-            return true;
+ 
+            ResultSet rs = ps.getGeneratedKeys();
+            if (rs.next()) {
+                int idGenerado = rs.getInt(1);
+ 
+                // 2. Insertar en tabla relacional
+                ps = con.prepareStatement(sqlRelacion);
+                ps.setLong(1, categoria.getIdUsuario());
+                ps.setInt(2, idGenerado);
+                ps.executeUpdate();
+ 
+                con.commit();
+                return true;
+            }
+            con.rollback();
+            return false;
+ 
         } catch (SQLException e) {
+            try { if (con != null) con.rollback(); } catch (SQLException ex) {}
             System.err.println("Error en DAO Crear Categoria: " + e.getMessage());
             return false;
         } finally {
@@ -35,13 +57,16 @@ public class CategoriaDao {
     }
  
     // ── LISTAR POR USUARIO ────────────────────────────────────────────────────
+    // JOIN con Usuario_Categoria para obtener solo las categorías del usuario
     public List<Categoria> listarPorUsuario(long idUsuario) {
-        String sql = "SELECT ID_categoria, Tipo_transaccion, Nombre_categoria, ID_usuario " +
-                     "FROM Categoria WHERE ID_usuario = ?";
+        String sql = "SELECT C.ID_categoria, C.Tipo_transaccion, C.Nombre_categoria " +
+                     "FROM Categoria C " +
+                     "JOIN Usuario_Categoria UC ON C.ID_categoria = UC.ID_categoria " +
+                     "WHERE UC.ID_usuario = ?";
         List<Categoria> lista = new ArrayList<>();
         try {
             con = cn.getConnection();
-            ps = con.prepareStatement(sql);
+            ps  = con.prepareStatement(sql);
             ps.setLong(1, idUsuario);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
@@ -49,7 +74,7 @@ public class CategoriaDao {
                 c.setIdCategoria(rs.getInt("ID_categoria"));
                 c.setTipoTransaccion(rs.getString("Tipo_transaccion"));
                 c.setNombreCategoria(rs.getString("Nombre_categoria"));
-                c.setIdUsuario(rs.getLong("ID_usuario"));
+                c.setIdUsuario(idUsuario); // se asigna desde el parámetro
                 lista.add(c);
             }
         } catch (SQLException e) {
@@ -61,13 +86,15 @@ public class CategoriaDao {
     }
  
     // ── EDITAR ────────────────────────────────────────────────────────────────
+    // Verifica que la categoría pertenezca al usuario via Usuario_Categoria
     public boolean editar(Categoria categoria) {
-        // Incluye ID_usuario en el WHERE para evitar que un usuario edite categorías de otro
-        String sql = "UPDATE Categoria SET Tipo_transaccion = ?, Nombre_categoria = ? " +
-                     "WHERE ID_categoria = ? AND ID_usuario = ?";
+        String sql = "UPDATE Categoria C " +
+                     "JOIN Usuario_Categoria UC ON C.ID_categoria = UC.ID_categoria " +
+                     "SET C.Tipo_transaccion = ?, C.Nombre_categoria = ? " +
+                     "WHERE C.ID_categoria = ? AND UC.ID_usuario = ?";
         try {
             con = cn.getConnection();
-            ps = con.prepareStatement(sql);
+            ps  = con.prepareStatement(sql);
             ps.setString(1, categoria.getTipoTransaccion());
             ps.setString(2, categoria.getNombreCategoria());
             ps.setInt(3, categoria.getIdCategoria());
@@ -83,17 +110,33 @@ public class CategoriaDao {
     }
  
     // ── ELIMINAR ──────────────────────────────────────────────────────────────
+    // Elimina de Usuario_Categoria primero, luego Categoria si ya no tiene usuarios
     public boolean eliminar(int idCategoria, long idUsuario) {
-        // Incluye ID_usuario en el WHERE para evitar que un usuario elimine categorías de otro
-        String sql = "DELETE FROM Categoria WHERE ID_categoria = ? AND ID_usuario = ?";
+        String sqlRelacion  = "DELETE FROM Usuario_Categoria " +
+                              "WHERE ID_categoria = ? AND ID_usuario = ?";
+        String sqlCategoria = "DELETE FROM Categoria WHERE ID_categoria = ? " +
+                              "AND NOT EXISTS (" +
+                              "SELECT 1 FROM Usuario_Categoria WHERE ID_categoria = ?)";
         try {
             con = cn.getConnection();
-            ps = con.prepareStatement(sql);
+            con.setAutoCommit(false);
+ 
+            // 1. Eliminar relación usuario-categoría
+            ps = con.prepareStatement(sqlRelacion);
             ps.setInt(1, idCategoria);
             ps.setLong(2, idUsuario);
             ps.executeUpdate();
+ 
+            // 2. Eliminar categoría solo si ya no tiene ningún usuario asociado
+            ps = con.prepareStatement(sqlCategoria);
+            ps.setInt(1, idCategoria);
+            ps.setInt(2, idCategoria);
+            ps.executeUpdate();
+ 
+            con.commit();
             return true;
         } catch (SQLException e) {
+            try { if (con != null) con.rollback(); } catch (SQLException ex) {}
             System.err.println("Error en DAO Eliminar Categoria: " + e.getMessage());
             return false;
         } finally {
@@ -103,11 +146,12 @@ public class CategoriaDao {
  
     // ── VALIDAR NOMBRE DUPLICADO POR USUARIO ──────────────────────────────────
     public boolean existeNombre(String nombreCategoria, long idUsuario) {
-        String sql = "SELECT COUNT(*) FROM Categoria " +
-                     "WHERE Nombre_categoria = ? AND ID_usuario = ?";
+        String sql = "SELECT COUNT(*) FROM Categoria C " +
+                     "JOIN Usuario_Categoria UC ON C.ID_categoria = UC.ID_categoria " +
+                     "WHERE C.Nombre_categoria = ? AND UC.ID_usuario = ?";
         try {
             con = cn.getConnection();
-            ps = con.prepareStatement(sql);
+            ps  = con.prepareStatement(sql);
             ps.setString(1, nombreCategoria);
             ps.setLong(2, idUsuario);
             ResultSet rs = ps.executeQuery();
@@ -122,11 +166,12 @@ public class CategoriaDao {
  
     // ── VALIDAR NOMBRE DUPLICADO EXCLUYENDO ID ACTUAL (para editar) ───────────
     public boolean existeNombreExcluyendoId(String nombreCategoria, int idCategoria, long idUsuario) {
-        String sql = "SELECT COUNT(*) FROM Categoria " +
-                     "WHERE Nombre_categoria = ? AND ID_categoria != ? AND ID_usuario = ?";
+        String sql = "SELECT COUNT(*) FROM Categoria C " +
+                     "JOIN Usuario_Categoria UC ON C.ID_categoria = UC.ID_categoria " +
+                     "WHERE C.Nombre_categoria = ? AND C.ID_categoria != ? AND UC.ID_usuario = ?";
         try {
             con = cn.getConnection();
-            ps = con.prepareStatement(sql);
+            ps  = con.prepareStatement(sql);
             ps.setString(1, nombreCategoria);
             ps.setInt(2, idCategoria);
             ps.setLong(3, idUsuario);

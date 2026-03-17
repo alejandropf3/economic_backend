@@ -5,6 +5,7 @@ import java.time.LocalDate;
  
 public class Transaccion {
  
+    private long idMeta;
     private long idTransaccion;
     private long idUsuario;
     private int idCategoria;
@@ -15,6 +16,10 @@ public class Transaccion {
     private LocalDate fechaRealizacion;
  
     public Transaccion() {}
+    
+
+    public long getIdMeta() { return idMeta; }
+    public void setIdMeta(long idMeta) { this.idMeta = idMeta; }
  
     public long getIdTransaccion() { return idTransaccion; }
     public void setIdTransaccion(long idTransaccion) { this.idTransaccion = idTransaccion; }

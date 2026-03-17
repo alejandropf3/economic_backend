@@ -16,14 +16,16 @@ public class TransaccionDao {
     PreparedStatement ps;
  
     // ── CREAR ─────────────────────────────────────────────────────────────────
+    // ID_usuario ya no existe en Transacciones — se omite del INSERT
     public boolean crear(Transaccion t) {
-        String sql = "INSERT INTO Transacciones (ID_usuario, ID_categoria, Valor_transaccion, Descripcion, Fecha_realizacion) " +
+        String sql = "INSERT INTO Transacciones " +
+                     "(ID_categoria, ID_meta, Valor_transaccion, Descripcion, Fecha_realizacion) " +
                      "VALUES (?, ?, ?, ?, ?)";
         try {
             con = cn.getConnection();
-            ps = con.prepareStatement(sql);
-            ps.setLong(1, t.getIdUsuario());
-            ps.setInt(2, t.getIdCategoria());
+            ps  = con.prepareStatement(sql);
+            ps.setInt(1, t.getIdCategoria());
+            ps.setObject(2, t.getIdMeta() != 0 ? t.getIdMeta() : null);
             ps.setBigDecimal(3, t.getValorTransaccion());
             ps.setString(4, t.getDescripcion());
             ps.setDate(5, java.sql.Date.valueOf(t.getFechaRealizacion()));
@@ -38,16 +40,18 @@ public class TransaccionDao {
     }
  
     // ── LISTAR CON FILTROS ────────────────────────────────────────────────────
+    // Filtra por usuario via JOIN con Usuario_Categoria
     public List<Transaccion> listarPorUsuario(long idUsuario, String tipo,
                                                String idCategoria,
                                                String fechaDesde, String fechaHasta) {
         StringBuilder sql = new StringBuilder(
-            "SELECT T.ID_transaccion, T.ID_usuario, T.ID_categoria, " +
+            "SELECT T.ID_transaccion, UC.ID_usuario, T.ID_categoria, " +
             "C.Nombre_categoria, C.Tipo_transaccion, T.Valor_transaccion, " +
             "T.Descripcion, T.Fecha_realizacion " +
             "FROM Transacciones T " +
             "JOIN Categoria C ON T.ID_categoria = C.ID_categoria " +
-            "WHERE T.ID_usuario = ?"
+            "JOIN Usuario_Categoria UC ON C.ID_categoria = UC.ID_categoria " +
+            "WHERE UC.ID_usuario = ?"
         );
  
         List<Object> params = new ArrayList<>();
@@ -75,7 +79,7 @@ public class TransaccionDao {
         List<Transaccion> lista = new ArrayList<>();
         try {
             con = cn.getConnection();
-            ps = con.prepareStatement(sql.toString());
+            ps  = con.prepareStatement(sql.toString());
             for (int i = 0; i < params.size(); i++) {
                 ps.setObject(i + 1, params.get(i));
             }
@@ -101,13 +105,17 @@ public class TransaccionDao {
     }
  
     // ── EDITAR ────────────────────────────────────────────────────────────────
+    // Verifica propiedad via JOIN con Usuario_Categoria
     public boolean editar(Transaccion t) {
-        String sql = "UPDATE Transacciones SET ID_categoria = ?, Valor_transaccion = ?, " +
-                     "Descripcion = ?, Fecha_realizacion = ? " +
-                     "WHERE ID_transaccion = ? AND ID_usuario = ?";
+        String sql = "UPDATE Transacciones T " +
+                     "JOIN Categoria C ON T.ID_categoria = C.ID_categoria " +
+                     "JOIN Usuario_Categoria UC ON C.ID_categoria = UC.ID_categoria " +
+                     "SET T.ID_categoria = ?, T.Valor_transaccion = ?, " +
+                     "T.Descripcion = ?, T.Fecha_realizacion = ? " +
+                     "WHERE T.ID_transaccion = ? AND UC.ID_usuario = ?";
         try {
             con = cn.getConnection();
-            ps = con.prepareStatement(sql);
+            ps  = con.prepareStatement(sql);
             ps.setInt(1, t.getIdCategoria());
             ps.setBigDecimal(2, t.getValorTransaccion());
             ps.setString(3, t.getDescripcion());
@@ -125,11 +133,15 @@ public class TransaccionDao {
     }
  
     // ── ELIMINAR ──────────────────────────────────────────────────────────────
+    // Verifica propiedad via JOIN con Usuario_Categoria
     public boolean eliminar(long idTransaccion, long idUsuario) {
-        String sql = "DELETE FROM Transacciones WHERE ID_transaccion = ? AND ID_usuario = ?";
+        String sql = "DELETE T FROM Transacciones T " +
+                     "JOIN Categoria C ON T.ID_categoria = C.ID_categoria " +
+                     "JOIN Usuario_Categoria UC ON C.ID_categoria = UC.ID_categoria " +
+                     "WHERE T.ID_transaccion = ? AND UC.ID_usuario = ?";
         try {
             con = cn.getConnection();
-            ps = con.prepareStatement(sql);
+            ps  = con.prepareStatement(sql);
             ps.setLong(1, idTransaccion);
             ps.setLong(2, idUsuario);
             ps.executeUpdate();
@@ -143,16 +155,18 @@ public class TransaccionDao {
     }
  
     // ── TOTALES para resumen ──────────────────────────────────────────────────
+    // Filtra por usuario via JOIN con Usuario_Categoria
     public java.math.BigDecimal[] obtenerTotales(long idUsuario) {
         String sql = "SELECT " +
                      "SUM(CASE WHEN C.Tipo_transaccion = 'Ingreso' THEN T.Valor_transaccion ELSE 0 END) AS total_ingresos, " +
                      "SUM(CASE WHEN C.Tipo_transaccion = 'Egreso'  THEN T.Valor_transaccion ELSE 0 END) AS total_egresos " +
                      "FROM Transacciones T " +
                      "JOIN Categoria C ON T.ID_categoria = C.ID_categoria " +
-                     "WHERE T.ID_usuario = ?";
+                     "JOIN Usuario_Categoria UC ON C.ID_categoria = UC.ID_categoria " +
+                     "WHERE UC.ID_usuario = ?";
         try {
             con = cn.getConnection();
-            ps = con.prepareStatement(sql);
+            ps  = con.prepareStatement(sql);
             ps.setLong(1, idUsuario);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
@@ -169,40 +183,42 @@ public class TransaccionDao {
         }
         return new java.math.BigDecimal[]{ java.math.BigDecimal.ZERO, java.math.BigDecimal.ZERO };
     }
-    
-    public Transaccion obtenerUltimaPorTipo(long idUsuario, String tipo) {
-    String sql = "SELECT T.ID_transaccion, T.ID_usuario, T.ID_categoria, " +
-                 "C.Nombre_categoria, C.Tipo_transaccion, T.Valor_transaccion, " +
-                 "T.Descripcion, T.Fecha_realizacion " +
-                 "FROM Transacciones T " +
-                 "JOIN Categoria C ON T.ID_categoria = C.ID_categoria " +
-                 "WHERE T.ID_usuario = ? AND C.Tipo_transaccion = ? " +
-                 "ORDER BY T.Fecha_realizacion DESC, T.ID_transaccion DESC " +
-                 "LIMIT 1";
-    try {
-        con = cn.getConnection();
-        ps = con.prepareStatement(sql);
-        ps.setLong(1, idUsuario);
-        ps.setString(2, tipo);
-        ResultSet rs = ps.executeQuery();
-        if (rs.next()) {
-            Transaccion t = new Transaccion();
-            t.setIdTransaccion(rs.getLong("ID_transaccion"));
-            t.setIdUsuario(rs.getLong("ID_usuario"));
-            t.setIdCategoria(rs.getInt("ID_categoria"));
-            t.setNombreCategoria(rs.getString("Nombre_categoria"));
-            t.setTipoTransaccion(rs.getString("Tipo_transaccion"));
-            t.setValorTransaccion(rs.getBigDecimal("Valor_transaccion"));
-            t.setDescripcion(rs.getString("Descripcion"));
-            t.setFechaRealizacion(rs.getDate("Fecha_realizacion").toLocalDate());
-            return t;
-        }
-    } catch (SQLException e) {
-        System.err.println("Error en obtenerUltimaPorTipo: " + e.getMessage());
-    } finally {
-        try { if (con != null) con.close(); } catch (SQLException e) {}
-    }
-    return null; // null significa que no hay transacciones de ese tipo aún
-}
-}
  
+    // ── OBTENER ÚLTIMA POR TIPO ───────────────────────────────────────────────
+    // Filtra por usuario via JOIN con Usuario_Categoria
+    public Transaccion obtenerUltimaPorTipo(long idUsuario, String tipo) {
+        String sql = "SELECT T.ID_transaccion, UC.ID_usuario, T.ID_categoria, " +
+                     "C.Nombre_categoria, C.Tipo_transaccion, T.Valor_transaccion, " +
+                     "T.Descripcion, T.Fecha_realizacion " +
+                     "FROM Transacciones T " +
+                     "JOIN Categoria C ON T.ID_categoria = C.ID_categoria " +
+                     "JOIN Usuario_Categoria UC ON C.ID_categoria = UC.ID_categoria " +
+                     "WHERE UC.ID_usuario = ? AND C.Tipo_transaccion = ? " +
+                     "ORDER BY T.Fecha_realizacion DESC, T.ID_transaccion DESC " +
+                     "LIMIT 1";
+        try {
+            con = cn.getConnection();
+            ps  = con.prepareStatement(sql);
+            ps.setLong(1, idUsuario);
+            ps.setString(2, tipo);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                Transaccion t = new Transaccion();
+                t.setIdTransaccion(rs.getLong("ID_transaccion"));
+                t.setIdUsuario(rs.getLong("ID_usuario"));
+                t.setIdCategoria(rs.getInt("ID_categoria"));
+                t.setNombreCategoria(rs.getString("Nombre_categoria"));
+                t.setTipoTransaccion(rs.getString("Tipo_transaccion"));
+                t.setValorTransaccion(rs.getBigDecimal("Valor_transaccion"));
+                t.setDescripcion(rs.getString("Descripcion"));
+                t.setFechaRealizacion(rs.getDate("Fecha_realizacion").toLocalDate());
+                return t;
+            }
+        } catch (SQLException e) {
+            System.err.println("Error en obtenerUltimaPorTipo: " + e.getMessage());
+        } finally {
+            try { if (con != null) con.close(); } catch (SQLException e) {}
+        }
+        return null;
+    }
+}
