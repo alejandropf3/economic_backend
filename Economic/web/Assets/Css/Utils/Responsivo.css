@@ -73,8 +73,9 @@
     }
 
     .main-menu__layout-historial-resumenes {
-        grid-template-columns: 1fr 0.4fr 0.8fr;
+        grid-template-columns: 1fr;
         padding: 0px 25px;
+        gap: 15px;
     }
 
     /* -------------------- Configuración usuario -------------------- */

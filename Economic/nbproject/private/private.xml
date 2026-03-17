@@ -3,10 +3,11 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/repo_todo/economic_backend/Economic/src/java/controlador/MenuControlador.java</file>
-            <file>file:/C:/repo_todo/economic_backend/Economic/web/Public/User/menu_principal.jsp</file>
-            <file>file:/C:/repo_todo/economic_backend/Economic/src/java/dao/TransaccionDao.java</file>
-            <file>file:/C:/repo_todo/economic_backend/Economic/src/java/controlador/LoginControlador.java</file>
+            <file>file:/C:/repo_todo/economic_backend/Economic/web/Assets/Css/Utils/Responsivo.css</file>
+            <file>file:/C:/repo_todo/economic_backend/Economic/src/java/configuracion/prueva.java</file>
+            <file>file:/C:/repo_todo/economic_backend/Economic/web/Assets/Css/Utils/Layout-menu.css</file>
+            <file>file:/C:/repo_todo/economic_backend/Economic/nbproject/build-impl.xml</file>
+            <file>file:/C:/repo_todo/economic_backend/Economic/web/Assets/Css/Pages/Style_historial_resumenes.css</file>
         </group>
     </open-files>
 </project-private>

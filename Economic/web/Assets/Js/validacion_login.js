@@ -69,11 +69,11 @@ const reglas = {
     },
     txtContrasena: { 
         required: true, 
-        min: 8,
-        max: 15,
+        min: 3,
+        max: 30,
         mensaje: "El campo contraseña es obligatorio",
-        minMensaje: "La contraseña debe tener como mínimo 8 caracteres",
-        maxMensaje: "La contraseña no debe exceder 15 caracteres"
+        minMensaje: "La contraseña debe tener como mínimo 3 caracteres",
+        maxMensaje: "La contraseña no debe exceder 30 caracteres"
     }
 };
 
