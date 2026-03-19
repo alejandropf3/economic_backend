@@ -12,8 +12,8 @@ public class ConexionDB {
 
     String url = "jdbc:mysql://localhost:3306/economic";
     String user = "root";
-    String pass = "#Aprendiz2024";
-    //String pass = "Orion31Heart";
+    //SString pass = "#Aprendiz2024";
+    String pass = "Orion31Heart";
     String driver = "com.mysql.cj.jdbc.Driver";
     
     public Connection getConnection() 

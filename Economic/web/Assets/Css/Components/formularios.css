@@ -93,7 +93,7 @@
 
 .formulario-inicio {
     /*Parametros para el contenedor del formulario*/
-    height: 420px;
+    min-height: 420px;
     width: var(--ancho_formulario);
     background-color: var(--color_secundario);
     border-radius: var(--radio_borde-contenedores);
