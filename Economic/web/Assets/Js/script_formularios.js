@@ -55,25 +55,25 @@ const mensaje_error = document.querySelector('.mensaje_error');
 const reglas = {
     txtNombre: {
         required: true,
-        mensaje: "El campo nombre es obligatorio"
+        mensaje: "El campo nombre es obligatorio (Ingresa tu nombre)"
     },
     txtEmail: {
         required: true,
         email: true,
-        mensaje: "El campo email es obligatorio",
+        mensaje: "El campo email es obligatorio (Ingresa ru direccion de correo)",
         emailMensaje: "El formato del correo no es válido (ej: usuario@dominio.com)"
     },
     txtContrasena: {
         required: true,
         min: 8,
-        max: 15,
-        mensaje: "El campo contraseña es obligatorio"
+        max: 30,
+        mensaje: "El campo contraseña es obligatorio (Ingresa una contraseña de 8 a 30 digitos)"
     },
     txtConfirmar: {
         required: true,
         min: 8,
-        max: 15,
-        mensaje: "El campo confirmar contraseña es obligatorio"
+        max: 30,
+        mensaje: "Por favor vuelve a ingresar tu contraseña"
     }
 };
  
@@ -111,7 +111,7 @@ document.addEventListener('DOMContentLoaded', function () {
         let mensaje = '';
         switch (res) {
             case 'vacio':
-                mensaje = 'Todos los campos son obligatorios';
+                mensaje = 'Todos los campos son obligatorios, por favor ingresa tus datos';
                 break;
             case 'pass_error':
                 mensaje = 'Las contraseñas no coinciden';

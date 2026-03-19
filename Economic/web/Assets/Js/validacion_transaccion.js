@@ -65,13 +65,13 @@ const reglas = {
         required: true,
         numeric: true,
         positive: true,
-        mensaje: "El campo valor de la transacción es obligatorio",
+        mensaje: "Por favor ingresa el valor de la transaccion",
         numericMensaje: "El valor debe ser un número válido (ej: 100.50)",
         positiveMensaje: "El valor debe ser mayor a cero"
     },
     categoria: {
         required: true,
-        mensaje: "Debe seleccionar una categoría"
+        mensaje: "Por favor selecciona una categoría"
     },
     descripcion: {
         required: false,

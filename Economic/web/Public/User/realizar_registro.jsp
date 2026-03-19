@@ -8,11 +8,13 @@
         return;
     }
     Usuario usuarioSesion = (Usuario) session.getAttribute("usuario");
-    String nombreUsuario = usuarioSesion != null ? usuarioSesion.getNombre() : "";
-    String correoUsuario = usuarioSesion != null ? usuarioSesion.getCorreo() : "";
+    String nombreUsuario   = usuarioSesion != null ? usuarioSesion.getNombre() : "";
+    String correoUsuario   = usuarioSesion != null ? usuarioSesion.getCorreo()  : "";
     String urlImagenPerfil = usuarioSesion != null && usuarioSesion.getUrlImagen() != null
                              ? usuarioSesion.getUrlImagen() : null;
     List<Categoria> categorias = (List<Categoria>) request.getAttribute("categorias");
+
+    boolean transaccionExitosa = "exitosa".equals(request.getAttribute("transaccionExitosa"));
 %>
 <!DOCTYPE html>
 <html lang="es">
@@ -39,13 +41,13 @@
                 </label>
             </div>
             <nav class="sidebar__navegacion">
-                <a href="${pageContext.request.contextPath}/Public/User/menu_principal.jsp" class="sidebar__link">
+                <a href="${pageContext.request.contextPath}/MenuControlador" class="sidebar__link">
                     <i class="bi bi-house-fill"></i> Inicio
                 </a>
-                <a href="${pageContext.request.contextPath}/Public/User/historial_transacciones.jsp" class="sidebar__link">
+                <a href="${pageContext.request.contextPath}/HistorialControlador" class="sidebar__link">
                     <i class="bi bi-clock-history"></i> Historial de transacciones
                 </a>
-                <a href="${pageContext.request.contextPath}/Public/User/historial_resumenes.jsp" class="sidebar__link">
+                <a href="${pageContext.request.contextPath}/ResumenControlador" class="sidebar__link">
                     <i class="bi bi-file-text-fill"></i> Historial de resúmenes
                 </a>
                 <a href="${pageContext.request.contextPath}/CategoriaControlador" class="sidebar__link">
@@ -84,9 +86,9 @@
                 <span class="hamburguesa__linea"></span>
             </label>
             <nav class="encabezado__navegacion">
-                <a href="${pageContext.request.contextPath}/Public/User/menu_principal.jsp" class="encabezado__link">Inicio</a>
-                <a href="${pageContext.request.contextPath}/Public/User/historial_transacciones.jsp" class="encabezado__link">Historial de transacciones</a>
-                <a href="${pageContext.request.contextPath}/Public/User/historial_resumenes.jsp" class="encabezado__link">Historial de resúmenes</a>
+                <a href="${pageContext.request.contextPath}/MenuControlador" class="encabezado__link">Inicio</a>
+                <a href="${pageContext.request.contextPath}/HistorialControlador" class="encabezado__link">Historial de transacciones</a>
+                <a href="${pageContext.request.contextPath}/ResumenControlador" class="encabezado__link">Historial de resúmenes</a>
                 <a href="${pageContext.request.contextPath}/CategoriaControlador" class="encabezado__link">Opciones</a>
                 <a href="#ventana-salida-confirmar" class="encabezado__icono">
                     <i class="bi bi-person-fill"></i>
@@ -133,7 +135,6 @@
 
                 <div class="contenedor-registro__formulario">
 
-                    <%-- Campo: Valor --%>
                     <div class="campo-formulario">
                         <input type="number"
                                name="valor"
@@ -145,7 +146,6 @@
                         <span class="campo-error" id="error-valor"></span>
                     </div>
 
-                    <%-- Campo: Categoría + badge de tipo --%>
                     <div class="formulario__seccion">
                         <div class="campo-formulario">
                             <select name="categoria"
@@ -167,7 +167,6 @@
                         <span id="tipo-badge" class="tipo-badge"></span>
                     </div>
 
-                    <%-- Campo: Fecha --%>
                     <div class="campo-formulario">
                         <input type="date"
                                name="fecha"
@@ -176,7 +175,6 @@
                         <span class="campo-error" id="error-fecha"></span>
                     </div>
 
-                    <%-- Campo: Descripción --%>
                     <div class="campo-formulario">
                         <textarea name="descripcion"
                                   id="input-descripcion"
@@ -199,7 +197,7 @@
                         <li>Ingresa una descripción opcional.</li>
                     </ol>
                     <nav class="formulario__informacion-opciones">
-                        <a href="${pageContext.request.contextPath}/Public/User/menu_principal.jsp"
+                        <a href="${pageContext.request.contextPath}/MenuControlador"
                            class="boton--salir">Cancelar</a>
                         <button type="button" class="boton" onclick="abrirConfirmacion()">Guardar</button>
                     </nav>
@@ -207,7 +205,7 @@
 
             </form>
 
-            <%-- ══ VENTANA CONFIRMACIÓN ══ --%>
+            <%-- ══ MODAL CONFIRMACIÓN PREVIA ══ --%>
             <div id="modal-confirmacion" class="ventana-confirmacion-registro">
                 <div class="confirmacion__contenido">
                     <div class="confirmacion__header">
@@ -247,6 +245,32 @@
 
         </section>
     </main>
+
+    <%-- ══ VENTANA ÉXITO — visible solo si la transacción se guardó correctamente ══ --%>
+    <% if (transaccionExitosa) { %>
+    <div class="ventana-exito__overlay">
+        <div class="ventana-exito__card">
+            <div class="ventana-exito__icono">
+                <i class="bi bi-check-lg"></i>
+            </div>
+            <h2 class="ventana-exito__titulo">¡Transacción registrada!</h2>
+            <p class="ventana-exito__mensaje">
+                Tu transacción fue guardada correctamente.
+            </p>
+            <div style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
+                <a href="${pageContext.request.contextPath}/TransaccionControlador"
+                   class="ventana-exito__boton">
+                    Nueva transacción
+                </a>
+                <a href="${pageContext.request.contextPath}/MenuControlador"
+                   class="ventana-exito__boton"
+                   style="background:linear-gradient(135deg,var(--color_terceario),#B3942F);">
+                    Ir al inicio
+                </a>
+            </div>
+        </div>
+    </div>
+    <% } %>
 
     <script src="${pageContext.request.contextPath}/Assets/Js/validacion_transaccion.js"></script>
 

@@ -64,14 +64,14 @@ const reglas = {
     txtCorreo: { 
         required: true, 
         email: true,
-        mensaje: "El campo correo electrónico es obligatorio",
+        mensaje: "El campo correo electrónico es obligatorio, por favor ingresa tu direccion de email",
         emailMensaje: "El formato del correo electrónico no es válido (ej: usuario@dominio.com)"
     },
     txtContrasena: { 
         required: true, 
         min: 8,
         max: 30,
-        mensaje: "El campo contraseña es obligatorio",
+        mensaje: "El campo contraseña es obligatorio, por favor ingresa tu contraseña",
         minMensaje: "La contraseña debe tener como mínimo 8 caracteres",
         maxMensaje: "La contraseña no debe exceder 30 caracteres"
     }

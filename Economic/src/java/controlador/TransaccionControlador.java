@@ -32,7 +32,6 @@ public class TransaccionControlador extends HttpServlet {
  
         Usuario usuarioSesion = (Usuario) session.getAttribute("usuario");
  
-        // Cargar categorías del usuario para el select
         CategoriaDao categoriaDao = new CategoriaDao();
         List<Categoria> categorias = categoriaDao.listarPorUsuario(usuarioSesion.getIdUsuario());
  
@@ -78,8 +77,13 @@ public class TransaccionControlador extends HttpServlet {
  
         TransaccionDao dao = new TransaccionDao();
         if (dao.crear(t)) {
-            response.sendRedirect(request.getContextPath()
-                    + "/TransaccionControlador?res=ok");
+            // Éxito — forward para mostrar ventana de confirmación
+            CategoriaDao categoriaDao = new CategoriaDao();
+            List<Categoria> categorias = categoriaDao.listarPorUsuario(usuarioSesion.getIdUsuario());
+            request.setAttribute("categorias",          categorias);
+            request.setAttribute("transaccionExitosa",  "exitosa");
+            request.getRequestDispatcher("/Public/User/realizar_registro.jsp")
+                   .forward(request, response);
         } else {
             response.sendRedirect(request.getContextPath()
                     + "/TransaccionControlador?res=error");
@@ -91,3 +95,4 @@ public class TransaccionControlador extends HttpServlet {
         return "Controlador para registro de transacciones";
     }
 }
+ 

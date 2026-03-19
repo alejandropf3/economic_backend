@@ -1,7 +1,7 @@
 package controlador;
  
 import dao.CategoriaDao;
-import dao.UsuarioDao;
+import dao.ImagenDao;
 import modelo.Categoria;
 import modelo.Usuario;
 import java.io.IOException;
@@ -29,7 +29,6 @@ public class CategoriaControlador extends HttpServlet {
         Usuario usuarioSesion = (Usuario) session.getAttribute("usuario");
         long idUsuario = usuarioSesion.getIdUsuario();
  
-        // Cargar solo las categorías de este usuario
         CategoriaDao categoriaDao = new CategoriaDao();
         List<Categoria> categorias = categoriaDao.listarPorUsuario(idUsuario);
  
@@ -62,7 +61,6 @@ public class CategoriaControlador extends HttpServlet {
                 String nombre = request.getParameter("txtNombreCategoria");
                 String tipo   = request.getParameter("txtTipoCategoria");
  
-                // Pasar idUsuario a la validación
                 String resultado = utils.validarCategorias.validarCrear(nombre, tipo, idUsuario, dao);
  
                 if (!resultado.equals("ok")) {
@@ -77,7 +75,12 @@ public class CategoriaControlador extends HttpServlet {
                 categoria.setIdUsuario(idUsuario);
  
                 if (dao.crear(categoria)) {
-                    response.sendRedirect(request.getContextPath() + "/CategoriaControlador");
+                    // Éxito — forward con flag para mostrar ventana de confirmación
+                    List<Categoria> categorias = dao.listarPorUsuario(idUsuario);
+                    request.setAttribute("categorias",        categorias);
+                    request.setAttribute("categoriaExitosa",  "exitosa");
+                    request.getRequestDispatcher("/Public/User/configuracion_usuario.jsp")
+                           .forward(request, response);
                 } else {
                     response.sendRedirect(request.getContextPath()
                             + "/CategoriaControlador?res=error&form=crear");
