@@ -171,7 +171,7 @@
                         </select>
                     </div>
 
-                    <div class="filtro-item">
+                    <%--<div class="filtro-item">
                         <label class="filtro-label">Categoría</label>
                         <select name="categoria" class="filtro-select">
                             <option value="todas" <%= "todas".equals(filtroCategoria) || filtroCategoria.isEmpty() ? "selected" : "" %>>Todas</option>
@@ -182,7 +182,7 @@
                             </option>
                             <% } %>
                         </select>
-                    </div>
+                    </div> --%>
 
                     <div class="filtro-item">
                         <label class="filtro-label">Desde</label>
@@ -242,7 +242,7 @@
                                 <td class="descripcion"><%= descripcion %></td>
                                 <td class="fecha"><%= t.getFechaRealizacion() %></td>
                                 <td class="acciones">
-                                    <button class="accion-btn editar-btn"
+                                    <%--<button class="accion-btn editar-btn"
                                             title="Editar"
                                             onclick="abrirModalEditar(
                                                 <%= t.getIdTransaccion() %>,
@@ -252,7 +252,7 @@
                                                 '<%= t.getFechaRealizacion() %>'
                                             )">
                                         <i class="bi bi-pencil"></i>
-                                    </button>
+                                    </button> --%>
                                     <button class="accion-btn eliminar-btn"
                                             title="Eliminar"
                                             onclick="confirmarEliminar(<%= t.getIdTransaccion() %>)">
