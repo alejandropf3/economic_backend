@@ -1,7 +1,6 @@
 package controlador;
  
 import dao.CategoriaDao;
-import dao.ImagenDao;
 import modelo.Categoria;
 import modelo.Usuario;
 import java.io.IOException;
@@ -75,10 +74,9 @@ public class CategoriaControlador extends HttpServlet {
                 categoria.setIdUsuario(idUsuario);
  
                 if (dao.crear(categoria)) {
-                    // Éxito — forward con flag para mostrar ventana de confirmación
                     List<Categoria> categorias = dao.listarPorUsuario(idUsuario);
-                    request.setAttribute("categorias",        categorias);
-                    request.setAttribute("categoriaExitosa",  "exitosa");
+                    request.setAttribute("categorias",       categorias);
+                    request.setAttribute("categoriaExitosa", "exitosa");
                     request.getRequestDispatcher("/Public/User/configuracion_usuario.jsp")
                            .forward(request, response);
                 } else {
@@ -88,39 +86,17 @@ public class CategoriaControlador extends HttpServlet {
                 break;
             }
  
-            case "editar": {
-                String idStr  = request.getParameter("txtIdCategoria");
-                String nombre = request.getParameter("txtNombreCategoria");
-                String tipo   = request.getParameter("txtTipoCategoria");
-                int id = Integer.parseInt(idStr);
- 
-                String resultado = utils.validarCategorias.validarEditar(
-                        nombre, tipo, id, idUsuario, dao);
- 
-                if (!resultado.equals("ok")) {
-                    response.sendRedirect(request.getContextPath()
-                            + "/CategoriaControlador?res=" + resultado + "&form=editar&id=" + id);
-                    return;
-                }
- 
-                Categoria categoria = new Categoria();
-                categoria.setIdCategoria(id);
-                categoria.setNombreCategoria(nombre.trim());
-                categoria.setTipoTransaccion(tipo);
-                categoria.setIdUsuario(idUsuario);
- 
-                if (dao.editar(categoria)) {
-                    response.sendRedirect(request.getContextPath() + "/CategoriaControlador");
-                } else {
-                    response.sendRedirect(request.getContextPath()
-                            + "/CategoriaControlador?res=error&form=editar&id=" + id);
-                }
-                break;
-            }
- 
             case "eliminar": {
                 String idStr = request.getParameter("txtIdCategoria");
                 int id = Integer.parseInt(idStr);
+ 
+                // Validar que la categoría no esté en uso
+                String resultado = utils.validarCategorias.validarEliminar(id, idUsuario, dao);
+                if (!resultado.equals("ok")) {
+                    response.sendRedirect(request.getContextPath()
+                            + "/CategoriaControlador?res=" + resultado);
+                    return;
+                }
  
                 if (dao.eliminar(id, idUsuario)) {
                     response.sendRedirect(request.getContextPath() + "/CategoriaControlador");

@@ -37,13 +37,6 @@ document.addEventListener("DOMContentLoaded", () => {
             <h2 class="item__titulo">${cat.nombreCategoria}</h2>
             <p class="item__parrafo">${tipoTexto}</p>
             <nav class="item__navegacion">
-                <a href="#ventana-modificar-categoria-confirmar"
-                   class="boton--editar"
-                   data-id="${cat.idCategoria}"
-                   data-nombre="${cat.nombreCategoria}"
-                   data-tipo="${cat.tipoTransaccion}">
-                   Editar
-                </a>
                 <a href="#"
                    class="boton--eliminar"
                    data-id="${cat.idCategoria}">
@@ -53,23 +46,6 @@ document.addEventListener("DOMContentLoaded", () => {
         `;
  
         contenedor.appendChild(item);
-    });
- 
-    // ── 3. Delegación de eventos — Editar ─────────────────────────────────────
-    contenedor.addEventListener("click", (e) => {
-        const btnEditar = e.target.closest(".boton--editar");
-        if (!btnEditar) return;
- 
-        const formEditar  = document.querySelector(".ventana-modificar-categoria__formulario-editar");
-        if (!formEditar) return;
- 
-        const inputId     = formEditar.querySelector("[name='txtIdCategoria']");
-        const inputNombre = formEditar.querySelector("[name='txtNombreCategoria']");
-        const inputTipo   = formEditar.querySelector("[name='txtTipoCategoria']");
- 
-        if (inputId)     inputId.value     = btnEditar.dataset.id;
-        if (inputNombre) inputNombre.value = btnEditar.dataset.nombre;
-        if (inputTipo)   inputTipo.value   = btnEditar.dataset.tipo;
     });
  
     // ── 4. Delegación de eventos — Eliminar ───────────────────────────────────

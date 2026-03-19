@@ -10,9 +10,45 @@
                              ? usuarioSesion.getCorreoRespaldo() : "";
     String urlImagenPerfil = usuarioSesion != null && usuarioSesion.getUrlImagen() != null
                              ? usuarioSesion.getUrlImagen() : null;
-    String resImagen  = request.getParameter("resImagen");
-    String resEdicion = request.getParameter("resEdicion");
+    String resImagen       = request.getParameter("resImagen");
+    String resEdicion      = request.getParameter("resEdicion");
+    String resCategoria    = request.getParameter("res");
     boolean categoriaExitosa = "exitosa".equals(request.getAttribute("categoriaExitosa"));
+
+    // Mensaje error categoría
+    String msgErrorCategoria = "";
+    if ("categoria_en_uso".equals(resCategoria)) {
+        msgErrorCategoria = "No puedes eliminar esta categoría porque está siendo utilizada en una o más transacciones.";
+    } else if ("error_eliminar".equals(resCategoria)) {
+        msgErrorCategoria = "Ocurrió un error al eliminar. Intenta de nuevo.";
+    }
+
+    // Mensaje edición perfil
+    String msgEdicion = "";
+    if (resEdicion != null && !resEdicion.isEmpty() && !"ok".equals(resEdicion)) {
+        switch (resEdicion) {
+            case "nombre_vacio":              msgEdicion = "El nombre es obligatorio."; break;
+            case "nombre_muy_corto":          msgEdicion = "El nombre debe tener al menos 3 caracteres."; break;
+            case "nombre_muy_largo":          msgEdicion = "El nombre es demasiado largo."; break;
+            case "correo_vacio":              msgEdicion = "El correo electrónico es obligatorio."; break;
+            case "correo_formato_invalido":   msgEdicion = "El formato del correo no es válido."; break;
+            case "correo_duplicado":          msgEdicion = "Ese correo ya está registrado por otro usuario."; break;
+            case "respaldo_formato_invalido": msgEdicion = "El formato del correo de respaldo no es válido."; break;
+            case "respaldo_igual_principal":  msgEdicion = "El correo de respaldo no puede ser igual al principal."; break;
+            case "respaldo_duplicado":        msgEdicion = "Ese correo de respaldo ya está en uso."; break;
+            default:                          msgEdicion = "Ocurrió un error. Intenta de nuevo."; break;
+        }
+    }
+
+    // Mensaje imagen
+    String msgImg = "";
+    if (resImagen != null && !resImagen.isEmpty() && !"ok".equals(resImagen)) {
+        switch (resImagen) {
+            case "vacio":            msgImg = "Debes seleccionar una imagen."; break;
+            case "formato_invalido": msgImg = "Solo se permiten JPG, PNG o WEBP."; break;
+            default:                 msgImg = "Error al guardar. Intenta de nuevo."; break;
+        }
+    }
 %>
 <%
     if (request.getAttribute("categorias") == null) {
@@ -22,7 +58,6 @@
 %>
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -30,7 +65,6 @@
     <title>Configuracion</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/Assets/Styles_principal.css">
 </head>
-
 <body>
 
     <input type="checkbox" id="sidebar-toggle" class="sidebar__toggle">
@@ -52,7 +86,7 @@
                     <i class="bi bi-clock-history"></i> Historial de transacciones
                 </a>
                 <a href="${pageContext.request.contextPath}/Public/User/historial_resumenes.jsp" class="sidebar__link">
-                    <i class="bi bi-file-text-fill"></i> Historial de resúmenes
+                    <i class="bi bi-file-text-fill"></i> Historial de resumenes
                 </a>
                 <a href="${pageContext.request.contextPath}/CategoriaControlador" class="sidebar__link sidebar__link--activo">
                     <i class="bi bi-gear-fill"></i> Opciones
@@ -94,7 +128,7 @@
             <nav class="encabezado__navegacion">
                 <a href="${pageContext.request.contextPath}/MenuControlador" class="encabezado__link">Inicio</a>
                 <a href="${pageContext.request.contextPath}/HistorialControlador" class="encabezado__link">Historial de transacciones</a>
-                <a href="${pageContext.request.contextPath}/Public/User/historial_resumenes.jsp" class="encabezado__link">Historial de resúmenes</a>
+                <a href="${pageContext.request.contextPath}/Public/User/historial_resumenes.jsp" class="encabezado__link">Historial de resumenes</a>
                 <a href="${pageContext.request.contextPath}/CategoriaControlador" class="encabezado__link">Opciones</a>
                 <a href="${pageContext.request.contextPath}/Public/Admin/administrar_usuarios.jsp" class="encabezado__link">Admin</a>
                 <a href="#ventana-salida-confirmar" class="encabezado__icono">
@@ -134,30 +168,13 @@
                 <h2 class="layout-menu__titulo">Configuracion de usuario</h2>
             </div>
 
-            <%-- ══ FORMULARIO IZQUIERDA ══ --%>
+            <%-- FORMULARIO IZQUIERDA --%>
             <div class="main-menu__contenedor-izquierda">
 
-                <%-- Mensaje resultado edición --%>
                 <% if ("ok".equals(resEdicion)) { %>
-                    <p class="formulario__mensaje-ok">✓ Datos actualizados correctamente.</p>
-                <% } else if (resEdicion != null && !resEdicion.isEmpty()) {
-                    String msgEdicion = "";
-                    switch (resEdicion) {
-                        case "nombre_vacio":              msgEdicion = "El nombre es obligatorio."; break;
-                        case "nombre_muy_corto":          msgEdicion = "El nombre debe tener al menos 3 caracteres."; break;
-                        case "nombre_muy_largo":          msgEdicion = "El nombre es demasiado largo."; break;
-                        case "correo_vacio":              msgEdicion = "El correo electrónico es obligatorio."; break;
-                        case "correo_formato_invalido":   msgEdicion = "El formato del correo no es válido."; break;
-                        case "correo_duplicado":          msgEdicion = "Ese correo ya está registrado por otro usuario."; break;
-                        case "respaldo_formato_invalido": msgEdicion = "El formato del correo de respaldo no es válido."; break;
-                        case "respaldo_igual_principal":  msgEdicion = "El correo de respaldo no puede ser igual al principal."; break;
-                        case "respaldo_duplicado":        msgEdicion = "Ese correo de respaldo ya está en uso."; break;
-                        case "error":                     msgEdicion = "Ocurrió un error. Intenta de nuevo."; break;
-                    }
-                %>
-                    <p class="formulario__span-error" style="display:block; font-size:13px;">
-                        <%= msgEdicion %>
-                    </p>
+                    <p class="formulario__mensaje-ok">Datos actualizados correctamente.</p>
+                <% } else if (!msgEdicion.isEmpty()) { %>
+                    <p class="formulario__span-error" style="display:block; font-size:13px;"><%= msgEdicion %></p>
                 <% } %>
 
                 <form action="${pageContext.request.contextPath}/UsuarioControlador"
@@ -167,7 +184,6 @@
 
                     <input type="hidden" name="accion" value="editarPerfil">
 
-                    <%-- Nombre --%>
                     <div class="formulario__campos-usuario">
                         <label for="nombre_usuario" class="formulario__campos-label">Nombre</label>
                         <input type="text" id="nombre_usuario" name="txtNombre"
@@ -176,15 +192,13 @@
                                placeholder="Nombre de usuario" readonly>
                     </div>
 
-                    <%-- Contraseña — nunca editable --%>
                     <div class="formulario__campos-usuario">
-                        <label for="contrasena_usuario" class="formulario__campos-label">Contraseña</label>
+                        <label for="contrasena_usuario" class="formulario__campos-label">Contrasena</label>
                         <input type="password" id="contrasena_usuario"
                                class="formulario__campos-input"
-                               value="••••••••" readonly disabled>
+                               value="12345678" readonly disabled>
                     </div>
 
-                    <%-- Correo principal --%>
                     <div class="formulario__campos-usuario">
                         <label for="correo_usuario" class="formulario__campos-label">Correo electronico</label>
                         <input type="email" id="correo_usuario" name="txtCorreo"
@@ -193,7 +207,6 @@
                                placeholder="Cor****@gmail.com" readonly>
                     </div>
 
-                    <%-- Correo de respaldo --%>
                     <div class="formulario__campos-usuario">
                         <label for="respaldo_correo_usuario" class="formulario__campos-label">Respaldo correo</label>
                         <input type="email" id="respaldo_correo_usuario" name="txtCorreoRespaldo"
@@ -202,7 +215,6 @@
                                placeholder="Res****@gmail.com" readonly>
                     </div>
 
-                    <%-- Botones --%>
                     <button type="button" class="boton--editar-perfil"
                             id="btn-editar-perfil" onclick="activarEdicion()">
                         Editar datos
@@ -210,18 +222,16 @@
 
                     <div class="formulario__botones-edicion"
                          id="botones-guardar-cancelar" style="display:none;">
-                        <button type="button" class="boton--cancelar"
-                                onclick="cancelarEdicion()">Cancelar</button>
+                        <button type="button" class="boton--cancelar" onclick="cancelarEdicion()">Cancelar</button>
                         <button type="submit" class="boton--guardar">Guardar</button>
                     </div>
 
                 </form>
             </div>
 
-            <%-- ══ CONTENEDOR DERECHA ══ --%>
+            <%-- CONTENEDOR DERECHA --%>
             <div class="main-menu__contenedor-derecha">
 
-                <%-- Formulario imagen --%>
                 <form action="${pageContext.request.contextPath}/ImagenControlador"
                       method="post" enctype="multipart/form-data"
                       class="contenedor-derecha__formulario">
@@ -240,20 +250,9 @@
                     </div>
 
                     <% if ("ok".equals(resImagen)) { %>
-                        <p class="formulario__mensaje-imagen formulario__mensaje-imagen--ok">
-                            ✓ Foto actualizada correctamente.
-                        </p>
-                    <% } else if (resImagen != null && !resImagen.isEmpty()) {
-                        String msgImg = "";
-                        switch (resImagen) {
-                            case "vacio":            msgImg = "Debes seleccionar una imagen."; break;
-                            case "formato_invalido": msgImg = "Solo se permiten JPG, PNG o WEBP."; break;
-                            case "error":            msgImg = "Error al guardar. Intenta de nuevo."; break;
-                        }
-                    %>
-                        <p class="formulario__mensaje-imagen formulario__mensaje-imagen--error">
-                            <%= msgImg %>
-                        </p>
+                        <p class="formulario__mensaje-imagen formulario__mensaje-imagen--ok">Foto actualizada correctamente.</p>
+                    <% } else if (!msgImg.isEmpty()) { %>
+                        <p class="formulario__mensaje-imagen formulario__mensaje-imagen--error"><%= msgImg %></p>
                     <% } %>
 
                     <div class="formulario__campo-imagen">
@@ -261,9 +260,8 @@
                         <input type="file" name="foto_usuario" id="foto_usuario"
                                class="formulario__imagen-input"
                                accept="image/jpeg, image/png, image/webp">
-                        <p class="formulario__imagen-hint">JPG, PNG o WEBP · Máximo 2 MB</p>
-                        <button type="submit" class="boton--guardar"
-                                style="margin-top:10px; width:100%;">
+                        <p class="formulario__imagen-hint">JPG, PNG o WEBP - Maximo 2 MB</p>
+                        <button type="submit" class="boton--guardar" style="margin-top:10px; width:100%;">
                             Guardar foto
                         </button>
                     </div>
@@ -272,13 +270,21 @@
 
                 <div class="contenedor-derecha__caja-categorias">
                     <h2 class="caja-categorias__titulo">Categorias</h2>
+
+                    <% if (!msgErrorCategoria.isEmpty()) { %>
+                        <p class="formulario__span-error caja-categorias__error"
+                           style="display:block; font-size:12px; margin-bottom:8px;">
+                            <%= msgErrorCategoria %>
+                        </p>
+                    <% } %>
+
                     <div class="caja-categorias__contenido"></div>
                     <a href="#ventana-crear-categoria-confirmar"
                        class="boton--crear-categoria">Crear categoria +</a>
                 </div>
             </div>
 
-            <!-- ══ MODAL CREAR CATEGORÍA ══ -->
+            <!-- MODAL CREAR CATEGORIA -->
             <div id="ventana-crear-categoria-confirmar" class="ventana-crear-categoria">
                 <form action="${pageContext.request.contextPath}/CategoriaControlador"
                       method="post" class="ventana-crear-categoria__formulario-crear">
@@ -297,31 +303,6 @@
                     </div>
                     <nav class="formulario-crear__navegacion">
                         <a href="#ventana-crear-categoria-cerrar" class="boton--cancelar">Cancelar</a>
-                        <button type="submit" class="boton--guardar">Guardar</button>
-                    </nav>
-                </form>
-            </div>
-
-            <!-- ══ MODAL EDITAR CATEGORÍA ══ -->
-            <div id="ventana-modificar-categoria-confirmar" class="ventana-modificar-categoria">
-                <form action="${pageContext.request.contextPath}/CategoriaControlador"
-                      method="post" class="ventana-modificar-categoria__formulario-editar">
-                    <input type="hidden" name="accion" value="editar">
-                    <input type="hidden" name="txtIdCategoria" id="inputIdEditar">
-                    <h2 class="formulario-editar__titulo">Editar categoria</h2>
-                    <div class="formulario-editar__contenido">
-                        <input type="text" name="txtNombreCategoria"
-                               placeholder="Nuevo nombre categoria" class="contenido__input">
-                        <span id="error-editar-nombre" class="formulario__span-error" style="display:none;"></span>
-                        <select name="txtTipoCategoria" class="contenido__input">
-                            <option value="" disabled selected>Nuevo tipo</option>
-                            <option value="Ingreso">Ingreso +</option>
-                            <option value="Egreso">Egreso -</option>
-                        </select>
-                        <span id="error-editar-tipo" class="formulario__span-error" style="display:none;"></span>
-                    </div>
-                    <nav class="formulario-editar__navegacion">
-                        <a href="#ventana-modificar-categoria-cerrar" class="boton--cancelar">Cancelar</a>
                         <button type="submit" class="boton--guardar">Guardar</button>
                     </nav>
                 </form>
@@ -362,38 +343,41 @@
         };
 
         const cancelarEdicion = () => {
-            document.getElementById("nombre_usuario").value   = valoresOriginales.nombre;
-            document.getElementById("correo_usuario").value   = valoresOriginales.correo;
-            document.getElementById("respaldo_correo_usuario").value = valoresOriginales.respaldo;
+            document.getElementById("nombre_usuario").value            = valoresOriginales.nombre;
+            document.getElementById("correo_usuario").value            = valoresOriginales.correo;
+            document.getElementById("respaldo_correo_usuario").value   = valoresOriginales.respaldo;
             document.getElementById("nombre_usuario").setAttribute("readonly", true);
             document.getElementById("correo_usuario").setAttribute("readonly", true);
             document.getElementById("respaldo_correo_usuario").setAttribute("readonly", true);
             document.getElementById("btn-editar-perfil").style.display = "";
             document.getElementById("botones-guardar-cancelar").style.display = "none";
         };
+
+        // Ocultar mensaje de error de categoria al hacer clic fuera
+        const errorCategoria = document.querySelector('.caja-categorias__error');
+        if (errorCategoria) {
+            document.addEventListener('click', (e) => {
+                if (!errorCategoria.contains(e.target)) {
+                    errorCategoria.style.display = 'none';
+                }
+            });
+        }
     </script>
 
     <script src="${pageContext.request.contextPath}/Assets/Js/categorias_dinamicas.js"></script>
     <script src="${pageContext.request.contextPath}/Assets/Js/validacion_categoria.js"></script>
 
-</body>
-</html>
-
-    <%-- ══ VENTANA ÉXITO — visible solo si se creó la categoría correctamente ══ --%>
+    <%-- VENTANA EXITO CATEGORIA --%>
     <% if (categoriaExitosa) { %>
     <div class="ventana-exito__overlay">
         <div class="ventana-exito__card">
             <div class="ventana-exito__icono">
                 <i class="bi bi-check-lg"></i>
             </div>
-            <h2 class="ventana-exito__titulo">¡Categoría creada!</h2>
-            <p class="ventana-exito__mensaje">
-                La categoría fue creada correctamente.
-            </p>
+            <h2 class="ventana-exito__titulo">Categoria creada!</h2>
+            <p class="ventana-exito__mensaje">La categoria fue creada correctamente.</p>
             <a href="${pageContext.request.contextPath}/CategoriaControlador"
-               class="ventana-exito__boton">
-                Aceptar
-            </a>
+               class="ventana-exito__boton">Aceptar</a>
         </div>
     </div>
     <% } %>

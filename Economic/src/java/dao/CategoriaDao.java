@@ -184,4 +184,22 @@ public class CategoriaDao {
         }
         return false;
     }
+    
+    // ── VERIFICAR SI LA CATEGORÍA ESTÁ EN USO EN TRANSACCIONES ───────────────────
+    public boolean categoriaEnUso(int idCategoria) {
+        String sql = "SELECT COUNT(*) FROM Transacciones WHERE ID_categoria = ?";
+        try {
+            con = cn.getConnection();
+            ps  = con.prepareStatement(sql);
+            ps.setInt(1, idCategoria);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) return rs.getInt(1) > 0;
+        } catch (SQLException e) {
+            System.err.println("Error en categoriaEnUso: " + e.getMessage());
+        } finally {
+            try { if (con != null) con.close(); } catch (SQLException e) {}
+        }
+        return false;
+    }
+ 
 }
