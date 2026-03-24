@@ -217,7 +217,6 @@
                                 <th>Categoría</th>
                                 <th>Descripción</th>
                                 <th>Fecha</th>
-                                <th>Acciones</th>
                             </tr>
                         </thead>
                         <tbody class="tabla__cuerpo">
@@ -241,24 +240,7 @@
                                 <td><span class="categoria-badge"><%= t.getNombreCategoria() %></span></td>
                                 <td class="descripcion"><%= descripcion %></td>
                                 <td class="fecha"><%= t.getFechaRealizacion() %></td>
-                                <td class="acciones">
-                                    <%--<button class="accion-btn editar-btn"
-                                            title="Editar"
-                                            onclick="abrirModalEditar(
-                                                <%= t.getIdTransaccion() %>,
-                                                <%= t.getIdCategoria() %>,
-                                                '<%= valorFormateado.replace("$","").replace(",","") %>',
-                                                '<%= descripcion.replace("'","\\'") %>',
-                                                '<%= t.getFechaRealizacion() %>'
-                                            )">
-                                        <i class="bi bi-pencil"></i>
-                                    </button> --%>
-                                    <button class="accion-btn eliminar-btn"
-                                            title="Eliminar"
-                                            onclick="confirmarEliminar(<%= t.getIdTransaccion() %>)">
-                                        <i class="bi bi-trash"></i>
-                                    </button>
-                                </td>
+                                
                             </tr>
                             <% } } %>
                         </tbody>
@@ -269,66 +251,6 @@
 
         </section>
     </main>
-
-    <%-- ══ MODAL EDITAR TRANSACCIÓN ══ --%>
-    <div id="modal-editar" class="ventana-modificar-categoria">
-        <form action="${pageContext.request.contextPath}/HistorialControlador"
-              method="post"
-              class="ventana-modificar-categoria__formulario-editar">
-
-            <input type="hidden" name="accion" value="editar">
-            <input type="hidden" name="txtIdTransaccion" id="edit-id">
-
-            <h2 class="formulario-editar__titulo">Editar transacción</h2>
-
-            <div class="formulario-editar__contenido">
-
-                <select name="txtCategoriaTransaccion" id="edit-categoria" class="contenido__input">
-                    <option value="" disabled>Seleccionar categoría</option>
-                    <% for (Categoria c : categorias) { %>
-                    <option value="<%= c.getIdCategoria() %>"><%= c.getNombreCategoria() %></option>
-                    <% } %>
-                </select>
-                <span id="error-edit-categoria" class="formulario__span-error" style="display:none;"></span>
-
-                <input type="number"
-                       name="txtValorTransaccion"
-                       id="edit-valor"
-                       class="contenido__input"
-                       placeholder="Valor"
-                       min="0.01" step="0.01">
-                <span id="error-edit-valor" class="formulario__span-error" style="display:none;"></span>
-
-                <input type="date"
-                       name="txtFechaTransaccion"
-                       id="edit-fecha"
-                       class="contenido__input">
-                <span id="error-edit-fecha" class="formulario__span-error" style="display:none;"></span>
-
-                <textarea name="txtDescripcionTransaccion"
-                          id="edit-descripcion"
-                          class="contenido__input"
-                          placeholder="Descripción (opcional)"
-                          style="height:80px; resize:vertical;"></textarea>
-
-            </div>
-
-            <nav class="formulario-editar__navegacion">
-                <button type="button" class="boton--cancelar" onclick="cerrarModalEditar()">Cancelar</button>
-                <button type="submit" class="boton--guardar">Guardar</button>
-            </nav>
-        </form>
-    </div>
-
-    <%-- Form oculto para eliminar --%>
-    <form id="form-eliminar"
-          action="${pageContext.request.contextPath}/HistorialControlador"
-          method="post" style="display:none;">
-        <input type="hidden" name="accion" value="eliminar">
-        <input type="hidden" name="txtIdTransaccion" id="eliminar-id">
-    </form>
-
-    <script src="${pageContext.request.contextPath}/Assets/Js/historial_transacciones.js"></script>
 
 </body>
 </html>
