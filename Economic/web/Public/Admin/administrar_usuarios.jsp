@@ -215,19 +215,6 @@
         <div class="toast toast--error" id="toast">
             <i class="bi bi-x-circle-fill"></i> Contraseña incorrecta. Intenta de nuevo.
         </div>
-    <% } else if ("tiene_asociados".equals(res)) { %>
-        <div class="toast toast--error" id="toast">
-            <i class="bi bi-x-circle-fill"></i>
-            No se puede eliminar: el usuario tiene
-            <% if (numTransacciones > 0) { %>
-                <strong><%= numTransacciones %> transacción(es)</strong>
-            <% } %>
-            <% if (numTransacciones > 0 && numCategorias > 0) { %> y <% } %>
-            <% if (numCategorias > 0) { %>
-                <strong><%= numCategorias %> categoría(s)</strong>
-            <% } %>
-            asociada(s). Elimínalas antes.
-        </div>
     <% } else if ("no_autoeliminacion".equals(res)) { %>
         <div class="toast toast--error" id="toast">
             <i class="bi bi-x-circle-fill"></i> No puedes eliminar tu propia cuenta.
@@ -302,7 +289,7 @@
         }
 
         // Re-abrir modal si hubo error del servidor para el mismo usuario
-        <% if (("pass_incorrecta".equals(res) || "tiene_asociados".equals(res)) && !idUsuarioParam.isEmpty()) { %>
+        <% if ("pass_incorrecta".equals(res) && !idUsuarioParam.isEmpty()) { %>
             // El modal se cierra tras la redirección; el toast ya informa al usuario.
         <% } %>
     </script>

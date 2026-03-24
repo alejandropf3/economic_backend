@@ -97,21 +97,7 @@ public class AdminControlador extends HttpServlet {
                 return;
             }
  
-            // ── 4. Validar que el usuario no tenga elementos asociados ─────────
-            int transacciones = dao.contarTransacciones(idUsuarioEliminar);
-            int categorias    = dao.contarCategorias(idUsuarioEliminar);
- 
-            if (transacciones > 0 || categorias > 0) {
-                StringBuilder resParam = new StringBuilder("tiene_asociados");
-                resParam.append("&transacciones=").append(transacciones);
-                resParam.append("&categorias=").append(categorias);
-                resParam.append("&idUsuario=").append(idUsuarioEliminar);
-                response.sendRedirect(request.getContextPath()
-                        + "/AdminControlador?" + resParam);
-                return;
-            }
- 
-            // ── 5. Eliminar usuario ───────────────────────────────────────────
+            // ── 4. Eliminar usuario (sin validación de asociados) ───────────────
             if (dao.eliminarUsuario(idUsuarioEliminar)) {
                 response.sendRedirect(request.getContextPath()
                         + "/AdminControlador?res=eliminado_ok");

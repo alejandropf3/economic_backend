@@ -124,22 +124,90 @@ public class AdminDao {
         return 0;
     }
  
-    // ── ELIMINAR USUARIO (en cascada por FK ON DELETE CASCADE) ───────────────
-    // Elimina: Email, Imagenes, Token_recuperacion, Usuario_Rol → Usuario
+    // ── ELIMINAR USUARIO (eliminación manual sin cascada) ───────────────────────
+    // Elimina manualmente: Transacciones→Categorías→Usuario_Categoria→Email→Imagenes→Token_recuperacion→Usuario_Rol→Usuario
     public boolean eliminarUsuario(long idUsuario) {
-        // Las FK con ON DELETE CASCADE se encargan de Email, Imagenes,
-        // Usuario_Rol, Token_recuperacion y Usuario_Categoria automáticamente.
-        String sql = "DELETE FROM Usuario WHERE ID_usuario = ?";
         try {
             con = cn.getConnection();
-            ps  = con.prepareStatement(sql);
+            con.setAutoCommit(false); // Iniciar transacción
+            
+            // 1. Eliminar transacciones del usuario
+            String sqlTransacciones = "DELETE T FROM Transacciones T " +
+                                     "JOIN Categoria C ON T.ID_categoria = C.ID_categoria " +
+                                     "JOIN Usuario_Categoria UC ON C.ID_categoria = UC.ID_categoria " +
+                                     "WHERE UC.ID_usuario = ?";
+            ps = con.prepareStatement(sqlTransacciones);
+            ps.setLong(1, idUsuario);
+            ps.executeUpdate();
+            ps.close();
+            
+            // 2. Eliminar categorías del usuario
+            String sqlCategorias = "DELETE C FROM Categoria C " +
+                                   "JOIN Usuario_Categoria UC ON C.ID_categoria = UC.ID_categoria " +
+                                   "WHERE UC.ID_usuario = ?";
+            ps = con.prepareStatement(sqlCategorias);
+            ps.setLong(1, idUsuario);
+            ps.executeUpdate();
+            ps.close();
+            
+            // 3. Eliminar relaciones usuario_categoría
+            String sqlUsuarioCategoria = "DELETE FROM Usuario_Categoria WHERE ID_usuario = ?";
+            ps = con.prepareStatement(sqlUsuarioCategoria);
+            ps.setLong(1, idUsuario);
+            ps.executeUpdate();
+            ps.close();
+            
+            // 4. Eliminar email del usuario
+            String sqlEmail = "DELETE FROM Email WHERE ID_usuario = ?";
+            ps = con.prepareStatement(sqlEmail);
+            ps.setLong(1, idUsuario);
+            ps.executeUpdate();
+            ps.close();
+            
+            // 5. Eliminar imágenes del usuario
+            String sqlImagenes = "DELETE FROM Imagenes WHERE ID_usuario = ?";
+            ps = con.prepareStatement(sqlImagenes);
+            ps.setLong(1, idUsuario);
+            ps.executeUpdate();
+            ps.close();
+            
+            // 6. Eliminar tokens de recuperación del usuario
+            String sqlTokens = "DELETE FROM Token_recuperacion WHERE ID_usuario = ?";
+            ps = con.prepareStatement(sqlTokens);
+            ps.setLong(1, idUsuario);
+            ps.executeUpdate();
+            ps.close();
+            
+            // 7. Eliminar roles del usuario
+            String sqlUsuarioRol = "DELETE FROM Usuario_Rol WHERE ID_usuario = ?";
+            ps = con.prepareStatement(sqlUsuarioRol);
+            ps.setLong(1, idUsuario);
+            ps.executeUpdate();
+            ps.close();
+            
+            // 8. Finalmente eliminar al usuario
+            String sqlUsuario = "DELETE FROM Usuario WHERE ID_usuario = ?";
+            ps = con.prepareStatement(sqlUsuario);
             ps.setLong(1, idUsuario);
             int filas = ps.executeUpdate();
+            
+            con.commit(); // Confirmar transacción
             return filas > 0;
+            
         } catch (SQLException e) {
+            try {
+                if (con != null) con.rollback(); // Revertir en caso de error
+            } catch (SQLException rollbackEx) {
+                System.err.println("Error al hacer rollback: " + rollbackEx.getMessage());
+            }
             System.err.println("Error en AdminDao.eliminarUsuario: " + e.getMessage());
             return false;
         } finally {
+            try {
+                if (con != null) con.setAutoCommit(true);
+            } catch (SQLException e) {
+                System.err.println("Error al restaurar autoCommit: " + e.getMessage());
+            }
             cerrar();
         }
     }
