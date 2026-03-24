@@ -91,9 +91,6 @@
                 <a href="${pageContext.request.contextPath}/CategoriaControlador" class="sidebar__link sidebar__link--activo">
                     <i class="bi bi-gear-fill"></i> Opciones
                 </a>
-                <a href="${pageContext.request.contextPath}/Public/Admin/administrar_usuarios.jsp" class="sidebar__link">
-                    <i class="bi bi-people-fill"></i> Admin
-                </a>
             </nav>
             <div class="sidebar__usuario">
                 <div class="sidebar__usuario-info">
@@ -130,7 +127,6 @@
                 <a href="${pageContext.request.contextPath}/HistorialControlador" class="encabezado__link">Historial de transacciones</a>
                 <a href="${pageContext.request.contextPath}/Public/User/historial_resumenes.jsp" class="encabezado__link">Historial de resumenes</a>
                 <a href="${pageContext.request.contextPath}/CategoriaControlador" class="encabezado__link">Opciones</a>
-                <a href="${pageContext.request.contextPath}/Public/Admin/administrar_usuarios.jsp" class="encabezado__link">Admin</a>
                 <a href="#ventana-salida-confirmar" class="encabezado__icono">
                     <i class="bi bi-person-fill"></i>
                 </a>
@@ -261,7 +257,7 @@
                                class="formulario__imagen-input"
                                accept="image/jpeg, image/png, image/webp">
                         <p class="formulario__imagen-hint">JPG, PNG o WEBP - Maximo 2 MB</p>
-                        <button type="submit" class="boton--guardar" style="margin-top:10px; width:100%;">
+                        <button type="submit" class="boton--guardar">
                             Guardar foto
                         </button>
                     </div>
