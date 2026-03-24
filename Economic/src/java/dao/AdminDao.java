@@ -2,6 +2,7 @@ package dao;
  
 import configuracion.ConexionDB;
 import modelo.Usuario;
+import modelo.ResultadoEliminacion;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -126,28 +127,39 @@ public class AdminDao {
  
     // ── ELIMINAR USUARIO (eliminación manual sin cascada) ───────────────────────
     // Elimina manualmente: Transacciones→Categorías→Usuario_Categoria→Email→Imagenes→Token_recuperacion→Usuario_Rol→Usuario
-    public boolean eliminarUsuario(long idUsuario) {
+    public ResultadoEliminacion eliminarUsuario(long idUsuario) {
+        ResultadoEliminacion resultado = new ResultadoEliminacion();
+        int transaccionesEliminadas = 0;
+        int categoriasEliminadas = 0;
+        
         try {
             con = cn.getConnection();
             con.setAutoCommit(false); // Iniciar transacción
             
-            // 1. Eliminar transacciones del usuario
+            // 1. Eliminar transacciones del usuario y contar
             String sqlTransacciones = "DELETE T FROM Transacciones T " +
                                      "JOIN Categoria C ON T.ID_categoria = C.ID_categoria " +
                                      "JOIN Usuario_Categoria UC ON C.ID_categoria = UC.ID_categoria " +
                                      "WHERE UC.ID_usuario = ?";
             ps = con.prepareStatement(sqlTransacciones);
             ps.setLong(1, idUsuario);
-            ps.executeUpdate();
+            transaccionesEliminadas = ps.executeUpdate();
             ps.close();
             
-            // 2. Eliminar categorías del usuario
-            String sqlCategorias = "DELETE C FROM Categoria C " +
-                                   "JOIN Usuario_Categoria UC ON C.ID_categoria = UC.ID_categoria " +
-                                   "WHERE UC.ID_usuario = ?";
-            ps = con.prepareStatement(sqlCategorias);
+            // 2. Guardar IDs de categorías del usuario antes de eliminar relaciones
+            String sqlObtenerCategorias = "SELECT DISTINCT C.ID_categoria FROM Categoria C " +
+                                         "JOIN Usuario_Categoria UC ON C.ID_categoria = UC.ID_categoria " +
+                                         "WHERE UC.ID_usuario = ?";
+            ps = con.prepareStatement(sqlObtenerCategorias);
             ps.setLong(1, idUsuario);
-            ps.executeUpdate();
+            rs = ps.executeQuery();
+            
+            StringBuilder categoriasIds = new StringBuilder();
+            while (rs.next()) {
+                if (categoriasIds.length() > 0) categoriasIds.append(",");
+                categoriasIds.append(rs.getLong("ID_categoria"));
+            }
+            rs.close();
             ps.close();
             
             // 3. Eliminar relaciones usuario_categoría
@@ -157,7 +169,15 @@ public class AdminDao {
             ps.executeUpdate();
             ps.close();
             
-            // 4. Eliminar email del usuario
+            // 4. Eliminar categorías huérfanas y contar
+            if (categoriasIds.length() > 0) {
+                String sqlCategorias = "DELETE FROM Categoria WHERE ID_categoria IN (" + categoriasIds.toString() + ")";
+                ps = con.prepareStatement(sqlCategorias);
+                categoriasEliminadas = ps.executeUpdate();
+                ps.close();
+            }
+            
+            // 5. Eliminar email del usuario
             String sqlEmail = "DELETE FROM Email WHERE ID_usuario = ?";
             ps = con.prepareStatement(sqlEmail);
             ps.setLong(1, idUsuario);
@@ -192,7 +212,13 @@ public class AdminDao {
             int filas = ps.executeUpdate();
             
             con.commit(); // Confirmar transacción
-            return filas > 0;
+            
+            // Configurar resultado
+            resultado.setExito(filas > 0);
+            resultado.setTransaccionesEliminadas(transaccionesEliminadas);
+            resultado.setCategoriasEliminadas(categoriasEliminadas);
+            
+            return resultado;
             
         } catch (SQLException e) {
             try {
@@ -201,7 +227,9 @@ public class AdminDao {
                 System.err.println("Error al hacer rollback: " + rollbackEx.getMessage());
             }
             System.err.println("Error en AdminDao.eliminarUsuario: " + e.getMessage());
-            return false;
+            resultado.setExito(false);
+            resultado.setMensajeError("Error al eliminar usuario: " + e.getMessage());
+            return resultado;
         } finally {
             try {
                 if (con != null) con.setAutoCommit(true);

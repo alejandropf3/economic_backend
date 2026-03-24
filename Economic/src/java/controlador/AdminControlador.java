@@ -3,7 +3,10 @@ package controlador;
 import configuracion.hash;
 import dao.AdminDao;
 import modelo.Usuario;
+import modelo.ResultadoEliminacion;
 import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -98,12 +101,17 @@ public class AdminControlador extends HttpServlet {
             }
  
             // ── 4. Eliminar usuario (sin validación de asociados) ───────────────
-            if (dao.eliminarUsuario(idUsuarioEliminar)) {
-                response.sendRedirect(request.getContextPath()
-                        + "/AdminControlador?res=eliminado_ok");
+            ResultadoEliminacion resultado = dao.eliminarUsuario(idUsuarioEliminar);
+            
+            if (resultado.isExito()) {
+                StringBuilder resParam = new StringBuilder("eliminado_ok");
+                resParam.append("&transaccionesEliminadas=").append(resultado.getTransaccionesEliminadas());
+                resParam.append("&categoriasEliminadas=").append(resultado.getCategoriasEliminadas());
+                response.sendRedirect(request.getContextPath() + "/AdminControlador?" + resParam);
             } else {
+                String mensajeErrorCodificado = URLEncoder.encode(resultado.getMensajeError(), StandardCharsets.UTF_8.toString());
                 response.sendRedirect(request.getContextPath()
-                        + "/AdminControlador?res=error_eliminar");
+                        + "/AdminControlador?res=error_eliminar&error=" + mensajeErrorCodificado);
             }
         } else {
             response.sendRedirect(request.getContextPath() + "/AdminControlador");

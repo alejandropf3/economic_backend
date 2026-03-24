@@ -20,11 +20,19 @@
     String transStr      = request.getParameter("transacciones") != null ? request.getParameter("transacciones") : "0";
     String catStr        = request.getParameter("categorias")    != null ? request.getParameter("categorias")    : "0";
     String idUsuarioParam= request.getParameter("idUsuario")     != null ? request.getParameter("idUsuario")     : "";
+    
+    // Nuevos parámetros para elementos eliminados
+    String transEliminadasStr = request.getParameter("transaccionesEliminadas") != null ? request.getParameter("transaccionesEliminadas") : "0";
+    String catEliminadasStr   = request.getParameter("categoriasEliminadas")   != null ? request.getParameter("categoriasEliminadas")   : "0";
 
     int numTransacciones = 0;
     int numCategorias    = 0;
+    int transEliminadas  = 0;
+    int catEliminadas    = 0;
     try { numTransacciones = Integer.parseInt(transStr); } catch (NumberFormatException e) {}
     try { numCategorias    = Integer.parseInt(catStr);   } catch (NumberFormatException e) {}
+    try { transEliminadas  = Integer.parseInt(transEliminadasStr); } catch (NumberFormatException e) {}
+    try { catEliminadas    = Integer.parseInt(catEliminadasStr);   } catch (NumberFormatException e) {}
 %>
 <!DOCTYPE html>
 <html lang="es">
@@ -209,7 +217,18 @@
     <!-- ══ TOASTS (mensajes del servidor) ════════════════════════════════════ -->
     <% if ("eliminado_ok".equals(res)) { %>
         <div class="toast toast--ok" id="toast">
-            <i class="bi bi-check-circle-fill"></i> Usuario eliminado correctamente.
+            <i class="bi bi-check-circle-fill"></i> 
+            Usuario eliminado correctamente.
+            <% if (transEliminadas > 0 || catEliminadas > 0) { %>
+                Se eliminaron: 
+                <% if (transEliminadas > 0) { %>
+                    <strong><%= transEliminadas %> transacción(es)</strong>
+                <% } %>
+                <% if (transEliminadas > 0 && catEliminadas > 0) { %> y <% } %>
+                <% if (catEliminadas > 0) { %>
+                    <strong><%= catEliminadas %> categoría(s)</strong>
+                <% } %>.
+            <% } %>
         </div>
     <% } else if ("pass_incorrecta".equals(res)) { %>
         <div class="toast toast--error" id="toast">
