@@ -52,18 +52,6 @@
                 </label>
             </div>
             <nav class="sidebar__navegacion">
-                <a href="${pageContext.request.contextPath}/MenuControlador" class="sidebar__link">
-                    <i class="bi bi-house-fill"></i> Inicio
-                </a>
-                <a href="${pageContext.request.contextPath}/HistorialControlador" class="sidebar__link">
-                    <i class="bi bi-clock-history"></i> Historial de transacciones
-                </a>
-                <a href="${pageContext.request.contextPath}/ResumenControlador" class="sidebar__link">
-                    <i class="bi bi-file-text-fill"></i> Historial de resúmenes
-                </a>
-                <a href="${pageContext.request.contextPath}/CategoriaControlador" class="sidebar__link">
-                    <i class="bi bi-gear-fill"></i> Opciones
-                </a>
                 <a href="${pageContext.request.contextPath}/AdminControlador" class="sidebar__link sidebar__link--activo">
                     <i class="bi bi-people-fill"></i> Admin
                 </a>
@@ -100,10 +88,6 @@
                 <span class="hamburguesa__linea"></span>
             </label>
             <nav class="encabezado__navegacion">
-                <a href="${pageContext.request.contextPath}/MenuControlador"     class="encabezado__link">Inicio</a>
-                <a href="${pageContext.request.contextPath}/HistorialControlador" class="encabezado__link">Historial de transacciones</a>
-                <a href="${pageContext.request.contextPath}/ResumenControlador"   class="encabezado__link">Historial de resúmenes</a>
-                <a href="${pageContext.request.contextPath}/CategoriaControlador" class="encabezado__link">Opciones</a>
 
                 <a href="#ventana-salida-confirmar" class="encabezado__icono">
                     <i class="bi bi-person-fill"></i>
