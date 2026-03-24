@@ -1,0 +1,126 @@
+package controlador;
+ 
+import configuracion.hash;
+import dao.AdminDao;
+import modelo.Usuario;
+import java.io.IOException;
+import java.util.List;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+ 
+/**
+ * AdminControlador.java
+ * Servlet que maneja la vista de administración de usuarios.
+ * GET  → lista todos los usuarios
+ * POST → elimina un usuario (con validaciones)
+ */
+@WebServlet(name = "AdminControlador", urlPatterns = {"/AdminControlador"})
+public class AdminControlador extends HttpServlet {
+ 
+    // ── GET → Cargar lista de usuarios ────────────────────────────────────────
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+ 
+        HttpSession session = request.getSession(false);
+        if (session == null || session.getAttribute("usuario") == null) {
+            response.sendRedirect(request.getContextPath() + "/index.jsp");
+            return;
+        }
+ 
+        // TODO: Aquí puedes agregar validación de rol admin cuando implementes esa lógica.
+ 
+        AdminDao dao = new AdminDao();
+        List<Usuario> usuarios = dao.listarUsuarios();
+        request.setAttribute("usuarios", usuarios);
+ 
+        request.getRequestDispatcher("/Public/Admin/administrar_usuarios.jsp")
+               .forward(request, response);
+    }
+ 
+    // ── POST → Eliminar usuario ───────────────────────────────────────────────
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+ 
+        request.setCharacterEncoding("UTF-8");
+ 
+        HttpSession session = request.getSession(false);
+        if (session == null || session.getAttribute("usuario") == null) {
+            response.sendRedirect(request.getContextPath() + "/index.jsp");
+            return;
+        }
+ 
+        Usuario admin = (Usuario) session.getAttribute("usuario");
+        long idAdmin  = admin.getIdUsuario();
+ 
+        String accion = request.getParameter("accion");
+ 
+        if ("eliminar".equals(accion)) {
+ 
+            String idUsuarioStr  = request.getParameter("idUsuario");
+            String passAdmin     = request.getParameter("passAdmin");
+ 
+            // ── 1. Validar que llegaron los datos ─────────────────────────────
+            if (idUsuarioStr == null || passAdmin == null || passAdmin.trim().isEmpty()) {
+                response.sendRedirect(request.getContextPath()
+                        + "/AdminControlador?res=datos_incompletos");
+                return;
+            }
+ 
+            long idUsuarioEliminar = Long.parseLong(idUsuarioStr);
+ 
+            // ── 2. No permitir que el admin se elimine a sí mismo ─────────────
+            if (idUsuarioEliminar == idAdmin) {
+                response.sendRedirect(request.getContextPath()
+                        + "/AdminControlador?res=no_autoeliminacion");
+                return;
+            }
+ 
+            // ── 3. Verificar contraseña del administrador ─────────────────────
+            String passEncriptada = hash.sha256(passAdmin);
+            AdminDao dao = new AdminDao();
+ 
+            if (!dao.verificarContrasenaAdmin(idAdmin, passEncriptada)) {
+                response.sendRedirect(request.getContextPath()
+                        + "/AdminControlador?res=pass_incorrecta&idUsuario=" + idUsuarioEliminar);
+                return;
+            }
+ 
+            // ── 4. Validar que el usuario no tenga elementos asociados ─────────
+            int transacciones = dao.contarTransacciones(idUsuarioEliminar);
+            int categorias    = dao.contarCategorias(idUsuarioEliminar);
+ 
+            if (transacciones > 0 || categorias > 0) {
+                StringBuilder resParam = new StringBuilder("tiene_asociados");
+                resParam.append("&transacciones=").append(transacciones);
+                resParam.append("&categorias=").append(categorias);
+                resParam.append("&idUsuario=").append(idUsuarioEliminar);
+                response.sendRedirect(request.getContextPath()
+                        + "/AdminControlador?" + resParam);
+                return;
+            }
+ 
+            // ── 5. Eliminar usuario ───────────────────────────────────────────
+            if (dao.eliminarUsuario(idUsuarioEliminar)) {
+                response.sendRedirect(request.getContextPath()
+                        + "/AdminControlador?res=eliminado_ok");
+            } else {
+                response.sendRedirect(request.getContextPath()
+                        + "/AdminControlador?res=error_eliminar");
+            }
+        } else {
+            response.sendRedirect(request.getContextPath() + "/AdminControlador");
+        }
+    }
+ 
+    @Override
+    public String getServletInfo() {
+        return "Controlador para administración de usuarios";
+    }
+}
+ 
