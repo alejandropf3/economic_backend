@@ -11,6 +11,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import utils.validarLogin;
+import utils.ValidadorPermisos;
 
 @WebServlet(name = "LoginControlador", urlPatterns = {"/LoginControlador"})
 public class LoginControlador extends HttpServlet {
@@ -36,7 +37,23 @@ public class LoginControlador extends HttpServlet {
         if (user != null) {
             HttpSession session = request.getSession();
             session.setAttribute("usuario", user);
-            response.sendRedirect(request.getContextPath() + "/MenuControlador");
+            
+            // 🔍 VALIDAR ROL Y PERMISOS PARA REDIRECCIÓN AUTOMÁTICA
+            boolean esAdminPorRol = (user.getIdRol() == 1); // ID_rol = 1 = administrador
+            boolean tienePermisoAdmin = ValidadorPermisos.tienePermiso(user, ValidadorPermisos.ADMINISTRAR_USUARIOS);
+            
+            // 🎯 LÓGICA DE REDIRECCIÓN CONDICIONAL
+            if (esAdminPorRol && tienePermisoAdmin) {
+                // ✅ Usuario es administrador y tiene permiso → Redirigir a administración
+                System.out.println("Administrador detectado: " + user.getNombre() + " (ID: " + user.getIdUsuario() + ")");
+                System.out.println("Redirigiendo a /AdminControlador");
+                response.sendRedirect(request.getContextPath() + "/AdminControlador");
+            } else {
+                // ✅ Usuario normal → Redirigir al menú principal
+                System.out.println("Usuario normal detectado: " + user.getNombre() + " (Rol: " + user.getNombreRol() + ")");
+                System.out.println("Redirigiendo a /MenuControlador");
+                response.sendRedirect(request.getContextPath() + "/MenuControlador");
+            }
         } else {
             // Verificar si el correo existe para dar mensaje específico
             boolean correoExiste = dao.existeCorreo(correo);

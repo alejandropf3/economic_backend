@@ -31,11 +31,17 @@ public class AdminControlador extends HttpServlet {
             response.sendRedirect(request.getContextPath() + "/index.jsp");
             return;
         }
- 
-        // TODO: Aquí puedes agregar validación de rol admin cuando implementes esa lógica.
- 
+
+        // Validar que el usuario tenga rol de administrador
+        Usuario usuarioSesion = (Usuario) session.getAttribute("usuario");
         AdminDao dao = new AdminDao();
-        List<Usuario> usuarios = dao.listarUsuarios();
+        if (!dao.esAdministrador(usuarioSesion.getIdUsuario())) {
+            response.sendRedirect(request.getContextPath() + "/MenuControlador?error=no_admin");
+            return;
+        }
+ 
+        AdminDao dao2 = new AdminDao();
+        List<Usuario> usuarios = dao2.listarUsuarios();
         request.setAttribute("usuarios", usuarios);
  
         request.getRequestDispatcher("/Public/Admin/administrar_usuarios.jsp")

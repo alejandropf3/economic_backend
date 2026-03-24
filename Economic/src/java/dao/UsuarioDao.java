@@ -19,6 +19,7 @@ public class UsuarioDao {
     public boolean registrar(Usuario user) {
         String sqlUsuario = "INSERT INTO Usuario (Nombre, Contraseña) VALUES (?, ?)";
         String sqlEmail = "INSERT INTO Email (ID_usuario, Correo_electronico) VALUES (?, ?)";
+        String sqlRol = "INSERT INTO Usuario_Rol (ID_usuario, ID_rol) VALUES (?, 2)"; // ID_rol=2 = "usuario"
         
         try {
             con = cn.getConnection();
@@ -41,7 +42,12 @@ public class UsuarioDao {
                 ps.setString(2, user.getCorreo());
                 ps.executeUpdate();
 
-                // Si ambos inserts fueron exitosos, confirmamos la transacción
+                // 3. Asignar rol automático de "usuario"
+                ps = con.prepareStatement(sqlRol);
+                ps.setLong(1, idGenerado);
+                ps.executeUpdate();
+
+                // Si todos los inserts fueron exitosos, confirmamos la transacción
                 con.commit();
                 return true;
             }
@@ -96,10 +102,14 @@ public class UsuarioDao {
     }
     
     public Usuario iniciarSesion(String correo, String contrasena) {
-        String sql = "SELECT U.*, E.Correo_electronico, I.Url_imagen " +
+        String sql = "SELECT U.*, E.Correo_electronico, I.Url_imagen, " +
+                     "COALESCE(R.ID_rol, 2) as ID_rol, " + // Default a rol 2 si no tiene asignado
+                     "COALESCE(R.Nombre_rol, 'usuario') as Nombre_rol " +
                      "FROM Usuario U " +
                      "JOIN Email E ON U.ID_usuario = E.ID_usuario " +
                      "LEFT JOIN Imagenes I ON U.ID_usuario = I.ID_usuario " +
+                     "LEFT JOIN Usuario_Rol UR ON U.ID_usuario = UR.ID_usuario " +
+                     "LEFT JOIN Rol R ON UR.ID_rol = R.ID_rol " +
                      "WHERE E.Correo_electronico = ? AND U.Contraseña = ?";
 
         Usuario user = null;
@@ -117,6 +127,11 @@ public class UsuarioDao {
                 user.setContrasena(rs.getString("Contraseña"));
                 user.setCorreo(rs.getString("Correo_electronico"));
                 user.setUrlImagen(rs.getString("Url_imagen")); // puede ser null si no tiene imagen
+                user.setIdRol(rs.getLong("ID_rol"));
+                user.setNombreRol(rs.getString("Nombre_rol"));
+                
+                // Cargar permisos del usuario
+                user.setPermisos(obtenerPermisosUsuario(rs.getLong("ID_usuario")));
             }
         } catch (SQLException e) {
             System.err.println("Error en Login DAO: " + e.getMessage());
@@ -124,5 +139,30 @@ public class UsuarioDao {
             try { if (con != null) con.close(); } catch (SQLException e) {}
         }
         return user;
+    }
+    
+    // Método auxiliar para obtener permisos del usuario
+    private java.util.List<String> obtenerPermisosUsuario(long idUsuario) {
+        java.util.List<String> permisos = new java.util.ArrayList<>();
+        String sql = "SELECT P.Permiso " +
+                     "FROM Permisos P " +
+                     "JOIN Rol_Permisos RP ON P.ID_permisos = RP.ID_permisos " +
+                     "JOIN Usuario_Rol UR ON RP.ID_rol = UR.ID_rol " +
+                     "WHERE UR.ID_usuario = ?";
+        
+        try {
+            con = cn.getConnection();
+            ps = con.prepareStatement(sql);
+            ps.setLong(1, idUsuario);
+            ResultSet rs = ps.executeQuery();
+            
+            while (rs.next()) {
+                permisos.add(rs.getString("Permiso"));
+            }
+        } catch (SQLException e) {
+            System.err.println("Error al obtener permisos: " + e.getMessage());
+        }
+        
+        return permisos;
     }
 }

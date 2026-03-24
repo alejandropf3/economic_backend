@@ -11,22 +11,23 @@ import java.util.List;
  * Operaciones de base de datos para la vista de administración de usuarios.
  */
 public class AdminDao {
- 
+
     ConexionDB cn = new ConexionDB();
     Connection con;
     PreparedStatement ps;
     ResultSet rs;
- 
+
     // ── LISTAR TODOS LOS USUARIOS (orden de creación) ─────────────────────────
     public List<Usuario> listarUsuarios() {
         String sql = "SELECT U.ID_usuario, U.Nombre, E.Correo_electronico, " +
-                     "COALESCE(R.Nombre_rol, 'Sin rol') AS Nombre_rol " +
+                     "COALESCE(R.Nombre_rol, 'Sin rol') AS Nombre_rol, " +
+                     "COALESCE(R.ID_rol, 2) AS ID_rol " +
                      "FROM Usuario U " +
                      "JOIN Email E ON U.ID_usuario = E.ID_usuario " +
                      "LEFT JOIN Usuario_Rol UR ON U.ID_usuario = UR.ID_usuario " +
                      "LEFT JOIN Rol R ON UR.ID_rol = R.ID_rol " +
                      "ORDER BY U.ID_usuario ASC";
- 
+
         List<Usuario> lista = new ArrayList<>();
         try {
             con = cn.getConnection();
@@ -38,6 +39,7 @@ public class AdminDao {
                 u.setNombre(rs.getString("Nombre"));
                 u.setCorreo(rs.getString("Correo_electronico"));
                 u.setCorreoRespaldo(rs.getString("Nombre_rol")); // reutilizamos campo temporal para el rol
+                u.setIdRol(rs.getLong("ID_rol"));
                 lista.add(u);
             }
         } catch (SQLException e) {
@@ -47,7 +49,26 @@ public class AdminDao {
         }
         return lista;
     }
- 
+    
+    // ── VERIFICAR SI USUARIO TIENE PERMISO DE ADMINISTRADOR ─────────────────────
+    public boolean esAdministrador(long idUsuario) {
+        String sql = "SELECT COUNT(*) FROM Usuario_Rol UR " +
+                     "JOIN Rol R ON UR.ID_rol = R.ID_rol " +
+                     "WHERE UR.ID_usuario = ? AND R.Nombre_rol = 'administrador'";
+        try {
+            con = cn.getConnection();
+            ps = con.prepareStatement(sql);
+            ps.setLong(1, idUsuario);
+            rs = ps.executeQuery();
+            if (rs.next()) return rs.getInt(1) > 0;
+        } catch (SQLException e) {
+            System.err.println("Error en AdminDao.esAdministrador: " + e.getMessage());
+        } finally {
+            cerrar();
+        }
+        return false;
+    }
+
     // ── VERIFICAR CONTRASEÑA DEL ADMINISTRADOR ────────────────────────────────
     public boolean verificarContrasenaAdmin(long idAdmin, String passEncriptada) {
         String sql = "SELECT COUNT(*) FROM Usuario WHERE ID_usuario = ? AND Contraseña = ?";

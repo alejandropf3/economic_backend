@@ -1,5 +1,7 @@
 package modelo;
  
+import java.util.List;
+ 
 public class Usuario {
  
     private long idUsuario;
@@ -8,6 +10,9 @@ public class Usuario {
     private String correo;
     private String correoRespaldo;
     private String urlImagen;       // foto de perfil
+    private long idRol;            // ID del rol asignado
+    private String nombreRol;       // Nombre del rol (para mostrar en UI)
+    private List<String> permisos;  // Lista de permisos del usuario
  
     public Usuario() {}
  
@@ -33,4 +38,13 @@ public class Usuario {
  
     public String getUrlImagen() { return urlImagen; }
     public void setUrlImagen(String urlImagen) { this.urlImagen = urlImagen; }
+
+    public long getIdRol() { return idRol; }
+    public void setIdRol(long idRol) { this.idRol = idRol; }
+
+    public String getNombreRol() { return nombreRol; }
+    public void setNombreRol(String nombreRol) { this.nombreRol = nombreRol; }
+
+    public List<String> getPermisos() { return permisos; }
+    public void setPermisos(List<String> permisos) { this.permisos = permisos; }
 }
