@@ -211,7 +211,7 @@
                                placeholder="Res****@gmail.com" readonly>
                     </div>
 
-                    <button type="button" class="boton--editar-perfil"
+                    <button type="button" class="boton"
                             id="btn-editar-perfil" onclick="activarEdicion()">
                         Editar datos
                     </button>

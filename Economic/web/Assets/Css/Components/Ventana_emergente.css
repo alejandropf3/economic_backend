@@ -494,7 +494,7 @@ select.contenido__input {
 
 .boton--guardar {
     width: 100%;
-    margin-top: 10px;
+    height: 44px;
     background: linear-gradient(135deg, #28a745 0%, #1e8c3a 100%);
     color: #ffffff;
     border: none;
@@ -510,6 +510,10 @@ select.contenido__input {
 .boton--cancelar:active,
 .boton--guardar:active {
     transform: translateY(0) scale(0.97);
+}
+
+.formulario__botones-edicion{
+    gap: 10px;
 }
 
 
