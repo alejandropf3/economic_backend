@@ -158,7 +158,7 @@
                         <td><%= u.getIdUsuario() %></td>
                         <td><%= u.getNombre() %></td>
                         <td><%= u.getCorreo() %></td>
-                        <td><%= u.getCorreoRespaldo() /* contiene el nombre del rol */ %></td>
+                        <td><%= u.getNombreRol() %></td>
                         <td>
                             <button class="btn-eliminar"
                                     title="Eliminar usuario"

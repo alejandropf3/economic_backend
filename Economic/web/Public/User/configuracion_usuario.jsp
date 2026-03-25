@@ -6,8 +6,6 @@
     Usuario usuarioSesion  = (Usuario) session.getAttribute("usuario");
     String nombreUsuario   = usuarioSesion != null ? usuarioSesion.getNombre()         : "";
     String correoUsuario   = usuarioSesion != null ? usuarioSesion.getCorreo()          : "";
-    String correoRespaldo  = usuarioSesion != null && usuarioSesion.getCorreoRespaldo() != null
-                             ? usuarioSesion.getCorreoRespaldo() : "";
     String urlImagenPerfil = usuarioSesion != null && usuarioSesion.getUrlImagen() != null
                              ? usuarioSesion.getUrlImagen() : null;
     String resImagen       = request.getParameter("resImagen");
@@ -33,9 +31,6 @@
             case "correo_vacio":              msgEdicion = "El correo electrónico es obligatorio."; break;
             case "correo_formato_invalido":   msgEdicion = "El formato del correo no es válido."; break;
             case "correo_duplicado":          msgEdicion = "Ese correo ya está registrado por otro usuario."; break;
-            case "respaldo_formato_invalido": msgEdicion = "El formato del correo de respaldo no es válido."; break;
-            case "respaldo_igual_principal":  msgEdicion = "El correo de respaldo no puede ser igual al principal."; break;
-            case "respaldo_duplicado":        msgEdicion = "Ese correo de respaldo ya está en uso."; break;
             default:                          msgEdicion = "Ocurrió un error. Intenta de nuevo."; break;
         }
     }
@@ -176,7 +171,8 @@
                 <form action="${pageContext.request.contextPath}/UsuarioControlador"
                       method="post"
                       class="contenedor-izquierda__formulario"
-                      id="form-editar-perfil">
+                      id="form-editar-perfil"
+                      onsubmit="return validarFormulario()">
 
                     <input type="hidden" name="accion" value="editarPerfil">
 
@@ -203,13 +199,6 @@
                                placeholder="Cor****@gmail.com" readonly>
                     </div>
 
-                    <div class="formulario__campos-usuario">
-                        <label for="respaldo_correo_usuario" class="formulario__campos-label">Respaldo correo</label>
-                        <input type="email" id="respaldo_correo_usuario" name="txtCorreoRespaldo"
-                               class="formulario__campos-input"
-                               value="<%= correoRespaldo %>"
-                               placeholder="Res****@gmail.com" readonly>
-                    </div>
 
                     <button type="button" class="boton"
                             id="btn-editar-perfil" onclick="activarEdicion()">
@@ -317,22 +306,20 @@
                 Categoria c = categorias.get(i); %>
             {
                 idCategoria:     <%= c.getIdCategoria() %>,
-                nombreCategoria: "<%= c.getNombreCategoria().replace("\"", "\\\"") %>",
+                nombreCategoria: "<%= c.getNombreCategoria().replace("\"", "\\\\\"") %>",
                 tipoTransaccion: "<%= c.getTipoTransaccion() %>"
             }<%= i < categorias.size() - 1 ? "," : "" %>
             <% } %>
         ];
 
         const valoresOriginales = {
-            nombre:   "<%= nombreUsuario.replace("\"", "\\\"") %>",
-            correo:   "<%= correoUsuario.replace("\"", "\\\"") %>",
-            respaldo: "<%= correoRespaldo.replace("\"", "\\\"") %>"
+            nombre:   "<%= nombreUsuario.replace("\"", "\\\\\"") %>",
+            correo:   "<%= correoUsuario.replace("\"", "\\\\\"") %>"
         };
 
         const activarEdicion = () => {
             document.getElementById("nombre_usuario").removeAttribute("readonly");
             document.getElementById("correo_usuario").removeAttribute("readonly");
-            document.getElementById("respaldo_correo_usuario").removeAttribute("readonly");
             document.getElementById("btn-editar-perfil").style.display = "none";
             document.getElementById("botones-guardar-cancelar").style.display = "flex";
             document.getElementById("nombre_usuario").focus();
@@ -341,12 +328,28 @@
         const cancelarEdicion = () => {
             document.getElementById("nombre_usuario").value            = valoresOriginales.nombre;
             document.getElementById("correo_usuario").value            = valoresOriginales.correo;
-            document.getElementById("respaldo_correo_usuario").value   = valoresOriginales.respaldo;
             document.getElementById("nombre_usuario").setAttribute("readonly", true);
             document.getElementById("correo_usuario").setAttribute("readonly", true);
-            document.getElementById("respaldo_correo_usuario").setAttribute("readonly", true);
             document.getElementById("btn-editar-perfil").style.display = "";
             document.getElementById("botones-guardar-cancelar").style.display = "none";
+        };
+
+        const validarFormulario = () => {
+            const nombre = document.getElementById("nombre_usuario").value.trim();
+            const correo = document.getElementById("correo_usuario").value.trim();
+            
+            if (nombre.length < 3) {
+                alert("El nombre debe tener al menos 3 caracteres.");
+                return false;
+            }
+            
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(correo)) {
+                alert("El formato del correo no es válido.");
+                return false;
+            }
+            
+            return true;
         };
 
         // Ocultar mensaje de error de categoria al hacer clic fuera

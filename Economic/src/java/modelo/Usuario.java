@@ -8,7 +8,6 @@ public class Usuario {
     private String nombre;
     private String contrasena;
     private String correo;
-    private String correoRespaldo;
     private String urlImagen;       // foto de perfil
     private long idRol;            // ID del rol asignado
     private String nombreRol;       // Nombre del rol (para mostrar en UI)
@@ -32,9 +31,6 @@ public class Usuario {
  
     public String getCorreo() { return correo; }
     public void setCorreo(String correo) { this.correo = correo; }
- 
-    public String getCorreoRespaldo() { return correoRespaldo; }
-    public void setCorreoRespaldo(String correoRespaldo) { this.correoRespaldo = correoRespaldo; }
  
     public String getUrlImagen() { return urlImagen; }
     public void setUrlImagen(String urlImagen) { this.urlImagen = urlImagen; }

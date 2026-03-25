@@ -39,7 +39,7 @@ public class AdminDao {
                 u.setIdUsuario(rs.getLong("ID_usuario"));
                 u.setNombre(rs.getString("Nombre"));
                 u.setCorreo(rs.getString("Correo_electronico"));
-                u.setCorreoRespaldo(rs.getString("Nombre_rol")); // reutilizamos campo temporal para el rol
+                u.setNombreRol(rs.getString("Nombre_rol")); // Usar el campo correcto para el rol
                 u.setIdRol(rs.getLong("ID_rol"));
                 lista.add(u);
             }
