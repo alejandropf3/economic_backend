@@ -74,7 +74,7 @@ public class TransaccionDao {
             params.add(java.sql.Date.valueOf(fechaHasta));
         }
  
-        sql.append(" ORDER BY T.Fecha_realizacion DESC");
+        sql.append(" ORDER BY T.ID_transaccion DESC");
  
         List<Transaccion> lista = new ArrayList<>();
         try {
