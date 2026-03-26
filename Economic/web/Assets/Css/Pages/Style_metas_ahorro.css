@@ -433,14 +433,17 @@
     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
     transform: translateY(80px);
     opacity: 0;
+    pointer-events: none; /* ← no captura clics cuando está oculto */
     transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     min-width: 280px;
+    max-height: 40px;
     font-family: var(--fuente_principal);
 }
  
 .toast.visible {
     transform: translateY(0);
     opacity: 1;
+    pointer-events: auto; /* ← recupera clics cuando está visible */
 }
  
 .toast.exito {
@@ -480,3 +483,4 @@
         justify-content: center;
     }
 }
+ 

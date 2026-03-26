@@ -247,16 +247,26 @@
                                     <div class="metas__acciones">
                                         <button class="meta-btn meta-btn--abonar"
                                                 <%= !m.isActiva() ? "disabled" : "" %>
-                                                onclick="abrirModalAbonar(<%= m.getIdMeta() %>, '<%= m.getNombreMeta().replace("'","\\\'") %>', '<%= String.format("%,.2f", m.getMontoObjetivo()) %>', '<%= String.format("%,.2f", m.getMontoActual()) %>')">
+                                                data-action="abonar"
+                                                data-id="<%= m.getIdMeta() %>"
+                                                data-nombre="<%= m.getNombreMeta() %>"
+                                                data-objetivo="<%= String.format("%,.2f", m.getMontoObjetivo()) %>"
+                                                data-actual="<%= String.format("%,.2f", m.getMontoActual()) %>">
                                             <i class="bi bi-plus-circle"></i> Abonar
                                         </button>
                                         <button class="meta-btn meta-btn--editar"
                                                 <%= !m.isActiva() ? "disabled" : "" %>
-                                                onclick="abrirModalEditar(<%= m.getIdMeta() %>, '<%= m.getNombreMeta().replace("'","\\\'") %>', '<%= m.getFechaLimite().toString() %>')">
+                                                data-action="editar"
+                                                data-id="<%= m.getIdMeta() %>"
+                                                data-nombre="<%= m.getNombreMeta() %>"
+                                                data-fecha="<%= m.getFechaLimite().toString() %>">
                                             <i class="bi bi-pencil-fill"></i> Editar
                                         </button>
                                         <button class="meta-btn meta-btn--eliminar"
-                                                onclick="abrirModalEliminar(<%= m.getIdMeta() %>, '<%= m.getNombreMeta().replace("'","\\\'") %>', <%= m.getMontoActual() %>)">
+                                                data-action="eliminar"
+                                                data-id="<%= m.getIdMeta() %>"
+                                                data-nombre="<%= m.getNombreMeta() %>"
+                                                data-monto="<%= m.getMontoActual() %>">
                                             <i class="bi bi-trash-fill"></i> Eliminar
                                         </button>
                                     </div>
@@ -475,6 +485,24 @@
         overlay.addEventListener('click', function(e) {
             if (e.target === this) cerrarModal(this.id);
         });
+    });
+
+    // ── Delegación de eventos en botones de tabla ─────────────────────────────
+    document.addEventListener('click', function(e) {
+        const btn = e.target.closest('[data-action]');
+        if (!btn || btn.disabled) return;
+
+        const action  = btn.dataset.action;
+        const id      = btn.dataset.id;
+        const nombre  = btn.dataset.nombre;
+
+        if (action === 'abonar') {
+            abrirModalAbonar(id, nombre, btn.dataset.objetivo, btn.dataset.actual);
+        } else if (action === 'editar') {
+            abrirModalEditar(id, nombre, btn.dataset.fecha);
+        } else if (action === 'eliminar') {
+            abrirModalEliminar(id, nombre, parseFloat(btn.dataset.monto));
+        }
     });
 
     // ── Abrir modal crear ─────────────────────────────────────────────────────
