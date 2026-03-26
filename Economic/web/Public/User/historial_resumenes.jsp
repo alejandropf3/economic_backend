@@ -154,7 +154,7 @@
                 <div class="contenedor-historial__encabezado">
                     <p class="contenedor-historial__encabezado-texto">Ver por:</p>
                     <a href="${pageContext.request.contextPath}/ResumenControlador?vista=semanal"
-                       class="boton--filtrar <%= "semanal".equals(vista) ? "" : "" %>"
+                       class="boton--filtrar"
                        style="<%= "semanal".equals(vista) ? "background:linear-gradient(135deg,var(--color_principal),#003977);" : "" %>">
                         Semanal
                     </a>
@@ -354,14 +354,6 @@
                         </tbody>
                     </table>
 
-                    <div class="contenido-total-semanal">
-                        <h2 class="contenido-total-semanal__titulo">
-                            Balance semanal =
-                            $<%= String.format("%,.2f", resumenSemanal.getBalance().abs()) %>
-                            <%= resumenSemanal.getBalance().compareTo(BigDecimal.ZERO) >= 0 ? "(positivo)" : "(negativo)" %>
-                        </h2>
-                    </div>
-
                 <% } else if ("mensual".equals(vista) && resumenMensual != null) { %>
 
                     <h2 class="contenedor-vista-previa__titulo">
@@ -424,14 +416,6 @@
                         </tbody>
                     </table>
 
-                    <div class="contenido-total-semanal">
-                        <h2 class="contenido-total-semanal__titulo">
-                            Balance mensual =
-                            $<%= String.format("%,.2f", resumenMensual.getBalance().abs()) %>
-                            <%= resumenMensual.getBalance().compareTo(BigDecimal.ZERO) >= 0 ? "(positivo)" : "(negativo)" %>
-                        </h2>
-                    </div>
-
                 <% } else if ("anual".equals(vista) && resumenAnual != null) { %>
 
                     <h2 class="contenedor-vista-previa__titulo">Año <%= resumenAnual.getAnio() %></h2>
@@ -491,14 +475,6 @@
                             <% } %>
                         </tbody>
                     </table>
-
-                    <div class="contenido-total-semanal">
-                        <h2 class="contenido-total-semanal__titulo">
-                            Balance anual =
-                            $<%= String.format("%,.2f", resumenAnual.getBalance().abs()) %>
-                            <%= resumenAnual.getBalance().compareTo(BigDecimal.ZERO) >= 0 ? "(positivo)" : "(negativo)" %>
-                        </h2>
-                    </div>
 
                 <% } %>
 

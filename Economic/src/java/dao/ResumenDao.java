@@ -20,7 +20,7 @@ public class ResumenDao {
  
     // --- VISTA SEMANAL ---
     public ResumenSemanal calcularSemanal(long idUsuario, LocalDate fechaReferencia) {
-        LocalDate lunes = fechaReferencia.with(java.time.DayOfWeek.MONDAY);
+        LocalDate lunes   = fechaReferencia.with(java.time.DayOfWeek.MONDAY);
         LocalDate domingo = lunes.plusDays(6);
  
         ResumenSemanal resumen = new ResumenSemanal();
@@ -29,38 +29,49 @@ public class ResumenDao {
  
         List<ResumenDiario> diasResumen = new ArrayList<>();
         BigDecimal totalIngresos = BigDecimal.ZERO;
-        BigDecimal totalEgresos = BigDecimal.ZERO;
+        BigDecimal totalEgresos  = BigDecimal.ZERO;
  
         String sql = "SELECT Fecha_realizacion, Ingresos, Egresos, Balance " +
                      "FROM Vista_Detalle_Resumen " +
                      "WHERE ID_usuario = ? AND Fecha_realizacion BETWEEN ? AND ? " +
                      "ORDER BY Fecha_realizacion ASC";
  
-        try {
-            con = cn.getConnection();
-            ps = con.prepareStatement(sql);
-            ps.setLong(1, idUsuario);
-            ps.setDate(2, Date.valueOf(lunes));
-            ps.setDate(3, Date.valueOf(domingo));
-            rs = ps.executeQuery();
+        // ── Variables locales para evitar conflicto con calcularMensual/Anual ──
+        Connection  localCon = null;
+        PreparedStatement localPs = null;
+        ResultSet   localRs  = null;
  
-            while (rs.next()) {
+        try {
+            localCon = cn.getConnection();
+            localPs  = localCon.prepareStatement(sql);
+            localPs.setLong(1, idUsuario);
+            localPs.setDate(2, Date.valueOf(lunes));
+            localPs.setDate(3, Date.valueOf(domingo));
+            localRs  = localPs.executeQuery();
+ 
+            while (localRs.next()) {
                 ResumenDiario dia = new ResumenDiario();
-                dia.setFecha(rs.getDate("Fecha_realizacion").toLocalDate());
-                BigDecimal ing = rs.getBigDecimal("Ingresos");
-                BigDecimal egr = rs.getBigDecimal("Egresos");
-                
+                dia.setFecha(localRs.getDate("Fecha_realizacion").toLocalDate());
+                BigDecimal ing = localRs.getBigDecimal("Ingresos");
+                BigDecimal egr = localRs.getBigDecimal("Egresos");
+ 
                 dia.setTotalIngresos(ing);
                 dia.setTotalEgresos(egr);
-                dia.setBalanceDia(rs.getBigDecimal("Balance"));
+                dia.setBalanceDia(localRs.getBigDecimal("Balance"));
  
                 totalIngresos = totalIngresos.add(ing);
-                totalEgresos = totalEgresos.add(egr);
+                totalEgresos  = totalEgresos.add(egr);
                 diasResumen.add(dia);
             }
         } catch (SQLException e) {
             System.err.println("Error en calcularSemanal: " + e.getMessage());
-        } finally { cerrarConexiones(); }
+        } finally {
+            try {
+                if (localRs  != null) localRs.close();
+                if (localPs  != null) localPs.close();
+                if (localCon != null) localCon.close();
+            } catch (SQLException e) { e.printStackTrace(); }
+        }
  
         resumen.setDiasResumen(diasResumen);
         resumen.setTotalIngresos(totalIngresos);
@@ -75,46 +86,53 @@ public class ResumenDao {
         mensual.setMes(mes);
         mensual.setAnio(anio);
  
-        // ── Fix: asignar nombre del mes ───────────────────────────────────────
         String[] nombresMeses = {"","Enero","Febrero","Marzo","Abril","Mayo","Junio",
                                  "Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"};
         mensual.setNombreMes(nombresMeses[mes]);
-        
+ 
         List<ResumenSemanal> semanas = new ArrayList<>();
-        // Buscamos los inicios de semana únicos en ese mes
         String sql = "SELECT DISTINCT Inicio_Semana FROM Vista_Detalle_Resumen " +
                      "WHERE ID_usuario = ? AND MONTH(Fecha_realizacion) = ? AND YEAR(Fecha_realizacion) = ? " +
                      "ORDER BY Inicio_Semana ASC";
  
-        try {
-            con = cn.getConnection();
-            ps = con.prepareStatement(sql);
-            ps.setLong(1, idUsuario);
-            ps.setInt(2, mes);
-            ps.setInt(3, anio);
-            rs = ps.executeQuery();
+        // ── Variables locales para no interferir con this.rs al llamar calcularSemanal ──
+        Connection        localCon = null;
+        PreparedStatement localPs  = null;
+        ResultSet         localRs  = null;
  
-            while (rs.next()) {
-                LocalDate inicio = rs.getDate("Inicio_Semana").toLocalDate();
-                // Reutilizamos el cálculo semanal
+        try {
+            localCon = cn.getConnection();
+            localPs  = localCon.prepareStatement(sql);
+            localPs.setLong(1, idUsuario);
+            localPs.setInt(2, mes);
+            localPs.setInt(3, anio);
+            localRs  = localPs.executeQuery();
+ 
+            while (localRs.next()) {
+                Date inicioDate = localRs.getDate("Inicio_Semana");
+                if (inicioDate == null) continue;
+                LocalDate inicio = inicioDate.toLocalDate();
                 semanas.add(calcularSemanal(idUsuario, inicio));
             }
         } catch (SQLException e) {
             System.err.println("Error en calcularMensual: " + e.getMessage());
-        } finally { 
-            cerrarConexiones(); 
+        } finally {
+            try {
+                if (localRs  != null) localRs.close();
+                if (localPs  != null) localPs.close();
+                if (localCon != null) localCon.close();
+            } catch (SQLException e) { e.printStackTrace(); }
         }
  
         mensual.setSemanas(semanas);
  
-        // --- AJUSTE: Sumatoria de totales para el mes ---
         BigDecimal ingMes = semanas.stream()
                                    .map(ResumenSemanal::getTotalIngresos)
                                    .reduce(BigDecimal.ZERO, BigDecimal::add);
         BigDecimal egrMes = semanas.stream()
                                    .map(ResumenSemanal::getTotalEgresos)
                                    .reduce(BigDecimal.ZERO, BigDecimal::add);
-        
+ 
         mensual.setTotalIngresos(ingMes);
         mensual.setTotalEgresos(egrMes);
         mensual.setBalance(ingMes.subtract(egrMes));
