@@ -27,15 +27,14 @@ public class UsuarioControlador extends HttpServlet {
             throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
 
-        HttpSession session = request.getSession(false);
-        if (session == null || session.getAttribute("usuario") == null) {
-            response.sendRedirect(request.getContextPath() + "/index.jsp");
-            return;
-        }
-
         String accion = request.getParameter("accion");
-        
+
         if ("editarPerfil".equals(accion)) {
+            HttpSession session = request.getSession(false);
+            if (session == null || session.getAttribute("usuario") == null) {
+                response.sendRedirect(request.getContextPath() + "/index.jsp");
+                return;
+            }
             // 1. Capturar datos del formulario
             String nombre = request.getParameter("txtNombre");
             String correo = request.getParameter("txtCorreo");
