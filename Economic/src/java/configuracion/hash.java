@@ -3,13 +3,21 @@ package configuracion;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+/**
+ * Utilidad para generar hashes criptográficos de texto plano.
+ * <p>
+ * Se utiliza principalmente para encriptar contraseñas antes de
+ * almacenarlas o compararlas en la base de datos.
+ * </p>
+ */
 public class hash {
 
     /**
-     * Retorna un hash a partir de un tipo y un texto
-     * @param txt Texto a encriptar
-     * @param hashType Algoritmo (SHA-256, MD5, etc)
-     * @return String encriptado
+     * Genera un hash hexadecimal del texto dado usando el algoritmo especificado.
+     *
+     * @param txt      Texto a encriptar.
+     * @param hashType Nombre del algoritmo de hash (ej. {@code "SHA-256"}, {@code "MD5"}).
+     * @return Representación hexadecimal del hash, o {@code null} si el algoritmo no existe.
      */
     public static String getHash(String txt, String hashType) {
         try {
@@ -26,7 +34,12 @@ public class hash {
         return null;
     }
 
-    /* Método directo para usar SHA-256 */
+    /**
+     * Método de conveniencia para generar un hash SHA-256.
+     *
+     * @param txt Texto a encriptar.
+     * @return Hash SHA-256 en formato hexadecimal.
+     */
     public static String sha256(String txt) {
         return hash.getHash(txt, "SHA-256");
     }
