@@ -504,3 +504,9 @@ select.contenido__input {
 .boton--cancelar:active {
   transform: translateY(0) scale(0.98);
 }
+
+.formulario__mensaje-ok{
+    margin-bottom: 10px;
+    font-size: 20px;
+    color: green;
+}
