@@ -276,4 +276,26 @@ public class UsuarioDao {
         }
         return user;
     }
+    
+    // ── ACTUALIZAR CONTRASEÑA (recuperación) ─────────────────────────────────
+    public boolean actualizarContrasena(Usuario user) {
+        String sql = "UPDATE Usuario SET Contraseña = ? WHERE ID_usuario = ?";
+        try {
+            con = cn.getConnection();
+            ps  = con.prepareStatement(sql);
+            ps.setString(1, user.getContrasena());
+            ps.setLong(2, user.getIdUsuario());
+            int filas = ps.executeUpdate();
+            return filas > 0;
+        } catch (SQLException e) {
+            System.err.println("Error en UsuarioDao.actualizarContrasena: " + e.getMessage());
+            return false;
+        } finally {
+            try {
+                if (con != null) con.close();
+            } catch (SQLException e) {
+                System.err.println("Error al cerrar conexión: " + e.getMessage());
+            }
+        }
+    }
 }
