@@ -109,10 +109,14 @@ const limpiar_errores = () => {
  
 document.addEventListener('DOMContentLoaded', function () {
  
-    // ── 1. Fecha automática al día de hoy ─────────────────────────────────────
+    // ── 1. Fecha automática al día de hoy (hora local, no UTC) ───────────────
     const inputFecha = document.getElementById("input-fecha");
     if (inputFecha && !inputFecha.value) {
-        inputFecha.value = new Date().toISOString().split("T")[0];
+        const ahora = new Date();
+        const anio  = ahora.getFullYear();
+        const mes   = String(ahora.getMonth() + 1).padStart(2, "0");
+        const dia   = String(ahora.getDate()).padStart(2, "0");
+        inputFecha.value = `${anio}-${mes}-${dia}`;
     }
  
     // ── 2. Badge de tipo al seleccionar categoría ─────────────────────────────
@@ -184,8 +188,9 @@ const abrirConfirmacion = () => {
     
     const fecha       = inputFecha.value;
     
-    // ── Validar que la fecha no supere la fecha actual ────────────────────────
-    const hoy = new Date().toISOString().split("T")[0];
+    // ── Validar que la fecha no supere la fecha actual (hora local) ──────────
+    const hoyDate = new Date();
+    const hoy = `${hoyDate.getFullYear()}-${String(hoyDate.getMonth() + 1).padStart(2, "0")}-${String(hoyDate.getDate()).padStart(2, "0")}`;
     if (fecha > hoy) {
         mostrar_errores("La fecha no puede ser mayor a la fecha actual.", "fecha");
         return;

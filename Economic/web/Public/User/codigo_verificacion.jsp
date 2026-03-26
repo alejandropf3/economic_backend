@@ -84,7 +84,7 @@
             <form action="<%= request.getContextPath() %>/CodigoVerificacionControlador" method="post" class="formulario-codigo__form">
 
                 <label for="codigo" class="formulario__label">Ingresa el codigo</label>
-                <input type="text" name="codigo" id="codigo" class="formulario__input"
+                <input type="text" name="codigo" id="codigo" class="formulario__input_codigo"
                        maxlength="6" autocomplete="one-time-code">
 
                 <%-- Span vacío para errores del JS cliente --%>

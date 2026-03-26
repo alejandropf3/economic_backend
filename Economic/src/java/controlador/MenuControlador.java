@@ -1,6 +1,8 @@
 package controlador;
  
+import dao.ResumenDao;
 import dao.TransaccionDao;
+import modelo.ResumenSemanal;
 import modelo.Transaccion;
 import modelo.Usuario;
 import java.io.IOException;
@@ -15,6 +17,9 @@ import jakarta.servlet.http.HttpSession;
 @WebServlet(name = "MenuControlador", urlPatterns = {"/MenuControlador"})
 public class MenuControlador extends HttpServlet {
  
+    // Cantidad de resúmenes semanales a mostrar en el menú
+    private static final int RESUMENES_LIMITE = 3;
+ 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -28,21 +33,25 @@ public class MenuControlador extends HttpServlet {
         Usuario usuarioSesion = (Usuario) session.getAttribute("usuario");
         long idUsuario = usuarioSesion.getIdUsuario();
  
-        TransaccionDao dao = new TransaccionDao();
+        TransaccionDao transaccionDao = new TransaccionDao();
  
-        // Obtener última transacción de tipo Ingreso
-        Transaccion ultimoIngreso = dao.obtenerUltimaPorTipo(idUsuario, "Ingreso");
+        // ── Últimas transacciones por tipo ────────────────────────────────────
+        Transaccion ultimoIngreso = transaccionDao.obtenerUltimaPorTipo(idUsuario, "Ingreso");
+        Transaccion ultimoEgreso  = transaccionDao.obtenerUltimaPorTipo(idUsuario, "Egreso");
  
-        // Obtener última transacción de tipo Egreso
-        Transaccion ultimoEgreso = dao.obtenerUltimaPorTipo(idUsuario, "Egreso");
- 
-        // Obtener balance actual del usuario
-        java.math.BigDecimal[] totales = dao.obtenerTotales(idUsuario);
+        // ── Balance actual ────────────────────────────────────────────────────
+        java.math.BigDecimal[] totales = transaccionDao.obtenerTotales(idUsuario);
         java.math.BigDecimal balance = totales[0].subtract(totales[1]);
  
-        request.setAttribute("ultimoIngreso", ultimoIngreso);
-        request.setAttribute("ultimoEgreso",  ultimoEgreso);
-        request.setAttribute("balance",        balance);
+        // ── Últimos resúmenes semanales ───────────────────────────────────────
+        ResumenDao resumenDao = new ResumenDao();
+        List<ResumenSemanal> ultimosResumenes =
+                resumenDao.obtenerUltimosSemanales(idUsuario, RESUMENES_LIMITE);
+ 
+        request.setAttribute("ultimoIngreso",    ultimoIngreso);
+        request.setAttribute("ultimoEgreso",     ultimoEgreso);
+        request.setAttribute("balance",          balance);
+        request.setAttribute("ultimosResumenes", ultimosResumenes);
  
         request.getRequestDispatcher("/Public/User/menu_principal.jsp")
                .forward(request, response);

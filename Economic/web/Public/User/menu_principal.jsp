@@ -1,7 +1,10 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="modelo.Usuario"%>
 <%@page import="modelo.Transaccion"%>
+<%@page import="modelo.ResumenSemanal"%>
 <%@page import="java.math.BigDecimal"%>
+<%@page import="java.util.List"%>
+<%@page import="java.time.format.DateTimeFormatter"%>
 <%
     if (request.getAttribute("ultimoIngreso") == null && request.getAttribute("ultimoEgreso") == null
         && request.getAttribute("balance") == null) {
@@ -34,6 +37,18 @@
     String balanceTexto    = "$" + String.format("%,.2f", balance.abs());
     String balanceClase    = balance.compareTo(BigDecimal.ZERO) >= 0 ? "balance--positivo" : "balance--negativo";
     String balanceSigNo    = balance.compareTo(BigDecimal.ZERO) >= 0 ? "+" : "-";
+
+    // ── Últimos resúmenes semanales ───────────────────────────────────────────
+    List<ResumenSemanal> ultimosResumenes =
+            (List<ResumenSemanal>) request.getAttribute("ultimosResumenes");
+
+    // Formateador para mostrar fechas como "20/03"
+    DateTimeFormatter fmtCorto = DateTimeFormatter.ofPattern("dd/MM");
+    // Formateador ISO para el parámetro del enlace (yyyy-MM-dd)
+    DateTimeFormatter fmtIso   = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    // Nombres de meses en español para el título
+    String[] meses = {"enero","febrero","marzo","abril","mayo","junio",
+                      "julio","agosto","septiembre","octubre","noviembre","diciembre"};
 %>
 <!DOCTYPE html>
 <html lang="es">
@@ -195,13 +210,32 @@
                 <div class="contenedor__resumenes">
                     <h2 class="resumenes__titulo">Historial de resúmenes</h2>
                     <div class="resumenes__elementos">
+
+                        <% if (ultimosResumenes == null || ultimosResumenes.isEmpty()) { %>
+                            <p style="color:#888; font-size:14px;">
+                                Aún no hay resúmenes disponibles.
+                            </p>
+                        <% } else {
+                               for (ResumenSemanal rs : ultimosResumenes) {
+                                   String fechaInicio = rs.getFechaInicio().format(fmtCorto);
+                                   String fechaFin    = rs.getFechaFin().format(fmtCorto);
+                                   String fechaParam  = rs.getFechaInicio().format(fmtIso);
+                                   String nombreMes   = meses[rs.getFechaInicio().getMonthValue() - 1];
+                                   int anio           = rs.getFechaInicio().getYear();
+                                   String tituloMes   = nombreMes.substring(0,1).toUpperCase()
+                                                      + nombreMes.substring(1) + " " + anio;
+                        %>
                         <div class="caja-resumen">
                             <h2 class="caja-resumen__titulo">Resumen semanal</h2>
-                            <p class="caja-resumen__fecha">Dias 20/26</p>
-                            <a href="" class="caja-resumen__link">Ver tabla</a>
+                            <p class="caja-resumen__subtitulo"><%= tituloMes %></p>
+                            <p class="caja-resumen__fecha">Días <%= fechaInicio %> / <%= fechaFin %></p>
+                            <a href="${pageContext.request.contextPath}/ResumenControlador?vista=semanal&fecha=<%= fechaParam %>"
+                               class="caja-resumen__link">Ver tabla</a>
                         </div>
+                        <% } } %>
+
                     </div>
-                    <a href="${pageContext.request.contextPath}/Public/User/historial_resumenes.jsp"
+                    <a href="${pageContext.request.contextPath}/ResumenControlador"
                        class="boton--ver-mas">Ver más</a>
                 </div>
 

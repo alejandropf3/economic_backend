@@ -1,5 +1,5 @@
 package dao;
-
+ 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,32 +10,32 @@ import modelo.ResumenSemanal;
 import modelo.ResumenMensual;
 import modelo.ResumenAnual; // Asegúrate de tener este modelo
 import configuracion.ConexionDB;
-
+ 
 public class ResumenDao {
-
+ 
     ConexionDB cn = new ConexionDB();
     Connection con;
     PreparedStatement ps;
     ResultSet rs;
-
+ 
     // --- VISTA SEMANAL ---
     public ResumenSemanal calcularSemanal(long idUsuario, LocalDate fechaReferencia) {
         LocalDate lunes = fechaReferencia.with(java.time.DayOfWeek.MONDAY);
         LocalDate domingo = lunes.plusDays(6);
-
+ 
         ResumenSemanal resumen = new ResumenSemanal();
         resumen.setFechaInicio(lunes);
         resumen.setFechaFin(domingo);
-
+ 
         List<ResumenDiario> diasResumen = new ArrayList<>();
         BigDecimal totalIngresos = BigDecimal.ZERO;
         BigDecimal totalEgresos = BigDecimal.ZERO;
-
+ 
         String sql = "SELECT Fecha_realizacion, Ingresos, Egresos, Balance " +
                      "FROM Vista_Detalle_Resumen " +
                      "WHERE ID_usuario = ? AND Fecha_realizacion BETWEEN ? AND ? " +
                      "ORDER BY Fecha_realizacion ASC";
-
+ 
         try {
             con = cn.getConnection();
             ps = con.prepareStatement(sql);
@@ -43,7 +43,7 @@ public class ResumenDao {
             ps.setDate(2, Date.valueOf(lunes));
             ps.setDate(3, Date.valueOf(domingo));
             rs = ps.executeQuery();
-
+ 
             while (rs.next()) {
                 ResumenDiario dia = new ResumenDiario();
                 dia.setFecha(rs.getDate("Fecha_realizacion").toLocalDate());
@@ -53,7 +53,7 @@ public class ResumenDao {
                 dia.setTotalIngresos(ing);
                 dia.setTotalEgresos(egr);
                 dia.setBalanceDia(rs.getBigDecimal("Balance"));
-
+ 
                 totalIngresos = totalIngresos.add(ing);
                 totalEgresos = totalEgresos.add(egr);
                 diasResumen.add(dia);
@@ -61,26 +61,31 @@ public class ResumenDao {
         } catch (SQLException e) {
             System.err.println("Error en calcularSemanal: " + e.getMessage());
         } finally { cerrarConexiones(); }
-
+ 
         resumen.setDiasResumen(diasResumen);
         resumen.setTotalIngresos(totalIngresos);
         resumen.setTotalEgresos(totalEgresos);
         resumen.setBalance(totalIngresos.subtract(totalEgresos));
         return resumen;
     }
-
+ 
     // --- VISTA MENSUAL ---
     public ResumenMensual calcularMensual(long idUsuario, int mes, int anio) {
         ResumenMensual mensual = new ResumenMensual();
         mensual.setMes(mes);
         mensual.setAnio(anio);
+ 
+        // ── Fix: asignar nombre del mes ───────────────────────────────────────
+        String[] nombresMeses = {"","Enero","Febrero","Marzo","Abril","Mayo","Junio",
+                                 "Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"};
+        mensual.setNombreMes(nombresMeses[mes]);
         
         List<ResumenSemanal> semanas = new ArrayList<>();
         // Buscamos los inicios de semana únicos en ese mes
         String sql = "SELECT DISTINCT Inicio_Semana FROM Vista_Detalle_Resumen " +
                      "WHERE ID_usuario = ? AND MONTH(Fecha_realizacion) = ? AND YEAR(Fecha_realizacion) = ? " +
                      "ORDER BY Inicio_Semana ASC";
-
+ 
         try {
             con = cn.getConnection();
             ps = con.prepareStatement(sql);
@@ -88,7 +93,7 @@ public class ResumenDao {
             ps.setInt(2, mes);
             ps.setInt(3, anio);
             rs = ps.executeQuery();
-
+ 
             while (rs.next()) {
                 LocalDate inicio = rs.getDate("Inicio_Semana").toLocalDate();
                 // Reutilizamos el cálculo semanal
@@ -99,9 +104,9 @@ public class ResumenDao {
         } finally { 
             cerrarConexiones(); 
         }
-
+ 
         mensual.setSemanas(semanas);
-
+ 
         // --- AJUSTE: Sumatoria de totales para el mes ---
         BigDecimal ingMes = semanas.stream()
                                    .map(ResumenSemanal::getTotalIngresos)
@@ -113,10 +118,10 @@ public class ResumenDao {
         mensual.setTotalIngresos(ingMes);
         mensual.setTotalEgresos(egrMes);
         mensual.setBalance(ingMes.subtract(egrMes));
-
+ 
         return mensual;
     }
-
+ 
     // --- VISTA ANUAL ---
     public ResumenAnual calcularAnual(long idUsuario, int anio) {
         ResumenAnual anual = new ResumenAnual();
@@ -128,7 +133,7 @@ public class ResumenDao {
             meses.add(calcularMensual(idUsuario, i, anio));
         }
         anual.setMeses(meses);
-
+ 
         // --- AJUSTE: Sumatoria de totales para el año ---
         BigDecimal ingAnual = meses.stream()
                                    .map(ResumenMensual::getTotalIngresos)
@@ -140,10 +145,10 @@ public class ResumenDao {
         anual.setTotalIngresos(ingAnual);
         anual.setTotalEgresos(egrAnual);
         anual.setBalance(ingAnual.subtract(egrAnual));
-
+ 
         return anual;
     }
-
+ 
     // --- SELECTOR DE AÑOS ---
     public List<Integer> obtenerAniosConTransacciones(long idUsuario) {
         List<Integer> listaAnios = new ArrayList<>();
@@ -161,7 +166,33 @@ public class ResumenDao {
         } finally { cerrarConexiones(); }
         return listaAnios;
     }
-
+ 
+    // ── ÚLTIMOS N RESÚMENES SEMANALES (para menú principal) ───────────────────
+    public List<ResumenSemanal> obtenerUltimosSemanales(long idUsuario, int limite) {
+        List<ResumenSemanal> resultado = new ArrayList<>();
+        String sql = "SELECT DISTINCT Inicio_Semana " +
+                     "FROM Vista_Detalle_Resumen " +
+                     "WHERE ID_usuario = ? " +
+                     "ORDER BY Inicio_Semana DESC " +
+                     "LIMIT ?";
+        try {
+            con = cn.getConnection();
+            ps  = con.prepareStatement(sql);
+            ps.setLong(1, idUsuario);
+            ps.setInt(2, limite);
+            rs  = ps.executeQuery();
+            while (rs.next()) {
+                LocalDate inicioSemana = rs.getDate("Inicio_Semana").toLocalDate();
+                resultado.add(calcularSemanal(idUsuario, inicioSemana));
+            }
+        } catch (SQLException e) {
+            System.err.println("Error en obtenerUltimosSemanales: " + e.getMessage());
+        } finally {
+            cerrarConexiones();
+        }
+        return resultado;
+    }
+ 
     private void cerrarConexiones() {
         try {
             if (rs != null) rs.close();

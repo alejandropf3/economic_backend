@@ -51,7 +51,6 @@
     outline: none;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    text-align: center;
 }
 
 .formulario__input::placeholder {
@@ -227,6 +226,7 @@
 
 /*==================== Formulario de codigo de verificacion =============================*/
 
+
 .formulario-codigo {
     /*Parametros para el contenedor del formulario*/
     height: 420px;
@@ -272,6 +272,22 @@
     width: 230px;
     margin-bottom: 15px;
     color: var(--color_texto-oscuro);
+}
+
+.formulario__input_codigo {
+    /*Aplicamos estilos a los imputs*/
+    height: 50px;
+    width: 370px;
+    background-color: var(--color_capos_formulario);
+    padding: 10px;
+    border-radius: var(--radio_borde-contenedores);
+    border-style: solid;
+    border-color: var(--color_borde_formulario);
+    font-size: var(--tamaño_fuente);
+    outline: none;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-align: center;
 }
 
 

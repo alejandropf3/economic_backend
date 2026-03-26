@@ -227,10 +227,17 @@
                             <p style="font-size:13px; color:var(--color_egresos); font-weight:600;">
                                 -$<%= String.format("%,.2f", resumenSemanal.getTotalEgresos()) %>
                             </p>
+                            <a href="${pageContext.request.contextPath}/ResumenControlador?vista=semanal&fecha=<%= resumenSemanal.getFechaInicio().toString() %>"
+                               class="caja-resumen__link">Ver tabla</a>
                         </div>
 
                     <% } else if ("mensual".equals(vista) && resumenMensual != null) { %>
-                        <% for (ResumenSemanal sem : resumenMensual.getSemanas()) { %>
+                        <% if (resumenMensual.getSemanas().isEmpty()) { %>
+                            <p style="color:#888; font-size:14px; padding:8px 0;">
+                                Sin transacciones este mes.
+                            </p>
+                        <% } else {
+                               for (ResumenSemanal sem : resumenMensual.getSemanas()) { %>
                         <div class="caja-resumen">
                             <h2 class="caja-resumen__titulo">Semana</h2>
                             <p class="caja-resumen__fecha">
@@ -243,11 +250,18 @@
                             <p style="font-size:13px; color:var(--color_egresos); font-weight:600;">
                                 -$<%= String.format("%,.2f", sem.getTotalEgresos()) %>
                             </p>
+                            <a href="${pageContext.request.contextPath}/ResumenControlador?vista=semanal&fecha=<%= sem.getFechaInicio().toString() %>"
+                               class="caja-resumen__link">Ver tabla</a>
                         </div>
-                        <% } %>
+                        <% } } %>
 
                     <% } else if ("anual".equals(vista) && resumenAnual != null) { %>
-                        <% for (ResumenMensual mes2 : resumenAnual.getMeses()) { %>
+                        <% boolean hayDatosAnual = false;
+                           for (ResumenMensual mes2 : resumenAnual.getMeses()) {
+                               if (mes2.getTotalIngresos().compareTo(BigDecimal.ZERO) == 0 &&
+                                   mes2.getTotalEgresos().compareTo(BigDecimal.ZERO) == 0) continue;
+                               hayDatosAnual = true;
+                        %>
                         <div class="caja-resumen">
                             <h2 class="caja-resumen__titulo"><%= mes2.getNombreMes() %></h2>
                             <p class="caja-resumen__fecha"><%= mes2.getAnio() %></p>
@@ -257,7 +271,14 @@
                             <p style="font-size:13px; color:var(--color_egresos); font-weight:600;">
                                 -$<%= String.format("%,.2f", mes2.getTotalEgresos()) %>
                             </p>
+                            <a href="${pageContext.request.contextPath}/ResumenControlador?vista=mensual&mes=<%= mes2.getMes() %>&anio=<%= mes2.getAnio() %>"
+                               class="caja-resumen__link">Ver tabla</a>
                         </div>
+                        <% } %>
+                        <% if (!hayDatosAnual) { %>
+                            <p style="color:#888; font-size:14px; padding:8px 0;">
+                                Sin transacciones este año.
+                            </p>
                         <% } %>
                     <% } %>
 
@@ -312,10 +333,24 @@
                                     -$<%= String.format("%,.2f", dia.getTotalEgresos()) %>
                                 </td>
                                 <td class="<%= positivo ? "transacciones-table__ingreso" : "transacciones-table__egreso" %>">
-                                    $<%= String.format("%,.2f", dia.getBalanceDia().abs()) %>
+                                    <%= positivo ? "+" : "-" %>$<%= String.format("%,.2f", dia.getBalanceDia().abs()) %>
                                 </td>
                             </tr>
-                            <% } } %>
+                            <% } %>
+                            <%-- Fila de totales --%>
+                            <tr style="font-weight:700; border-top:2px solid #ccc;">
+                                <td>Total</td>
+                                <td class="transacciones-table__ingreso">
+                                    +$<%= String.format("%,.2f", resumenSemanal.getTotalIngresos()) %>
+                                </td>
+                                <td class="transacciones-table__egreso">
+                                    -$<%= String.format("%,.2f", resumenSemanal.getTotalEgresos()) %>
+                                </td>
+                                <td class="<%= resumenSemanal.getBalance().compareTo(BigDecimal.ZERO) >= 0 ? "transacciones-table__ingreso" : "transacciones-table__egreso" %>">
+                                    <%= resumenSemanal.getBalance().compareTo(BigDecimal.ZERO) >= 0 ? "+" : "-" %>$<%= String.format("%,.2f", resumenSemanal.getBalance().abs()) %>
+                                </td>
+                            </tr>
+                            <% } %>
                         </tbody>
                     </table>
 
@@ -347,6 +382,13 @@
                             </tr>
                         </thead>
                         <tbody>
+                            <% if (resumenMensual.getSemanas().isEmpty()) { %>
+                            <tr>
+                                <td colspan="4" style="text-align:center; padding:20px; color:#666;">
+                                    Sin transacciones este mes.
+                                </td>
+                            </tr>
+                            <% } else { %>
                             <% for (ResumenSemanal sem : resumenMensual.getSemanas()) {
                                 boolean pos = sem.getBalance().compareTo(BigDecimal.ZERO) >= 0; %>
                             <tr>
@@ -361,7 +403,21 @@
                                     -$<%= String.format("%,.2f", sem.getTotalEgresos()) %>
                                 </td>
                                 <td class="<%= pos ? "transacciones-table__ingreso" : "transacciones-table__egreso" %>">
-                                    $<%= String.format("%,.2f", sem.getBalance().abs()) %>
+                                    <%= pos ? "+" : "-" %>$<%= String.format("%,.2f", sem.getBalance().abs()) %>
+                                </td>
+                            </tr>
+                            <% } %>
+                            <%-- Fila de totales --%>
+                            <tr style="font-weight:700; border-top:2px solid #ccc;">
+                                <td>Total</td>
+                                <td class="transacciones-table__ingreso">
+                                    +$<%= String.format("%,.2f", resumenMensual.getTotalIngresos()) %>
+                                </td>
+                                <td class="transacciones-table__egreso">
+                                    -$<%= String.format("%,.2f", resumenMensual.getTotalEgresos()) %>
+                                </td>
+                                <td class="<%= resumenMensual.getBalance().compareTo(BigDecimal.ZERO) >= 0 ? "transacciones-table__ingreso" : "transacciones-table__egreso" %>">
+                                    <%= resumenMensual.getBalance().compareTo(BigDecimal.ZERO) >= 0 ? "+" : "-" %>$<%= String.format("%,.2f", resumenMensual.getBalance().abs()) %>
                                 </td>
                             </tr>
                             <% } %>
@@ -393,8 +449,12 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <% for (ResumenMensual mes2 : resumenAnual.getMeses()) {
-                                boolean pos = mes2.getBalance().compareTo(BigDecimal.ZERO) >= 0; %>
+                            <% boolean hayDatos = false;
+                               for (ResumenMensual mes2 : resumenAnual.getMeses()) {
+                                   if (mes2.getTotalIngresos().compareTo(BigDecimal.ZERO) == 0 &&
+                                       mes2.getTotalEgresos().compareTo(BigDecimal.ZERO) == 0) continue;
+                                   hayDatos = true;
+                                   boolean pos = mes2.getBalance().compareTo(BigDecimal.ZERO) >= 0; %>
                             <tr>
                                 <td><%= mes2.getNombreMes() %></td>
                                 <td class="transacciones-table__ingreso">
@@ -404,7 +464,28 @@
                                     -$<%= String.format("%,.2f", mes2.getTotalEgresos()) %>
                                 </td>
                                 <td class="<%= pos ? "transacciones-table__ingreso" : "transacciones-table__egreso" %>">
-                                    $<%= String.format("%,.2f", mes2.getBalance().abs()) %>
+                                    <%= pos ? "+" : "-" %>$<%= String.format("%,.2f", mes2.getBalance().abs()) %>
+                                </td>
+                            </tr>
+                            <% } %>
+                            <% if (!hayDatos) { %>
+                            <tr>
+                                <td colspan="4" style="text-align:center; padding:20px; color:#666;">
+                                    Sin transacciones este año.
+                                </td>
+                            </tr>
+                            <% } else { %>
+                            <%-- Fila de totales --%>
+                            <tr style="font-weight:700; border-top:2px solid #ccc;">
+                                <td>Total</td>
+                                <td class="transacciones-table__ingreso">
+                                    +$<%= String.format("%,.2f", resumenAnual.getTotalIngresos()) %>
+                                </td>
+                                <td class="transacciones-table__egreso">
+                                    -$<%= String.format("%,.2f", resumenAnual.getTotalEgresos()) %>
+                                </td>
+                                <td class="<%= resumenAnual.getBalance().compareTo(BigDecimal.ZERO) >= 0 ? "transacciones-table__ingreso" : "transacciones-table__egreso" %>">
+                                    <%= resumenAnual.getBalance().compareTo(BigDecimal.ZERO) >= 0 ? "+" : "-" %>$<%= String.format("%,.2f", resumenAnual.getBalance().abs()) %>
                                 </td>
                             </tr>
                             <% } %>
