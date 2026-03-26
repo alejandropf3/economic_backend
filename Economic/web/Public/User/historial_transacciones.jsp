@@ -51,14 +51,17 @@
                 </label>
             </div>
             <nav class="sidebar__navegacion">
-                <a href="${pageContext.request.contextPath}/Public/User/menu_principal.jsp" class="sidebar__link">
+                <a href="${pageContext.request.contextPath}/MenuControlador" class="sidebar__link sidebar__link--activo">
                     <i class="bi bi-house-fill"></i> Inicio
                 </a>
-                <a href="${pageContext.request.contextPath}/HistorialControlador" class="sidebar__link sidebar__link--activo">
+                <a href="${pageContext.request.contextPath}/HistorialControlador" class="sidebar__link">
                     <i class="bi bi-clock-history"></i> Historial de transacciones
                 </a>
-                <a href="${pageContext.request.contextPath}/Public/User/historial_resumenes.jsp" class="sidebar__link">
+                <a href="${pageContext.request.contextPath}/ResumenControlador" class="sidebar__link">
                     <i class="bi bi-file-text-fill"></i> Historial de resúmenes
+                </a>
+                <a href="${pageContext.request.contextPath}/MetaControlador" class="sidebar__link">
+                    <i class="bi bi-piggy-bank-fill"></i> Metas de ahorro
                 </a>
                 <a href="${pageContext.request.contextPath}/CategoriaControlador" class="sidebar__link">
                     <i class="bi bi-gear-fill"></i> Opciones
@@ -96,9 +99,10 @@
                 <span class="hamburguesa__linea"></span>
             </label>
             <nav class="encabezado__navegacion">
-                <a href="${pageContext.request.contextPath}/Public/User/menu_principal.jsp" class="encabezado__link">Inicio</a>
-                <a href="${pageContext.request.contextPath}/HistorialControlador" class="encabezado__link">Historial de transacciones</a>
-                <a href="${pageContext.request.contextPath}/Public/User/historial_resumenes.jsp" class="encabezado__link">Historial de resúmenes</a>
+                <a href="${pageContext.request.contextPath}/MenuControlador" class="encabezado__link">Inicio</a>
+                <a href="${pageContext.request.contextPath}/HistorialControlador" class="encabezado__link">Transacciones</a>
+                <a href="${pageContext.request.contextPath}/ResumenControlador" class="encabezado__link">Resúmenes</a>
+                <a href="${pageContext.request.contextPath}/MetaControlador" class="encabezado__link">Metas</a>
                 <a href="${pageContext.request.contextPath}/CategoriaControlador" class="encabezado__link">Opciones</a>
                 <a href="#ventana-salida-confirmar" class="encabezado__icono">
                     <i class="bi bi-person-fill"></i>
