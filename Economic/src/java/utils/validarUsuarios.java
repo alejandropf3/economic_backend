@@ -1,57 +1,71 @@
-package utils;
+package utils; // Paquete que contiene clases de utilidad del sistema
 
-import dao.UsuarioDao;
+import dao.UsuarioDao; // Clase para acceder a datos de usuarios en la base de datos
 
 /**
  * Utilidad de validación para el registro de nuevos usuarios.
  * <p>
- * Verifica que los datos del formulario de registro sean correctos antes de
- * persistirlos: campos vacíos, coincidencia de contraseñas, longitud mínima
- * y unicidad del correo electrónico.
+ * Esta clase se encarga de validar todos los datos que el usuario ingresa
+ * en el formulario de registro antes de guardarlos en la base de datos.
+ * Es importante validar aquí para evitar guardar datos incorrectos o
+ * incompletos en la base de datos.
+ * </p>
+ * <p>
+ * ¿Por qué tener una clase separada para validación? Porque centraliza
+ * todas las reglas de validación en un solo lugar, haciendo el código
+ * más fácil de mantener y modificar. Si necesitamos cambiar una regla,
+ * solo tenemos que hacerlo aquí.
  * </p>
  */
 public class validarUsuarios {
 
     /**
-     * Valida los datos del formulario de registro de usuario.
-     *
-     * @param correo      Correo electrónico ingresado.
-     * @param pass        Contraseña ingresada (en texto plano).
-     * @param confirmPass Confirmación de la contraseña.
-     * @param dao         Instancia del {@link UsuarioDao} para verificar unicidad de correo.
-     * @return {@code "ok"} si todos los datos son válidos, o uno de los siguientes
-     *         códigos de error:
-     *         <ul>
-     *           <li>{@code "vacio"} — algún campo obligatorio está vacío.</li>
-     *           <li>{@code "pass_error"} — las contraseñas no coinciden.</li>
-     *           <li>{@code "cantidad_de_caracteres_error"} — contraseña menor a 8 caracteres.</li>
-     *           <li>{@code "correo_duplicado"} — el correo ya está registrado.</li>
-     *         </ul>
+     * Valida todos los datos del formulario de registro de usuario.
+     * 
+     * Este método realiza las siguientes validaciones en orden:
+     * 1. Verifica que ningún campo esté vacío
+     * 2. Confirma que las contraseñas coincidan exactamente
+     * 3. Verifica que la contraseña tenga al menos 8 caracteres
+     * 4. Comprueba que el correo electrónico no esté ya registrado
+     * 
+     * @param correo      Correo electrónico ingresado por el usuario
+     * @param pass        Contraseña ingresada (en texto plano, sin encriptar)
+     * @param confirmPass Confirmación de la contraseña ingresada
+     * @param dao         Instancia del UsuarioDao para verificar si el correo ya existe
+     * @return "ok" si todo es válido, o un código de error específico:
+     *         - "vacio": algún campo obligatorio está vacío
+     *         - "pass_error": las contraseñas no coinciden
+     *         - "cantidad_de_caracteres_error": contraseña tiene menos de 8 caracteres
+     *         - "correo_duplicado": el correo ya está registrado en el sistema
      */
     public static String validarRegistro(String correo, String pass, String confirmPass, UsuarioDao dao) {
 
-        // 1. Validar campos vacíos
-        if (correo == null || correo.trim().isEmpty() ||
-            pass == null || pass.trim().isEmpty() ||
-            confirmPass == null || confirmPass.trim().isEmpty()) {
-            return "vacio";
+        // Paso 1: Validar que ningún campo esté vacío o sea solo espacios
+        if (correo == null || correo.trim().isEmpty() || // Si el correo está vacío
+            pass == null || pass.trim().isEmpty() ||       // O si la contraseña está vacía
+            confirmPass == null || confirmPass.trim().isEmpty()) { // O si la confirmación está vacía
+            return "vacio"; // Retorna error de campo vacío
         }
 
-        // 2. Validar coincidencia de contraseña
+        // Paso 2: Validar que la contraseña y la confirmación sean exactamente iguales
+        // Usamos equals() para comparar strings, no == que compara referencias
         if (!pass.equals(confirmPass)) {
-            return "pass_error";
+            return "pass_error"; // Retorna error de contraseñas diferentes
         }
 
-        // 3. Validar longitud mínima (8 caracteres)
+        // Paso 3: Validar que la contraseña tenga al menos 8 caracteres
+        // Esta es una medida de seguridad básica para contraseñas robustas
         if (pass.length() < 8) {
-            return "cantidad_de_caracteres_error";
+            return "cantidad_de_caracteres_error"; // Retorna error de contraseña muy corta
         }
 
-        // 4. Validar correo único
+        // Paso 4: Validar que el correo electrónico no esté ya registrado
+        // Evitamos tener usuarios duplicados con el mismo correo
         if (dao.existeCorreo(correo)) {
-            return "correo_duplicado";
+            return "correo_duplicado"; // Retorna error de correo ya existente
         }
 
+        // Si todas las validaciones pasaron, retornamos "ok"
         return "ok";
     }
 }
